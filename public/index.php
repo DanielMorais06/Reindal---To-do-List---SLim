@@ -15,8 +15,8 @@ require __DIR__ . '/../vendor/autoload.php';
 // Instantiate PHP-DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
 
-if (false) { // Should be set to true in production
-	$containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
+if (true) { // Should be set to true in production
+    $containerBuilder->enableCompilation(__DIR__ . '/../var/cache');
 }
 
 // Set up settings
@@ -64,7 +64,7 @@ $errorHandler = new HttpErrorHandler($callableResolver, $responseFactory);
 
 // Create Shutdown Handler
 $shutdownHandler = new ShutdownHandler($request, $errorHandler, $displayErrorDetails);
-register_shutdown_function($shutdownHandler);
+register_shutdown_function([$shutdownHandler, 'handleShutdown']);
 
 // Add Routing Middleware
 $app->addRoutingMiddleware();
