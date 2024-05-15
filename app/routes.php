@@ -1,5 +1,3 @@
 <?php
 
-$app->get('/mydealreindal', function (){
-    return('Home');
-});
+$app->get('/home', 'HomeController:index');
