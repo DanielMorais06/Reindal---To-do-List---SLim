@@ -11,10 +11,6 @@ class ComposerStaticInit1ff696401163d3fbe8dab8da572d3ebf
     );
 
     public static $prefixLengthsPsr4 = array (
-        'm' => 
-        array (
-            'mydeal\\' => 7,
-        ),
         'S' => 
         array (
             'Slim\\' => 5,
@@ -32,13 +28,13 @@ class ComposerStaticInit1ff696401163d3fbe8dab8da572d3ebf
         array (
             'FastRoute\\' => 10,
         ),
+        'A' => 
+        array (
+            'App\\' => 4,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'mydeal\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/app',
-        ),
         'Slim\\' => 
         array (
             0 => __DIR__ . '/..' . '/slim/slim/Slim',
@@ -59,6 +55,10 @@ class ComposerStaticInit1ff696401163d3fbe8dab8da572d3ebf
         array (
             0 => __DIR__ . '/..' . '/nikic/fast-route/src',
         ),
+        'App\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app',
+        ),
     );
 
     public static $prefixesPsr0 = array (
@@ -72,6 +72,7 @@ class ComposerStaticInit1ff696401163d3fbe8dab8da572d3ebf
     );
 
     public static $classMap = array (
+        'App\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Controllers/HomeController.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'FastRoute\\BadRouteException' => __DIR__ . '/..' . '/nikic/fast-route/src/BadRouteException.php',
         'FastRoute\\DataGenerator' => __DIR__ . '/..' . '/nikic/fast-route/src/DataGenerator.php',
