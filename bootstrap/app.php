@@ -1,25 +1,37 @@
 <?php
 
-session_start();
+declare(strict_types=1);
+
+use DI\ContainerBuilder;
+use Slim\Factory\AppFactory;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+// Instantiate PHP-DI ContainerBuilder
+$containerBuilder = new ContainerBuilder();
 
+// Set up settings
+$settings = require __DIR__ . '/../app/settings.php';
+$settings($containerBuilder);
 
-$app = new Slim\App([
-    'settings' => [
-        'displayErrorDetails' => true,
-
-    ]
+// Set up dependencies
+$containerBuilder->addDefinitions([
+    'TodoRepository' => function() {
+        return new \App\Repositories\TodoRepository();
+    },
+    \App\Controllers\TodoController::class => function($container) {
+        return new \App\Controllers\TodoController($container->get('TodoRepository'));
+    }
 ]);
 
-$container = $app->getContainer();
+// Build PHP-DI Container instance
+$container = $containerBuilder->build();
 
-$container['HomeController'] = function($container){
+// Set the container to create the app
+AppFactory::setContainer($container);
+$app = AppFactory::create();
 
-    return  new \App\Controllers\HomeController;
+// Register routes
+(require __DIR__ . '/../app/routes.php')($app);
 
-};
-
-
-require __DIR__ . '/../app/routes.php';
+return $app;
