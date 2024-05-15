@@ -1,5 +1,4 @@
 <?php
-use App\Controllers\HomeController;
 
 session_start();
 
@@ -13,8 +12,8 @@ $app = new \Slim\App([
 
 $container = $app->getContainer();
 
-$container['view'] = function(){
-    $view=new \Slim\Views\PhpRender('/../resources/views');
+$container['view'] = function($container){
+    $view=new \Slim\Views\PhpRenderer(__DIR__.'/../resources/views');
     return $view;
 };
 

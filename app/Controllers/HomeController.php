@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Controllers;
+use Slim\Views\PhpRenderer as View;
 
 class HomeController{
 
     protected $view;
-    public function __constructor(View $view){
+    public function __construct(View $view){
         $this->view = $view;
     }
     public function index($request, $response){
