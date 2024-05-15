@@ -3,13 +3,9 @@
 namespace App\Controllers;
 use Slim\Views\PhpRenderer as View;
 
-class HomeController{
+class HomeController extends Controller{
 
-    protected $view;
-    public function __construct(View $view){
-        $this->view = $view;
-    }
     public function index($request, $response){
-        return $this->view->render($response, 'index.html');
+        return $this->container->view->render($response, 'index.html');
     }
 }
