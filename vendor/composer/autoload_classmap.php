@@ -95,4 +95,6 @@ return array(
     'Slim\\Route' => $vendorDir . '/slim/slim/Slim/Route.php',
     'Slim\\RouteGroup' => $vendorDir . '/slim/slim/Slim/RouteGroup.php',
     'Slim\\Router' => $vendorDir . '/slim/slim/Slim/Router.php',
+    'Slim\\Views\\Exception\\PhpTemplateNotFoundException' => $vendorDir . '/slim/php-view/src/Exception/PhpTemplateNotFoundException.php',
+    'Slim\\Views\\PhpRenderer' => $vendorDir . '/slim/php-view/src/PhpRenderer.php',
 );

@@ -13,6 +13,7 @@ class ComposerStaticInit1ff696401163d3fbe8dab8da572d3ebf
     public static $prefixLengthsPsr4 = array (
         'S' => 
         array (
+            'Slim\\Views\\' => 11,
             'Slim\\' => 5,
         ),
         'P' => 
@@ -35,6 +36,10 @@ class ComposerStaticInit1ff696401163d3fbe8dab8da572d3ebf
     );
 
     public static $prefixDirsPsr4 = array (
+        'Slim\\Views\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/slim/php-view/src',
+        ),
         'Slim\\' => 
         array (
             0 => __DIR__ . '/..' . '/slim/slim/Slim',
@@ -161,6 +166,8 @@ class ComposerStaticInit1ff696401163d3fbe8dab8da572d3ebf
         'Slim\\Route' => __DIR__ . '/..' . '/slim/slim/Slim/Route.php',
         'Slim\\RouteGroup' => __DIR__ . '/..' . '/slim/slim/Slim/RouteGroup.php',
         'Slim\\Router' => __DIR__ . '/..' . '/slim/slim/Slim/Router.php',
+        'Slim\\Views\\Exception\\PhpTemplateNotFoundException' => __DIR__ . '/..' . '/slim/php-view/src/Exception/PhpTemplateNotFoundException.php',
+        'Slim\\Views\\PhpRenderer' => __DIR__ . '/..' . '/slim/php-view/src/PhpRenderer.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

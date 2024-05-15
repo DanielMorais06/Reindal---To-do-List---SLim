@@ -13,8 +13,14 @@ $app = new \Slim\App([
 
 $container = $app->getContainer();
 
-$container['HomeController'] = function(){
-    return new App\Controllers\HomeController;
+$container['view'] = function(){
+    $view=new \Slim\Views\PhpRender('/../resources/views');
+    return $view;
+};
+
+
+$container['HomeController'] = function($container){
+    return new App\Controllers\HomeController($container->view);
 };
 
 require __DIR__ . '/../app/routes.php';
