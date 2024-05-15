@@ -11,8 +11,5 @@ $app = new Slim\App([
     ]
 ]);
 
-$app->get('/', function ($request, $response) {
 
-    return 'Home';
-
-});
+require __DIR__ . '/../app/routes.php';
