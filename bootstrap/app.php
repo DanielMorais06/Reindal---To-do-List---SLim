@@ -21,16 +21,20 @@ $app = new \Slim\App([
     
 ]);
 
-$container = $app->getContainer();
+
 $config['displayErrorDetails'] = true;
 $config['addContentLengthHeader'] = false;
 
 $config['db']['host']   = 'localhost';
-$config['db']['user']   = 'user';
+$config['db']['user']   = 'root';
 $config['db']['pass']   = '';
 $config['db']['dbname'] = 'slimtest';
 
-$app = new \Slim\App(['settings' => $config]);
+$app = new \Slim\App([
+    'settings' => $config
+]);
+
+$container = $app->getContainer();
 
 $container['db'] = function ($c) {
     $db = $c['settings']['db'];
