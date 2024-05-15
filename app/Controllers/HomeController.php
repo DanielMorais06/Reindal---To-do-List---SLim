@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controllers;
-use Slim\Views\PhpRenderer as View;
+use App\Models\user;
 
 class HomeController extends Controller{
 
