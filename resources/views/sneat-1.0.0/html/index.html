@@ -96,17 +96,27 @@
           <li class="menu-header small text-uppercase"><span class="menu-header-text">Ho tempo</span><span>&#128512;</span></li>
         
         </aside>
-        <!-- / Menu -->        
+        <!-- / Menu --> 
+        <div class="layout-page">
 
-      <!-- Bootstrap Bundle with Popper -->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-                    <!-- / Content -->
-                    
-                    <div class="content-backdrop fade"></div>
-                  </div>
-                  <!-- Content wrapper -->
-                </div>
-      
+            <div id="taskList"></div>
+
+        <script>
+            // Converte os dados das tarefas em um objeto JavaScript
+            const tasks = JSON.parse(`<?php echo $tasksJson; ?>`);
+
+            // Seleciona o contêiner onde as tarefas serão adicionadas
+            const taskContainer = document.getElementById('taskList');
+
+            // Para cada tarefa, cria um card e adiciona ao contêiner
+            tasks.forEach(task => {
+                const card = document.createElement('div');
+                card.className = 'col-md-4'; // Coloque aqui as classes de bootstrap que deseja para o card
+                card.innerHTML = `${task.id_task}`;
+                taskContainer.appendChild(card);
+            });
+        </script>
+
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
