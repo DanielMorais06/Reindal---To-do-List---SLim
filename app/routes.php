@@ -7,3 +7,7 @@ $app->post('/auth/signup', 'AuthController:postSignUp');
 
 $app->get('/auth/signin', 'AuthController:getSignIn')->setName('auth.signin');
 $app->post('/auth/signin', 'AuthController:postSignIn');
+
+$app->get('/html/New-Task', 'TaskController:getNewTask')->setName('new.task');
+$app->post('/html/New-Task', 'TaskController:postNewTask');
+

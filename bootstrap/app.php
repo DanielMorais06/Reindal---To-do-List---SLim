@@ -59,5 +59,9 @@ $container['AuthController'] = function($container){
     return new App\Controllers\Auth\AuthController($container);
 };
 
+$container['TaskController'] = function($container){
+    return new App\Controllers\TaskController($container);
+};
+
 require __DIR__ . '/../app/routes.php';
 
