@@ -64,28 +64,24 @@ class AuthController extends Controller{
     }
 
     public function getSignIn($request, $response){
-
         return $this->container->view->render($response, 'auth/signin.html');
-
     }
 
     public function postSignIn($request, $response){
         $email = $request->getParam('email');
         $palavrapasse = $request->getParam('password');
 
-        $sql = "SELECT id_utilizador FROM utilizadores WHERE email=:email AND palavrapasse:palavrapasse";
+        $sql = "SELECT id_utilizador FROM utilizadores WHERE email=:email AND palavrapasse=:palavrapasse";
         $stmt = $this->container->db->prepare($sql);
         $stmt->execute(['email' => $email, 'palavrapasse' => $palavrapasse]);
 
-        // Verifica se o email existe na base de dados
         if ($stmt->rowCount() > 0) {
-            // Se o email existe, armazena o ID do usuário em uma variável
             $id_utilizador = $stmt->fetchColumn();
             $_SESSION['ID'] = $id_utilizador;
             
-            return $response->withRedirect('../index.html');
+            return $response->withRedirect('/public/');
         } else {
-            echo "Email não encontrado na base de dados.";
+            echo "Email ou Palavra Passe Incorretos";
         }
 
     }
