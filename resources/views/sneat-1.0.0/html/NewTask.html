@@ -83,17 +83,101 @@
         
         <!-- Adicionando um espaço -->
         <span style="margin-top: 10px;"></span>
-        
-        <button type="button" class="btn btn-warning" style="border-radius: 0; padding: 3vh;" onclick="location.href='./html/New-Task'">
-          <span class="tf-icons bx bx-user me-1"></span>Registra l'account
+          <button id="Register" type="button" class="btn btn-warning" style="border-radius: 0; padding: 3vh;" onclick="location.href='./html/signin'">
+            <span class="tf-icons bx bx-user me-1"></span>Registra l'account
+        </button>
+
+        <button id="Categoria" type="button" class="btn btn-danger btn-link" style="border-radius: 0;" onclick="location.href='./html/signin'">
+          <span class="tf-icons bx bx-plus me-1"></span>Categoria
       </button>
+      <span style="margin-top: 10px;"></span>
+        
+      <button id="Perfil" type="button" class="btn btn-warning btn-link" style="border-radius: 0;" onclick="location.href='./html/signin'">
+        <span class="tf-icons bx bx-user me-1"></span>Profilo
+    </button>
+          
+
+      <script>
+        const session = "<?php if(empty($_SESSION['Id_User'])){echo '';}else{echo '23';} ?>";
+        
+        const perfilElement = document.getElementById('Perfil');
+        const categoriaElement = document.getElementById('Categoria');
+        const registerElement = document.getElementById('Register');
+        
+        if (session === '') {
+            perfilElement.classList.add('d-none');
+            categoriaElement.classList.add('d-none');
+            registerElement.classList.remove('d-none');
+        } else {
+            perfilElement.classList.remove('d-none');
+            categoriaElement.classList.remove('d-none');
+            registerElement.classList.add('d-none');
+        }
+    </script>
 
                 
               <!-- Components -->
+      <!-- Alta Urgenza Section -->
       <li class="menu-header small text-uppercase"><span class="menu-header-text">Alta urgenza</span></li>
+      <div class="container">
+          <div class="row" id="taskList"></div>
+      </div>
+
+      <!-- Seção Normale -->
       <li class="menu-header small text-uppercase"><span class="menu-header-text">Normale</span></li>
+      <div class="container">
+          <div class="row" id="taskListar"></div>
+      </div>
+
+      <!-- Seção Ho Tempo -->
       <li class="menu-header small text-uppercase"><span class="menu-header-text">Ho tempo</span><span>&#128512;</span></li>
-        
+      <div class="container">
+          <div class="row" id="taskListHoTempo"></div>
+      </div>
+
+      <script>
+          // Converte os dados das tarefas de Alta Urgenza em um objeto JavaScript
+          const tasks1 = JSON.parse('<?php echo $tasksJson1; ?>');
+
+          // Seleciona o contêiner onde as tarefas de Alta Urgenza serão adicionadas
+          const taskContainer1 = document.getElementById('taskList');
+
+          // Para cada tarefa de Alta Urgenza, cria um card e adiciona ao contêiner
+          tasks1.forEach(task => {
+              const card = document.createElement('div');
+              card.className = 'col-12'; // Tarefa ocupa toda a linha
+              card.innerHTML = `<a href="">${task.title}</a>`; // Exibe o nome da categoria
+              taskContainer1.appendChild(card);
+          });
+
+          // Converte os dados das tarefas Normale em um objeto JavaScript
+          const tasks2 = JSON.parse('<?php echo $tasksJson2; ?>');
+
+          // Seleciona o contêiner onde as tarefas Normale serão adicionadas
+          const taskContainer2 = document.getElementById('taskListar');
+
+          // Para cada tarefa Normale, cria um card e adiciona ao contêiner
+          tasks2.forEach(task => {
+              const card = document.createElement('div');
+              card.className = 'col-12'; // Tarefa ocupa toda a linha
+              card.innerHTML = `${task.title}`; // Exibe o nome da categoria
+              taskContainer2.appendChild(card);
+          });
+
+          // Converte os dados das tarefas Ho Tempo em um objeto JavaScript
+          const tasks3 = JSON.parse('<?php echo $tasksJson3; ?>');
+
+          // Seleciona o contêiner onde as tarefas Ho Tempo serão adicionadas
+          const taskContainer3 = document.getElementById('taskListHoTempo');
+
+          // Para cada tarefa Ho Tempo, cria um card e adiciona ao contêiner
+          tasks3.forEach(task => {
+              const card = document.createElement('div');
+              card.className = 'col-12'; // Tarefa ocupa toda a linha
+              card.innerHTML = `${task.title}`; // Exibe o nome da categoria
+              taskContainer3.appendChild(card);
+          });
+      </script>
         </aside>
         <!-- / Menu -->
         
@@ -138,23 +222,13 @@
                         </div>
                         
                           <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-message">Categoria</label>
+                            <label class="form-label" for="basic-icon-default-message">Urgenza</label>
                             <div class="input-group input-group-merge">
                                 <span id="basic-icon-default-message2" class="input-group-text"><i class="bx bx-folder"></i></span>
                                 <select id="defaultSelect" class="form-select">
-                                    <option value="">Seleziona una categoria</option>
-                                    <option value="Sport">Sport</option>
-                                    <option value="Programmazione">Programmazione</option>
-                                    <option value="Salute">Salute</option>
-                                    <option value="Finanza">Finanza</option>
-                                    <option value="Viaggi">Viaggi</option>
-                                    <option value="Cucina">Cucina</option>
-                                    <option value="Casa">Casa</option>
-                                    <option value="Studio">Studio</option>
-                                    <option value="Lavoro">Lavoro</option>
-                                    <option value="Famiglia">Famiglia</option>
-                                    <option value="Tempo libero">Tempo libero</option>
-                                    <option value="Altro">Altro</option>
+                                    <option value="1">Alta Urgenza</option>
+                                    <option value="2">Normale</option>
+                                    <option value="3">Ho Tempo</option>
                                 </select>
                             </div>
                         </div>  

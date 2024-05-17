@@ -2,11 +2,11 @@
 
 $app->get('/', 'HomeController:index');
 
-$app->get('/auth/signup', 'AuthController:getSignUp')->setName('auth.signup');
-$app->post('/auth/signup', 'AuthController:postSignUp');
+$app->get('/html/signup', 'TaskController:getSignUp')->setName('html.signup');
+$app->post('/html/signup', 'TaskController:postSignUp');
 
-$app->get('/auth/signin', 'AuthController:getSignIn')->setName('auth.signin');
-$app->post('/auth/signin', 'AuthController:postSignIn');
+$app->get('/html/signin', 'TaskController:getSignIn')->setName('html.signin');
+$app->post('/html/signin', 'TaskController:postSignIn');
 
 $app->get('/html/New-Task', 'TaskController:getNewTask')->setName('new.task');
 $app->post('/html/New-Task', 'TaskController:postNewTask');

@@ -80,42 +80,156 @@
           <button type="button" style="border-radius: 0;" class="btn btn-primary btn-link" onclick="location.href='./html/New-Task'">
               <span class="tf-icons bx bx-plus me-1"></span>Nuovo compito
           </button>
-        
-          
-          <!-- Adicionando um espaço -->
           <span style="margin-top: 10px;"></span>
+          <button id="Register" type="button" class="btn btn-warning" style="border-radius: 0; padding: 3vh;" onclick="location.href='./html/signin'">
+            <span class="tf-icons bx bx-user me-1"></span>Registra l'account
+        </button>
+        
+        <button id="Perfil" type="button" class="btn btn-warning" style="border-radius: 0; padding: 3vh;" onclick="location.href='./html/New-Task'">
+          <span class="tf-icons bx bx-user me-1"></span>Profilo
+        </button>
           
-          <button type="button" class="btn btn-warning" style="border-radius: 0; padding: 3vh;" onclick="location.href='./html/New-Task'">
-              <span class="tf-icons bx bx-user me-1"></span>Registra l'account
-          </button>
 
+      <script>
+        const session = "<?php if(empty($_SESSION['Id_User'])){echo '';}else{echo '23';} ?>";
+        
+        const perfilElement = document.getElementById('Perfil');
+        const registerElement = document.getElementById('Register');
+        
+        if (session === '') {
+            perfilElement.classList.add('d-none');
+            registerElement.classList.remove('d-none');
+        } else {
+            perfilElement.classList.remove('d-none');
+            registerElement.classList.add('d-none');
+        }
+    </script>
+    
+        
        
               <!-- Components -->
-          <li class="menu-header small text-uppercase"><span class="menu-header-text">Alta urgenza</span></li>
-          <li class="menu-header small text-uppercase"><span class="menu-header-text">Normale</span></li>
-          <li class="menu-header small text-uppercase"><span class="menu-header-text">Ho tempo</span><span>&#128512;</span></li>
+              <!-- Alta Urgenza Section -->
+              <li class="menu-header small text-uppercase"><span class="menu-header-text">Alta urgenza</span></li>
+              <div class="container">
+                  <div class="row" id="taskList"></div>
+              </div>
+
+              <!-- Seção Normale -->
+              <li class="menu-header small text-uppercase"><span class="menu-header-text">Normale</span></li>
+              <div class="container">
+                  <div class="row" id="taskListar"></div>
+              </div>
+
+              <!-- Seção Ho Tempo -->
+              <li class="menu-header small text-uppercase"><span class="menu-header-text">Ho tempo</span><span>&#128512;</span></li>
+              <div class="container">
+                  <div class="row" id="taskListHoTempo"></div>
+              </div>
+
+              <script>
+                  // Converte os dados das tarefas de Alta Urgenza em um objeto JavaScript
+                  const tasks1 = JSON.parse('<?php echo $tasksJson1; ?>');
+
+                  // Seleciona o contêiner onde as tarefas de Alta Urgenza serão adicionadas
+                  const taskContainer1 = document.getElementById('taskList');
+
+                  // Para cada tarefa de Alta Urgenza, cria um card e adiciona ao contêiner
+                  tasks1.forEach(task => {
+                      const card = document.createElement('div');
+                      card.className = 'col-12'; // Tarefa ocupa toda a linha
+                      card.innerHTML = `<a href="">${task.title}</a>`; // Exibe o nome da categoria
+                      taskContainer1.appendChild(card);
+                  });
+
+                  // Converte os dados das tarefas Normale em um objeto JavaScript
+                  const tasks2 = JSON.parse('<?php echo $tasksJson2; ?>');
+
+                  // Seleciona o contêiner onde as tarefas Normale serão adicionadas
+                  const taskContainer2 = document.getElementById('taskListar');
+
+                  // Para cada tarefa Normale, cria um card e adiciona ao contêiner
+                  tasks2.forEach(task => {
+                      const card = document.createElement('div');
+                      card.className = 'col-12'; // Tarefa ocupa toda a linha
+                      card.innerHTML = `${task.title}`; // Exibe o nome da categoria
+                      taskContainer2.appendChild(card);
+                  });
+
+                  // Converte os dados das tarefas Ho Tempo em um objeto JavaScript
+                  const tasks3 = JSON.parse('<?php echo $tasksJson3; ?>');
+
+                  // Seleciona o contêiner onde as tarefas Ho Tempo serão adicionadas
+                  const taskContainer3 = document.getElementById('taskListHoTempo');
+
+                  // Para cada tarefa Ho Tempo, cria um card e adiciona ao contêiner
+                  tasks3.forEach(task => {
+                      const card = document.createElement('div');
+                      card.className = 'col-12'; // Tarefa ocupa toda a linha
+                      card.innerHTML = `${task.title}`; // Exibe o nome da categoria
+                      taskContainer3.appendChild(card);
+                  });
+              </script>
         
         </aside>
         <!-- / Menu --> 
         <div class="layout-page">
-
-            <div id="taskList"></div>
-
+      
+          
+                
+          
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+          
+                  <!-- Content -->
+                  
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                      
+                      
+          <h4 class="py-3 mb-4"><span class="text-muted fw-light"> Attività /</span> Tutte le attività</h4>
+        
+          <h5 class="pb-1 mb-4">Attività</h5>
+          <div class="row mb-5" id="taskListas">
+            <!-- Cards de tarefas serão adicionados aqui -->
+        </div>
+        
         <script>
             // Converte os dados das tarefas em um objeto JavaScript
-            const tasks = JSON.parse(`<?php echo $tasksJson; ?>`);
-
-            // Seleciona o contêiner onde as tarefas serão adicionadas
-            const taskContainer = document.getElementById('taskList');
-
+            const tasks = JSON.parse('<?php echo $tasksJson4; ?>');
+        
+            // Seleciona o contêiner onde os cards de tarefa serão adicionados
+            const taskContainer = document.getElementById('taskListas');
+        
             // Para cada tarefa, cria um card e adiciona ao contêiner
             tasks.forEach(task => {
                 const card = document.createElement('div');
-                card.className = 'col-md-4'; // Coloque aqui as classes de bootstrap que deseja para o card
-                card.innerHTML = `${task.id_task}`;
+                card.className = 'col-md-6 col-lg-4';
+                card.innerHTML = `
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">${task.title}</h5>
+                            <p class="card-text">${task.description}</p>
+                            <a href="#" class="btn btn-primary">Visualizza attività</a>
+                        </div>
+                    </div>
+                `;
                 taskContainer.appendChild(card);
             });
         </script>
+            
+            
+          </div>
+          
+                    </div>
+          
+                    
+                    
+          
+          
+                    
+                    <div class="content-backdrop fade"></div>
+                  </div>
+                  <!-- Content wrapper -->
+                </div>
 
 
     <!-- Core JS -->
