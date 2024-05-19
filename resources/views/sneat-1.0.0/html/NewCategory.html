@@ -30,26 +30,26 @@
     />
 
     <!-- Icons. Uncomment required icon fonts -->
-    <link rel="stylesheet" href="../resources/views/sneat-1.0.0/assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="../../../../../resources/views/sneat-1.0.0/assets/vendor/fonts/boxicons.css" />
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="../resources/views/sneat-1.0.0/assets/vendor/css/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="../resources/views/sneat-1.0.0/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="../resources/views/sneat-1.0.0/assets/css/demo.css" />
+    <link rel="stylesheet" href="../../../../../resources/views/sneat-1.0.0/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../../../../../resources/views/sneat-1.0.0/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../../../../../resources/views/sneat-1.0.0/assets/css/demo.css" />
 
     <!-- Vendors CSS -->
-    <link rel="stylesheet" href="../resources/views/sneat-1.0.0/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
-    <link rel="stylesheet" href="../resources/views/sneat-1.0.0/assets/vendor/libs/apex-charts/apex-charts.css" />
+    <link rel="stylesheet" href="../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/apex-charts/apex-charts.css" />
 
     <!-- Page CSS -->
 
     <!-- Helpers -->
-    <script src="../resources/views/sneat-1.0.0/assets/vendor/js/helpers.js"></script>
+    <script src="../../../../../resources/views/sneat-1.0.0/assets/vendor/js/helpers.js"></script>
 
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="../resources/views/sneat-1.0.0/assets/js/config.js"></script>
+    <script src="../../../../../resources/views/sneat-1.0.0/assets/js/config.js"></script>
   </head>
   
 
@@ -59,7 +59,7 @@
       <div class="layout-container">
         <!-- Menu -->
 
-        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme" data-bg-class="bg-menu-theme">
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo">
             <a href="index.html" class="app-brand-link">
               <span class="app-brand-logo demo">
@@ -70,19 +70,22 @@
               </span>
               <span class="app-brand-text demo menu-text fw-bolder ms-2">ORGANIZE LIFES</span>
           </a>
+          
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                <i class="bx bx-chevron-left bx-sm align-middle"></i>
+            </a>
         </div>
-        
 
           <div class="menu-inner-shadow"></div>
-          <button type="button" style="border-radius: 0;" class="btn btn-primary btn-link" onclick="location.href='./html/New-Task'">
+          <button type="button" style="border-radius: 0;" class="btn btn-primary btn-link" onclick="location.href='../html/New-Task'">
               <span class="tf-icons bx bx-plus me-1"></span>Nuovo compito
           </button>
           <span style="margin-top: 10px;"></span>
-          <button id="Register" type="button" class="btn btn-warning" style="border-radius: 0; padding: 3vh;" onclick="location.href='./html/signin'">
+          <button id="Register" type="button" class="btn btn-warning" style="border-radius: 0; padding: 3vh;" onclick="location.href='../html/signin'">
             <span class="tf-icons bx bx-user me-1"></span>Registra l'account
         </button>
         
-        <button id="Perfil" type="button" class="btn btn-warning" style="border-radius: 0; padding: 3vh;" onclick="location.href='./html/New-Task'">
+        <button id="Perfil" type="button" class="btn btn-warning" style="border-radius: 0; padding: 3vh;" onclick="location.href='../html/New-Task'">
           <span class="tf-icons bx bx-user me-1"></span>Profilo
         </button>
           
@@ -101,9 +104,9 @@
             registerElement.classList.add('d-none');
         }
     </script>
-    <ul class="menu-inner py-2 overflow-auto">
+    
         
-      <li class="menu-item">
+       
               <!-- Components -->
               <!-- Alta Urgenza Section -->
               <li class="menu-header small text-uppercase"><span class="menu-header-text">Alta urgenza</span></li>
@@ -121,11 +124,6 @@
               <li class="menu-header small text-uppercase"><span class="menu-header-text">Ho tempo</span><span>&#128512;</span></li>
               <div class="container">
                   <div class="row" id="taskListHoTempo"></div>
-              </div>
-
-              <li class="menu-header small text-uppercase"><span class="menu-header-text">Categorias</span><span>&#128512;</span></li>
-              <div class="container">
-                  <div class="row" id="taskListCategory"></div>
               </div>
 
               <script>
@@ -170,103 +168,82 @@
                       card.innerHTML = `${task.title}`; // Exibe o nome da categoria
                       taskContainer3.appendChild(card);
                   });
-
-                  // Converte os dados das tarefas Ho Tempo em um objeto JavaScript
-                  const tasks4 = JSON.parse('<?php echo $tasksJson5; ?>');
-
-                  // Seleciona o contêiner onde as tarefas Ho Tempo serão adicionadas
-                  const taskContainer4 = document.getElementById('taskListCategory');
-
-                  // Para cada tarefa Ho Tempo, cria um card e adiciona ao contêiner
-                  tasks4.forEach(task => {
-                      const card = document.createElement('div');
-                      card.className = 'col-12'; // Tarefa ocupa toda a linha
-                      card.innerHTML = `${task.name}`; // Exibe o nome da categoria
-                      taskContainer4.appendChild(card);
-                  });
               </script>
-              </li>
-        </ul>
+        
         </aside>
         <!-- / Menu --> 
         <div class="layout-page">
-      
-          
-                
-          
-                <!-- Content wrapper -->
-                <div class="content-wrapper">
-          
-                  <!-- Content -->
+            
                   
-                    <div class="container-xxl flex-grow-1 container-p-y">
-                      
-                      
-          <h4 class="py-3 mb-4"><span class="text-muted fw-light"> Attività /</span> Tutte le attività</h4>
-        
-          <h5 class="pb-1 mb-4">Attività</h5>
-          <div class="row mb-5" id="taskListas">
-            <!-- Cards de tarefas serão adicionados aqui -->
-        </div>
-        
-        <script>
-            // Converte os dados das tarefas em um objeto JavaScript
-            const tasks = JSON.parse('<?php echo $tasksJson4; ?>');
-        
-            // Seleciona o contêiner onde os cards de tarefa serão adicionados
-            const taskContainer = document.getElementById('taskListas');
-        
-            // Para cada tarefa, cria um card e adiciona ao contêiner
-            tasks.forEach(task => {
-                const card = document.createElement('div');
-                card.className = 'col-md-6 col-lg-4';
-                card.innerHTML = `
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">${task.title}</h5>
-                            <p class="card-text">${task.description}</p>
-                            <a href="#" class="btn btn-primary">Visualizza attività</a>
-                        </div>
-                    </div>
-                `;
-                taskContainer.appendChild(card);
-            });
-        </script>
             
-            
-          </div>
-          
-                    </div>
-          
-                    
-                    
-          
-          
-                    
-                    <div class="content-backdrop fade"></div>
-                  </div>
                   <!-- Content wrapper -->
+                  <div class="content-wrapper">
+            
+                    <!-- Content -->
+                    
+                      <div class="container-xxl flex-grow-1 container-p-y">
+                        
+                        
+            <h4 class="py-3 mb-4"><span class="text-muted fw-light">Categoria /</span> Nuova categoria</h4>
+            
+            <!-- Basic Layout & Basic with Icons -->
+            <div class="row">
+              <!-- Basic Layout -->
+              <div class="col-xxl">
+                <div class="card mb-4">
+                  <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">Nuova categoria</h5> <small class="text-muted float-end">Crea una nuova categoria</small>
+                  </div>
+                  <div class="card-body">
+                    <form method="post" class="mb-3" action="../html/New-Category" autocomplete="off">
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="basic-default-name">Categoria</label>
+                        <div class="col-sm-10">
+                          <input type="text" name="categoria" class="form-control" id="basic-default-name" placeholder="Categoria">
+                        </div>
+                      </div>
+                      <div class="row justify-content-end">
+                        <div class="col-sm-10">
+                          <button type="submit" class="btn btn-primary">Send</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
                 </div>
+              </div>
+              </div>
+            </div>
+            
+                      </div>
+                      <!-- / Content -->
+            
+                    
+            
+                      
+                      <div class="content-backdrop fade"></div>
+                    </div>
+                    <!-- Content wrapper -->
+                  </div>
 
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
-    <script src="../assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="../assets/vendor/libs/popper/popper.js"></script>
-    <script src="../assets/vendor/js/bootstrap.js"></script>
-    <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="../../../../../assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../../../../../assets/vendor/libs/popper/popper.js"></script>
+    <script src="../../../../../assets/vendor/js/bootstrap.js"></script>
+    <script src="../../../../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 
-    <script src="../assets/vendor/js/menu.js"></script>
+    <script src="../../../../../assets/vendor/js/menu.js"></script>
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-    <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+    <script src="../../../../../assets/vendor/libs/apex-charts/apexcharts.js"></script>
 
     <!-- Main JS -->
-    <script src="../assets/js/main.js"></script>
+    <script src="../../../../../assets/js/main.js"></script>
 
     <!-- Page JS -->
-    <script src="../assets/js/dashboards-analytics.js"></script>
+    <script src="../../../../../assets/js/dashboards-analytics.js"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>

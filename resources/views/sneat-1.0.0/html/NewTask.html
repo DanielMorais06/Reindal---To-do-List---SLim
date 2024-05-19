@@ -87,7 +87,7 @@
             <span class="tf-icons bx bx-user me-1"></span>Registra l'account
         </button>
 
-        <button id="Categoria" type="button" class="btn btn-danger btn-link" style="border-radius: 0;" onclick="location.href='./html/signin'">
+        <button id="Categoria" type="button" class="btn btn-danger btn-link" style="border-radius: 0;" onclick="location.href='../html/New-Category'">
           <span class="tf-icons bx bx-plus me-1"></span>Categoria
       </button>
       <span style="margin-top: 10px;"></span>
@@ -205,33 +205,55 @@
                         <small class="text-muted float-end">Compila i campi per aggiungere una nuova attività</small>
                       </div>
                       <div class="card-body">
-                        <form>
+                        <form method="post" class="mb-3" action="../html/New-Category" autocomplete="off">
                           <div class="mb-3">
                             <label class="form-label" for="basic-icon-default-fullname">Titolo</label>
                             <div class="input-group input-group-merge">
                               <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
-                              <input type="text" class="form-control" id="basic-icon-default-fullname" placeholder="Titolo" aria-label="Titolo" aria-describedby="basic-icon-default-fullname2" />
+                              <input type="text" class="form-control" for="titolo" name="titolo" id="basic-icon-default-fullname" placeholder="Titolo" aria-label="Titolo" aria-describedby="basic-icon-default-fullname2" />
                             </div>
                           </div>            
                           <div class="mb-3">
                             <label class="form-label" for="basic-icon-default-message">Avidità</label>
                             <div class="input-group input-group-merge">
                                 <span id="basic-icon-default-message2" class="input-group-text"><i class="bx bx-comment"></i></span>
-                                <textarea id="basic-icon-default-message" class="form-control" style="height: 100px;" placeholder="Scrivi dove si trova la tua nuova attività" aria-label="Scrivi dove si trova la tua nuova attività" aria-describedby="basic-icon-default-message2"></textarea>
+                                <textarea id="basic-icon-default-message" for="avidita" name="avidita" class="form-control" style="height: 100px;" placeholder="Scrivi dove si trova la tua nuova attività" aria-label="Scrivi dove si trova la tua nuova attività" aria-describedby="basic-icon-default-message2"></textarea>
                             </div>
                         </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-icon-default-fullname">
+                            Data finale</label>
+                          <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-calendar"></i></span>
+                            <input type="date" class="form-control" for="data" name="data" id="basic-icon-default-fullname" placeholder="" aria-label="" aria-describedby="basic-icon-default-fullname2" />
+                          </div>
+                        </div> 
                         
-                          <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-message">Urgenza</label>
-                            <div class="input-group input-group-merge">
-                                <span id="basic-icon-default-message2" class="input-group-text"><i class="bx bx-folder"></i></span>
-                                <select id="defaultSelect" class="form-select">
-                                    <option value="1">Alta Urgenza</option>
-                                    <option value="2">Normale</option>
-                                    <option value="3">Ho Tempo</option>
-                                </select>
-                            </div>
-                        </div>  
+                        <div class="mb-3">
+                          <label class="form-label" for="basic-icon-default-message">Categoria</label>
+                          <div class="input-group input-group-merge">
+                              <span id="basic-icon-default-message2" class="input-group-text"><i class="bx bx-folder"></i></span>
+                              <select id="defaultSelect" class="form-select" name="categoria">
+                                  <!-- Opções serão adicionadas aqui -->
+                              </select>
+                          </div>
+                      </div>
+                      
+                      <script>
+                          // Converte os dados das categorias em um objeto JavaScript
+                          const options = JSON.parse('<?php echo $tasksJson4; ?>');
+                      
+                          // Seleciona o seletor de categorias
+                          const selectElement = document.getElementById('defaultSelect');
+                      
+                          // Para cada categoria, cria uma opção e adiciona ao seletor
+                          options.forEach(category => {
+                              const option = document.createElement('option');
+                              option.value = category.id_category;
+                              option.textContent = category.name;
+                              selectElement.appendChild(option);
+                          });
+                      </script> 
                           <button type="submit" class="btn btn-primary">Inviare</button>
                         </form>
                       </div>

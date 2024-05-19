@@ -11,3 +11,6 @@ $app->post('/html/signin', 'TaskController:postSignIn');
 $app->get('/html/New-Task', 'TaskController:getNewTask')->setName('new.task');
 $app->post('/html/New-Task', 'TaskController:postNewTask');
 
+$app->get('/html/New-Category', 'TaskController:getNewCategory')->setName('new.category');
+$app->post('/html/New-Category', 'TaskController:postNewCategory');
+

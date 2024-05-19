@@ -8,34 +8,98 @@ class TaskController extends Controller{
     public function getNewTask($request, $response){
         if(empty($_SESSION['Id_User'])){
             return $this->container->view->render($response, 'sneat-1.0.0/html/Login.html');
-        }else{
+        } else {
             $iduser = $_SESSION['Id_User'];
-            $query1 = "SELECT * FROM tasks WHERE urgenza = '1' AND id_user = '$iduser' LIMIT 4";
-        $stmt1 = $this->container->db->query($query1);
-        $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
-        $tasksJson1 = json_encode($tasks1);
-    
-        $query2 = "SELECT * FROM tasks WHERE urgenza = '2' AND id_user = '$iduser' LIMIT 4";
-        $stmt2 = $this->container->db->query($query2);
-        $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
-        $tasksJson2 = json_encode($tasks2);
-    
-        $query3 = "SELECT * FROM tasks WHERE urgenza = '3' AND id_user = '$iduser' LIMIT 4"; 
-        $stmt3 = $this->container->db->query($query3);
-        $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
-        $tasksJson3 = json_encode($tasks3);
+            // Define a data limite para 3 dias no futuro
+            $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
+            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser LIMIT 4";
+            $stmt1 = $this->container->db->prepare($query1);
+            $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
+            $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
+            $tasksJson1 = json_encode($tasks1);
 
+            // Define a data limite para uma semana no futuro
+            $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
+            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser LIMIT 4";
+            $stmt2 = $this->container->db->prepare($query2);
+            $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
+            $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
+            $tasksJson2 = json_encode($tasks2);
+
+            // Define a data limite para a data atual
+            $dateLimit3 = date('Y-m-d');
+            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser LIMIT 4";
+            $stmt3 = $this->container->db->prepare($query3);
+            $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
+            $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
+            $tasksJson3 = json_encode($tasks3);
     
-        return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.html', [
-            'tasksJson1' => $tasksJson1,
-            'tasksJson2' => $tasksJson2,
-            'tasksJson3' => $tasksJson3 
-        ]);
-        } 
+            $query4 = "SELECT * FROM categorys WHERE id_user = :iduser"; 
+            $stmt4 = $this->container->db->prepare($query4);
+            $stmt4->execute(['iduser' => $iduser]);
+            $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
+            $tasksJson4 = json_encode($tasks4);
+    
+            return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.html', [
+                'tasksJson1' => $tasksJson1,
+                'tasksJson2' => $tasksJson2,
+                'tasksJson3' => $tasksJson3,
+                'tasksJson4' => $tasksJson4 
+            ]);
+        }
     }
 
     public function postNewTask($request, $response){
+        $titolo = $request->getParam('titolo');
+        $avidita = $request->getParam('avidita');
+        $data = $request->getParam('data');
+        $categoria = $request->getParam('categoria');
+
+        $errodata = 0;
+
+        $dataAtual = date('Y-m-d');
+
+        if ($data <= $dataAtual) {
+            $errodata = 1;
+        } 
+
+        if($errodata==0){
+            $sql = "INSERT INTO tasks (category, description, final_date, title, id_user) VALUES (:category, :description, :data, :title, :id_user)";
+            $stmt = $this->container->db->prepare($sql);
+            
+            // Execute a consulta com os valores fornecidos
+            $stmt->execute(['category' => $categoria, 'description' => $avidita, 'data' => $data, 'title'=>$titolo, 'id_user'=>$_SESSION['Id_User']]);
+            
+            // Verifica se a inserção foi bem-sucedida
+            if ($stmt->rowCount() > 0) {
+                
+                // Redireciona para a página inicial ou renderiza o template, conforme necessário
+                return $response->withRedirect('/public/');
+            } else {
+                echo "Erro ao inserir registro.";
+            }
+        }
+    }
+
+    public function getNewCategory($request, $response){
+        return $this->container->view->render($response, 'sneat-1.0.0/html/NewCategory.html');
+    
+    }
+    public function postNewCategory($request, $response){
+        $categoria = $request->getParam('categoria');
+    
+        $sql = "INSERT INTO categorys (id_user, name) VALUES (:id, :category)";
+        $stmt = $this->container->db->prepare($sql);
         
+        // Execute a consulta com os valores fornecidos
+        $stmt->execute(['category' => $categoria, 'id' => $_SESSION['Id_User']]);
+        
+        // Verifica se a inserção foi bem-sucedida
+        if ($stmt->rowCount() > 0) {
+            return $response->withRedirect('/public/');
+        } else {
+            echo "Erro ao inserir registro.";
+        }
     }
 
     public function getSignIn($request, $response){
@@ -44,8 +108,24 @@ class TaskController extends Controller{
     }
 
     public function postSignIn($request, $response){
+        $email = $request->getParam('email');
+        $palavrapasse = $request->getParam('password');
         
+        $sql = "SELECT id_user FROM users WHERE email=:email AND password=:palavrapasse";
+        $stmt = $this->container->db->prepare($sql);
+        $stmt->execute(['email' => $email, 'palavrapasse' => $palavrapasse]);
+        $user = $stmt->fetch(); // Obter a primeira linha de resultado
+        
+        if ($user) {
+            // Se o usuário existe, armazena o ID do usuário na sessão e redireciona
+            $_SESSION['Id_User'] = $user['id_user'];
+            return $response->withRedirect('/public/');
+        } else {
+            // Se o usuário não existe, renderiza a página de login novamente
+            return $this->container->view->render($response, 'sneat-1.0.0/html/Login.html');
+        }
     }
+    
 
     public function getSignUp($request, $response){
         return $this->container->view->render($response, 'sneat-1.0.0/html/Register.html');
