@@ -55,38 +55,48 @@ class TaskController extends Controller{
         $avidita = $request->getParam('avidita');
         $data = $request->getParam('data');
         $categoria = $request->getParam('categoria');
-
+    
         $errodata = 0;
         $errovazio = 0;
-
+    
         $dataAtual = date('Y-m-d');
-
+    
         if ($data <= $dataAtual) {
             $errodata = 1;
         } 
-
+    
         if(empty($titolo) || empty($avidita) || empty($data) || empty($categoria)){
             $errovazio = 1;
         }
 
-        if($errodata==0 && $errovazio== 0){
-            $sql = "INSERT INTO tasks (category, description, final_date, title, id_user, Completed) VALUES (:category, :description, :data, :title, :id_user, 0)";
+        if (!preg_match('/^[a-zA-Z0-9\s]+$/', $titolo) || !preg_match('/^[a-zA-Z0-9\s]+$/', $avidita)) {
+            $errovazio = 1; 
+        }
+    
+        if($errodata == 0 && $errovazio == 0){
+            $sql = "INSERT INTO tasks (category, description, final_date, title, id_user, Completed) VALUES (:category, :descrito, :dat, :title, :id_user, 0)";
             $stmt = $this->container->db->prepare($sql);
-            
+    
+            // Usar bindParam para garantir a segurança dos dados
+            $stmt->bindParam(':category', $categoria);
+            $stmt->bindParam(':descrito', $avidita);
+            $stmt->bindParam(':dat', $data);
+            $stmt->bindParam(':title', $titolo);
+            $stmt->bindParam(':id_user', $_SESSION['Id_User']);
+    
             // Execute a consulta com os valores fornecidos
-            $stmt->execute(['category' => $categoria, 'description' => $avidita, 'data' => $data, 'title'=>$titolo, 'id_user'=>$_SESSION['Id_User']]);
+            $stmt->execute();
             
             // Verifica se a inserção foi bem-sucedida
             if ($stmt->rowCount() > 0) {
-                
                 // Redireciona para a página inicial ou renderiza o template, conforme necessário
                 return $response->withRedirect('/public/');
             } else {
                 echo "Erro ao inserir registro.";
             }
-        }else{
+        } else {
             $iduser = $_SESSION['Id_User'];
-
+    
             // Define a data limite para 3 dias no futuro
             $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
             $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
@@ -94,7 +104,7 @@ class TaskController extends Controller{
             $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
             $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
             $tasksJson1 = json_encode($tasks1);
-
+    
             // Define a data limite para uma semana no futuro
             $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
             $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
@@ -102,7 +112,7 @@ class TaskController extends Controller{
             $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
             $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
             $tasksJson2 = json_encode($tasks2);
-
+    
             // Define a data limite para a data atual
             $dateLimit3 = date('Y-m-d');
             $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
@@ -110,13 +120,13 @@ class TaskController extends Controller{
             $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
             $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
             $tasksJson3 = json_encode($tasks3);
-
+    
             $query4 = "SELECT * FROM categorys WHERE id_user = :iduser";
             $stmt4 = $this->container->db->prepare($query4);
             $stmt4->execute(['iduser' => $iduser]);
             $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
             $tasksJson4 = json_encode($tasks4);
-
+    
             return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.html', [
                 'tasksJson1' => $tasksJson1,
                 'tasksJson2' => $tasksJson2,
@@ -170,7 +180,7 @@ class TaskController extends Controller{
     public function postNewCategory($request, $response){
         $categoria = $request->getParam('categoria');
         if(empty($categoria)){
-$iduser = $_SESSION['Id_User'];
+            $iduser = $_SESSION['Id_User'];
 
             // Define a data limite para 3 dias no futuro
             $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
@@ -209,17 +219,58 @@ $iduser = $_SESSION['Id_User'];
                 'tasksJson4' => $tasksJson4
             ]);
         }else{
-            $sql = "INSERT INTO categorys (id_user, name) VALUES (:id, :category)";
-            $stmt = $this->container->db->prepare($sql);
-            
-            // Execute a consulta com os valores fornecidos
-            $stmt->execute(['category' => $categoria, 'id' => $_SESSION['Id_User']]);
-            
-            // Verifica se a inserção foi bem-sucedida
-            if ($stmt->rowCount() > 0) {
-                return $response->withRedirect('/public/');
-            } else {
-                echo "Erro ao inserir registro.";
+            if (!preg_match('/^[a-zA-Z0-9\s]+$/', $categoria)) {
+                $iduser = $_SESSION['Id_User'];
+
+                // Define a data limite para 3 dias no futuro
+                $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
+                $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+                $stmt1 = $this->container->db->prepare($query1);
+                $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
+                $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
+                $tasksJson1 = json_encode($tasks1);
+    
+                // Define a data limite para uma semana no futuro
+                $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
+                $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+                $stmt2 = $this->container->db->prepare($query2);
+                $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
+                $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
+                $tasksJson2 = json_encode($tasks2);
+    
+                // Define a data limite para a data atual
+                $dateLimit3 = date('Y-m-d');
+                $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+                $stmt3 = $this->container->db->prepare($query3);
+                $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
+                $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
+                $tasksJson3 = json_encode($tasks3);
+    
+                $query4 = "SELECT * FROM categorys WHERE id_user = :iduser";
+                $stmt4 = $this->container->db->prepare($query4);
+                $stmt4->execute(['iduser' => $iduser]);
+                $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
+                $tasksJson4 = json_encode($tasks4);
+    
+                return $this->container->view->render($response, '/sneat-1.0.0/html/NewCategory.html', [
+                    'tasksJson1' => $tasksJson1,
+                    'tasksJson2' => $tasksJson2,
+                    'tasksJson3' => $tasksJson3,
+                    'tasksJson4' => $tasksJson4
+                ]);
+            }else{
+                $sql = "INSERT INTO categorys (id_user, name) VALUES (:id, :category)";
+                $stmt = $this->container->db->prepare($sql);
+                
+                // Execute a consulta com os valores fornecidos
+                $stmt->execute(['category' => $categoria, 'id' => $_SESSION['Id_User']]);
+                
+                // Verifica se a inserção foi bem-sucedida
+                if ($stmt->rowCount() > 0) {
+                    return $response->withRedirect('/public/');
+                } else {
+                    echo "Erro ao inserir registro.";
+                }
             }
         }
     
