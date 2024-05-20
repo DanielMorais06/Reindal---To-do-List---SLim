@@ -11,7 +11,6 @@ class TaskController extends Controller{
         } else {
             $iduser = $_SESSION['Id_User'];
 
-            // Define a data limite para 3 dias no futuro
             $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
             $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt1 = $this->container->db->prepare($query1);
@@ -19,7 +18,6 @@ class TaskController extends Controller{
             $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
             $tasksJson1 = json_encode($tasks1);
 
-            // Define a data limite para uma semana no futuro
             $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
             $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt2 = $this->container->db->prepare($query2);
@@ -27,7 +25,6 @@ class TaskController extends Controller{
             $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
             $tasksJson2 = json_encode($tasks2);
 
-            // Define a data limite para a data atual
             $dateLimit3 = date('Y-m-d');
             $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt3 = $this->container->db->prepare($query3);
@@ -609,6 +606,7 @@ class TaskController extends Controller{
        
         return $response->withRedirect('/public/');
     }
+
     public function getDeletTask($request, $response){
 
        

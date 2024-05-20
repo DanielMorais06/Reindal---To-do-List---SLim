@@ -116,61 +116,49 @@
     
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                // Converte os dados das tarefas de Alta Urgenza em um objeto JavaScript
                 const tasks1 = JSON.parse('<?php echo $tasksJson1; ?>');
     
-                // Seleciona o contêiner onde as tarefas de Alta Urgenza serão adicionadas
                 const taskContainer1 = document.getElementById('taskList');
     
-                // Para cada tarefa de Alta Urgenza, cria um card e adiciona ao contêiner
                 tasks1.forEach(task => {
                     const card = document.createElement('div');
-                    card.className = 'col-12'; // Tarefa ocupa toda a linha
+                    card.className = 'col-12'; 
                     task.title = task.title.replace(/\*\*/g, "'");
                     card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
                             <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da tarefa
                     taskContainer1.appendChild(card);
                 });
     
-                // Converte os dados das tarefas Normale em um objeto JavaScript
                 const tasks2 = JSON.parse('<?php echo $tasksJson2; ?>');
     
-                // Seleciona o contêiner onde as tarefas Normale serão adicionadas
                 const taskContainer2 = document.getElementById('taskListar');
     
-                // Para cada tarefa Normale, cria um card e adiciona ao contêiner
                 tasks2.forEach(task => {
                     const card = document.createElement('div');
-                    card.className = 'col-12'; // Tarefa ocupa toda a linha
+                    card.className = 'col-12'; 
                     task.title = task.title.replace(/\*\*/g, "'");
                     card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
-                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da tarefa
+                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; 
                     taskContainer2.appendChild(card);
                 });
     
-                // Converte os dados das tarefas Ho Tempo em um objeto JavaScript
                 const tasks3 = JSON.parse('<?php echo $tasksJson3; ?>');
     
-                // Seleciona o contêiner onde as tarefas Ho Tempo serão adicionadas
                 const taskContainer3 = document.getElementById('taskListHoTempo');
     
-                // Para cada tarefa Ho Tempo, cria um card e adiciona ao contêiner
                 tasks3.forEach(task => {
                     const card = document.createElement('div');
-                    card.className = 'col-12'; // Tarefa ocupa toda a linha
+                    card.className = 'col-12';
                     task.title = task.title.replace(/\*\*/g, "'");
                     card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
-                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da tarefa
+                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; 
                     taskContainer3.appendChild(card);
                 });
     
-                // Converte os dados das categorias em um objeto JavaScript
                 const tasks4 = JSON.parse('<?php echo $tasksJson4; ?>');
     
-                // Seleciona o contêiner onde as categorias serão adicionadas
                 const taskContainer4 = document.getElementById('taskListCategory');
     
-                // Para cada categoria, cria um card e adiciona ao contêiner
                 tasks4.forEach(task => {
                     const card = document.createElement('div');
                     card.className = 'col-12'; 
@@ -183,7 +171,7 @@
                                 <span class="tf-icons bx bx-trash p-0"></span>
                             </button>
                         </form>
-                    </div>`; // Exibe o nome da categoria
+                    </div>`; 
                     taskContainer4.appendChild(card);
                 });
             });
@@ -193,12 +181,12 @@
                     overflow-x: hidden;
                     overflow-y: scroll;
                     height: 100vh;
-                    scrollbar-width: none; /* For Firefox */
+                    scrollbar-width: none; 
                   }
                 
                   .menu-inner::-webkit-scrollbar {
-                    width: 0; /* Remove scrollbar space */
-                    background: transparent; /* Optional: just to avoid a flash of white when scrolling */
+                    width: 0; 
+                    background: transparent; 
                   }
                 </style>
                 </li>
@@ -241,31 +229,26 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
         
-              
-                // Your existing JavaScript to populate the table with tasks data
                 const tasksJson5 = '<?php echo addslashes($tasksJson5); ?>';
                 const tasks = JSON.parse(tasksJson5);
             
-                console.log('Tasks Data:', tasks); // Debugging line to check data
+                console.log('Tasks Data:', tasks); 
             
                 const tbody = document.querySelector('#taskTable tbody');
             
                 tasks.forEach(task => {
                     const tr = document.createElement('tr');
             
-                    // Create and append task title with icon
                     const taskTitleTd = document.createElement('td');
                     taskTitleTd.innerHTML = `<i class="bx bx-task bx-sm text-danger me-3"></i> <span class="fw-medium">${task.title}</span>`;
                     tr.appendChild(taskTitleTd);
             
-                    // Create and append final date
                     const finalDateTd = document.createElement('td');
                     finalDateTd.textContent = task.final_date;
                     tr.appendChild(finalDateTd);
             
-                    // Create and append owner (user's name)
                     const ownerTd = document.createElement('td');
-                    ownerTd.textContent = task.name; // Use the correct field name for the username
+                    ownerTd.textContent = task.name; 
                     tr.appendChild(ownerTd);
             
                     // Create and append status

@@ -23,6 +23,9 @@ $app->post('/html/task', 'TaskController:postTask');
 $app->get('/html/complettask', 'TaskController:getCompletTask')->setName('html.complettask');
 $app->post('/html/complettask', 'TaskController:postCompletTask');
 
+$app->get('/html/edittask', 'TaskController:getEditTask')->setName('html.edittask');
+$app->post('/html/edittask', 'TaskController:postEditTask');
+
 $app->get('/html/delettask', 'TaskController:getDeletTask')->setName('html.delettask');
 $app->post('/html/delettask', 'TaskController:postDeletTask');
 
