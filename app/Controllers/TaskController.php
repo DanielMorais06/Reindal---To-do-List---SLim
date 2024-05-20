@@ -344,6 +344,7 @@ class TaskController extends Controller{
         if($erroNome == 0 &&
         $erroEmail == 0 &&
         $erroSenha == 0){
+            
             $sql = "INSERT INTO users (email, name, password) VALUES (:email, :nome, :palavrapasse)";
             $stmt = $this->container->db->prepare($sql);
             
