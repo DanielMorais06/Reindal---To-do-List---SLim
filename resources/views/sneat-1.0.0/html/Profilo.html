@@ -236,48 +236,27 @@
                   </div>
                   <hr class="my-0">
                   <div class="card-body">
-                    <form id="formAccountSettings" method="POST" onsubmit="return false">
+                    <form id="formAccountSettings" method="POST" action="../html/profilo">
                       <div class="row">
-                        <div class="mb-3 col-md-6">
-                          <label for="firstName" class="form-label">Nome</label>
-                          <input class="form-control" type="text" value="<?php echo htmlspecialchars($userData['name']); ?>" id="firstName" name="firstName" value="John" autofocus="">
-                        </div>
-                        <div class="mb-3 col-md-6">
-                          <label for="email" class="form-label">E-mail</label>
-                          <input class="form-control" type="text" id="email" name="email" value="<?php echo htmlspecialchars($userData['email']); ?>" placeholder="Email">
-                        </div>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label for="password" class="form-label">Parola d'ordine</label>
-                            <input class="form-control" type="password" id="password" name="password" value="<?php echo htmlspecialchars($userData['password']); ?>" placeholder="Password">
+                          <div class="mb-3 col-md-6">
+                              <label for="nome" class="form-label">Nome</label>
+                              <input class="form-control" type="text" value="<?php echo htmlspecialchars($userData['name']); ?>" id="nome" name="nome" autofocus="">
+                          </div>
+                          <div class="mb-3 col-md-6">
+                              <label for="email" class="form-label">E-mail</label>
+                              <input class="form-control" type="text" id="email" name="email" value="<?php echo htmlspecialchars($userData['email']); ?>" placeholder="Email" readonly>
                           </div>
                       </div>
-                      <div class="mt-2">
-                        <button type="submit" class="btn btn-primary me-2">
-                          Salvare le modifiche</button>
-                        <button type="reset" class="btn btn-outline-secondary" onclick="location.href='../html/profilo'">Annulla</button>
+                      <div class="mb-3 col-md-6">
+                          <label for="password" class="form-label">Parola d'ordine</label>
+                          <input class="form-control" type="password" id="password" name="password" value="<?php echo htmlspecialchars($userData['password']); ?>" placeholder="Password" readonly>
                       </div>
-                    </form>
+                      <div class="mt-2">
+                          <button type="submit" class="btn btn-primary me-2">Cambia nome utente</button>
+                      </div>
+                  </form>
                   </div>
                   <!-- /Account -->
-                </div>
-                <div class="card">
-                  <h5 class="card-header">Delete Account</h5>
-                  <div class="card-body">
-                    <div class="mb-3 col-12 mb-0">
-                      <div class="alert alert-warning">
-                        <h6 class="alert-heading mb-1">Are you sure you want to delete your account?</h6>
-                        <p class="mb-0">Once you delete your account, there is no going back. Please be certain.</p>
-                      </div>
-                    </div>
-                    <form id="formAccountDeactivation" onsubmit="return false">
-                      <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" name="accountActivation" id="accountActivation">
-                        <label class="form-check-label" for="accountActivation">I confirm my account deactivation</label>
-                      </div>
-                      <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
-                    </form>
-                  </div>
                 </div>
               </div>
             </div>

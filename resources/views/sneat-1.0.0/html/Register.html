@@ -111,10 +111,6 @@ padding-bottom: 0px !important;
         </div>
         <div class="input-group input-group-merge">
             <input type="password" id="password" class="form-control" name="password" placeholder="············" aria-describedby="password">
-            <span class="input-group-text cursor-pointer" id="togglePassword">
-                <i class="bx bx-hide d-none"></i>
-                <i class="bx bx-show"></i>
-            </span>
         </div>
     </div>
     <button class="btn btn-primary d-grid w-100">
@@ -146,21 +142,6 @@ padding-bottom: 0px !important;
     </div>
   </div>
   <!-- / Content -->
-  <script>
-    const togglePassword = document.getElementById('togglePassword');
-    const passwordInput = document.getElementById('password');
-
-    togglePassword.addEventListener('click', function () {
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        
-        const hideIcon = this.querySelector('.bx-hide');
-        const showIcon = this.querySelector('.bx-show');
-        
-        hideIcon.classList.toggle('d-none');
-        showIcon.classList.toggle('d-none');
-    });
-</script>
   
   
       
