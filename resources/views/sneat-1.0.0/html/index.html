@@ -30,26 +30,28 @@
     />
 
     <!-- Icons. Uncomment required icon fonts -->
-    <link rel="stylesheet" href="../resources/views/sneat-1.0.0/assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="../../../../../../resources/views/sneat-1.0.0/assets/vendor/fonts/boxicons.css" />
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="../resources/views/sneat-1.0.0/assets/vendor/css/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="../resources/views/sneat-1.0.0/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="../resources/views/sneat-1.0.0/assets/css/demo.css" />
+    <link rel="stylesheet" href="../../../../../../resources/views/sneat-1.0.0/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../../../../../../resources/views/sneat-1.0.0/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../../../../../../resources/views/sneat-1.0.0/assets/css/demo.css" />
 
     <!-- Vendors CSS -->
-    <link rel="stylesheet" href="../resources/views/sneat-1.0.0/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="../../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
-    <link rel="stylesheet" href="../resources/views/sneat-1.0.0/assets/vendor/libs/apex-charts/apex-charts.css" />
+    <link rel="stylesheet" href="../../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/apex-charts/apex-charts.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-w8+JN2HP6O9+hsTR+A7LSq4gGscj5PwdfdrGYMyeEB83SMtvxjyEb7XRfChhXT2LooHgrEwyw2EyCUzh8zWfXQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Page CSS -->
 
     <!-- Helpers -->
-    <script src="../resources/views/sneat-1.0.0/assets/vendor/js/helpers.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/js/helpers.js"></script>
 
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="../resources/views/sneat-1.0.0/assets/js/config.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/js/config.js"></script>
   </head>
   
 
@@ -82,7 +84,7 @@
             <span class="tf-icons bx bx-user me-1"></span>Registra l'account
         </button>
         
-        <button id="Perfil" type="button" class="btn btn-warning" style="border-radius: 0; padding: 3vh;" onclick="location.href='./html/New-Task'">
+        <button id="Perfil" type="button" class="btn btn-warning" style="border-radius: 0; padding: 3vh;" onclick="location.href='./html/profilo'">
           <span class="tf-icons bx bx-user me-1"></span>Profilo
         </button>
           
@@ -101,32 +103,31 @@
             registerElement.classList.add('d-none');
         }
     </script>
-    <ul class="menu-inner py-2 overflow-auto">
-        
+    <ul class="menu-inner py-2 overflow-auto" style="overflow-x: hidden; overflow-y: scroll; height: 100vh;">
       <li class="menu-item">
-              <!-- Components -->
-              <!-- Alta Urgenza Section -->
-              <li class="menu-header small text-uppercase"><span class="menu-header-text">Alta urgenza</span></li>
-              <div class="container">
-                  <div class="row" id="taskList"></div>
-              </div>
-
-              <!-- Seção Normale -->
-              <li class="menu-header small text-uppercase"><span class="menu-header-text">Normale</span></li>
-              <div class="container">
-                  <div class="row" id="taskListar"></div>
-              </div>
-
-              <!-- Seção Ho Tempo -->
-              <li class="menu-header small text-uppercase"><span class="menu-header-text">Ho tempo</span><span>&#128512;</span></li>
-              <div class="container">
-                  <div class="row" id="taskListHoTempo"></div>
-              </div>
-
-              <li class="menu-header small text-uppercase"><span class="menu-header-text">Categorias</span><span>&#128512;</span></li>
-              <div class="container">
-                  <div class="row" id="taskListCategory"></div>
-              </div>
+        <!-- Components -->
+        <!-- Alta Urgenza Section -->
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Alta urgenza</span></li>
+        <div class="container">
+          <div class="row" id="taskList"></div>
+        </div>
+    
+        <!-- Seção Normale -->
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Normale</span></li>
+        <div class="container">
+          <div class="row" id="taskListar"></div>
+        </div>
+    
+        <!-- Seção Ho Tempo -->
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Ho tempo</span><span>&#128512;</span></li>
+        <div class="container">
+          <div class="row" id="taskListHoTempo"></div>
+        </div>
+    
+        <li class="menu-header small text-uppercase"><span class="menu-header-text">Categorias</span><span>&#128512;</span></li>
+        <div class="container">
+          <div class="row" id="taskListCategory"></div>
+        </div>
 
               <script>
                   // Converte os dados das tarefas de Alta Urgenza em um objeto JavaScript
@@ -139,7 +140,8 @@
                   tasks1.forEach(task => {
                       const card = document.createElement('div');
                       card.className = 'col-12'; // Tarefa ocupa toda a linha
-                      card.innerHTML = `<a href="">${task.title}</a>`; // Exibe o nome da categoria
+                      card.innerHTML = `<form method='post' action='./html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
+                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da categoria
                       taskContainer1.appendChild(card);
                   });
 
@@ -153,7 +155,8 @@
                   tasks2.forEach(task => {
                       const card = document.createElement('div');
                       card.className = 'col-12'; // Tarefa ocupa toda a linha
-                      card.innerHTML = `${task.title}`; // Exibe o nome da categoria
+                      card.innerHTML = `<form method='post' action='./html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
+                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da categoria
                       taskContainer2.appendChild(card);
                   });
 
@@ -167,7 +170,8 @@
                   tasks3.forEach(task => {
                       const card = document.createElement('div');
                       card.className = 'col-12'; // Tarefa ocupa toda a linha
-                      card.innerHTML = `${task.title}`; // Exibe o nome da categoria
+                      card.innerHTML = `<form method='post' action='./html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
+                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da categoria
                       taskContainer3.appendChild(card);
                   });
 
@@ -181,10 +185,29 @@
                   tasks4.forEach(task => {
                       const card = document.createElement('div');
                       card.className = 'col-12'; // Tarefa ocupa toda a linha
-                      card.innerHTML = `${task.name}`; // Exibe o nome da categoria
+                      card.innerHTML = `<form method="post" action="./html/deletecategory"><div class="d-flex justify-content-between align-items-center">
+            <span>${task.name}</span> <!-- Exibe o nome da categoria -->
+            <input type="hidden" value="${task.id_category}" name="idcategory"/>
+            <button class="btn btn-link" type="submit">
+              <span class="tf-icons bx bx-trash p-0"></span>
+            </button>
+        </div></form>`; // Exibe o nome da categoria
                       taskContainer4.appendChild(card);
                   });
               </script>
+              <style>
+                .menu-inner {
+                  overflow-x: hidden;
+                  overflow-y: scroll;
+                  height: 100vh;
+                  scrollbar-width: none; /* For Firefox */
+                }
+              
+                .menu-inner::-webkit-scrollbar {
+                  width: 0; /* Remove scrollbar space */
+                  background: transparent; /* Optional: just to avoid a flash of white when scrolling */
+                }
+              </style>
               </li>
         </ul>
         </aside>
@@ -221,18 +244,83 @@
                 const card = document.createElement('div');
                 card.className = 'col-md-6 col-lg-4';
                 card.innerHTML = `
+                <form method='post' action='./html/task'>
                     <div class="card mb-3">
                         <div class="card-body">
                             <h5 class="card-title">${task.title}</h5>
                             <p class="card-text">${task.description}</p>
-                            <a href="#" class="btn btn-primary">Visualizza attività</a>
+                            <input type="hidden" name="id_task" value='${task.id_task}'>
+                            <button type='submit' class="btn btn-primary">Visualizza attività</button>
                         </div>
                     </div>
+                </form>
                 `;
                 taskContainer.appendChild(card);
             });
         </script>
-            
+        <h5 class="pb-1 mb-4">Completare le attività</h5>
+        <div class="row mb-5" id="taskListas2">
+          <!-- Cards de tarefas serão adicionados aqui -->
+      </div>
+      
+      <script>
+          // Converte os dados das tarefas em um objeto JavaScript
+          const task = JSON.parse('<?php echo $tasksJson6; ?>');
+      
+          // Seleciona o contêiner onde os cards de tarefa serão adicionados
+          const taskContaine = document.getElementById('taskListas2');
+      
+          // Para cada tarefa, cria um card e adiciona ao contêiner
+          task.forEach(task => {
+              const card = document.createElement('div');
+              card.className = 'col-md-6 col-lg-4';
+              card.innerHTML = `
+              <form method='post' action='./html/task'>
+                  <div class="card mb-3">
+                      <div class="card-body">
+                          <h5 class="card-title">${task.title}</h5>
+                          <p class="card-text">${task.description}</p>
+                          <input type="hidden" name="id_task" value='${task.id_task}'>
+                          <button type='submit' class="btn btn-primary">Visualizza attività</button>
+                      </div>
+                  </div>
+              </form>
+              `;
+              taskContaine.appendChild(card);
+          });
+      </script>    
+      
+      <h5 class="pb-1 mb-4">Attività non completate in tempo</h5>
+        <div class="row mb-5" id="taskListas9">
+          <!-- Cards de tarefas serão adicionados aqui -->
+      </div>
+      
+      <script>
+          // Converte os dados das tarefas em um objeto JavaScript
+          const taskes = JSON.parse('<?php echo $tasksJson7; ?>');
+      
+          // Seleciona o contêiner onde os cards de tarefa serão adicionados
+          const taskContaines = document.getElementById('taskListas9');
+      
+          // Para cada tarefa, cria um card e adiciona ao contêiner
+          taskes.forEach(task => {
+              const card = document.createElement('div');
+              card.className = 'col-md-6 col-lg-4';
+              card.innerHTML = `
+              <form method='post' action='./html/task'>
+                  <div class="card mb-3">
+                      <div class="card-body">
+                          <h5 class="card-title">${task.title}</h5>
+                          <p class="card-text">${task.description}</p>
+                          <input type="hidden" name="id_task" value='${task.id_task}'>
+                          <button type='submit' class="btn btn-primary">Visualizza attività</button>
+                      </div>
+                  </div>
+              </form>
+              `;
+              taskContaines.appendChild(card);
+          });
+      </script> 
             
           </div>
           
@@ -251,22 +339,22 @@
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
-    <script src="../assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="../assets/vendor/libs/popper/popper.js"></script>
-    <script src="../assets/vendor/js/bootstrap.js"></script>
-    <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/popper/popper.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/js/bootstrap.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 
-    <script src="../assets/vendor/js/menu.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/js/menu.js"></script>
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-    <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/apex-charts/apexcharts.js"></script>
 
     <!-- Main JS -->
-    <script src="../assets/js/main.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/js/main.js"></script>
 
     <!-- Page JS -->
-    <script src="../assets/js/dashboards-analytics.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/js/dashboards-analytics.js"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>

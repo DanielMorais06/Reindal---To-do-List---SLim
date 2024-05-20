@@ -21,7 +21,6 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg class='w-[46px] h-[46px] text-blue-500' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 12a28.076 28.076 0 0 1-1.091 9M7.231 4.37a8.994 8.994 0 0 1 12.88 3.73M2.958 15S3 14.577 3 12a8.949 8.949 0 0 1 1.735-5.307m12.84 3.088A5.98 5.98 0 0 1 18 12a30 30 0 0 1-.464 6.232M6 12a6 6 0 0 1 9.352-4.974M4 21a5.964 5.964 0 0 1 1.01-3.328 5.15 5.15 0 0 0 .786-1.926m8.66 2.486a13.96 13.96 0 0 1-.962 2.683M7.5 19.336C9 17.092 9 14.845 9 12a3 3 0 1 1 6 0c0 .749 0 1.521-.031 2.311M12 12c0 3 0 6-2 9'/%3E%3C/svg%3E">
 
-
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -60,61 +59,33 @@
       <div class="layout-container">
         <!-- Menu -->
 
-        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme" data-bg-class="bg-menu-theme">
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo">
             <a href="index.html" class="app-brand-link">
-                <span class="app-brand-logo demo">
-                  <svg class="w-[46px] h-[46px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a28.076 28.076 0 0 1-1.091 9M7.231 4.37a8.994 8.994 0 0 1 12.88 3.73M2.958 15S3 14.577 3 12a8.949 8.949 0 0 1 1.735-5.307m12.84 3.088A5.98 5.98 0 0 1 18 12a30 30 0 0 1-.464 6.232M6 12a6 6 0 0 1 9.352-4.974M4 21a5.964 5.964 0 0 1 1.01-3.328 5.15 5.15 0 0 0 .786-1.926m8.66 2.486a13.96 13.96 0 0 1-.962 2.683M7.5 19.336C9 17.092 9 14.845 9 12a3 3 0 1 1 6 0c0 .749 0 1.521-.031 2.311M12 12c0 3 0 6-2 9"/>
-                  </svg>
-                </span>
-                <span class="app-brand-text demo menu-text fw-bolder ms-2">Organize Lifes</span>
-            </a>
-        
+              <span class="app-brand-logo demo">
+                <svg class="w-[46px] h-[46px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a28.076 28.076 0 0 1-1.091 9M7.231 4.37a8.994 8.994 0 0 1 12.88 3.73M2.958 15S3 14.577 3 12a8.949 8.949 0 0 1 1.735-5.307m12.84 3.088A5.98 5.98 0 0 1 18 12a30 30 0 0 1-.464 6.232M6 12a6 6 0 0 1 9.352-4.974M4 21a5.964 5.964 0 0 1 1.01-3.328 5.15 5.15 0 0 0 .786-1.926m8.66 2.486a13.96 13.96 0 0 1-.962 2.683M7.5 19.336C9 17.092 9 14.845 9 12a3 3 0 1 1 6 0c0 .749 0 1.521-.031 2.311M12 12c0 3 0 6-2 9"/>
+                </svg>
+                
+              </span>
+              <span class="app-brand-text demo menu-text fw-bolder ms-2">ORGANIZE LIFES</span>
+          </a>
+          
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
                 <i class="bx bx-chevron-left bx-sm align-middle"></i>
             </a>
         </div>
 
           <div class="menu-inner-shadow"></div>
-          <button type="button" style="border-radius: 0;" class="btn btn-primary btn-link" onclick="location.href='../'">
+          <button type="button" style="border-radius: 0;" class="btn btn-primary btn-link" onclick="location.href='../html/New-Task'">
+              <span class="tf-icons bx bx-plus me-1"></span>Nuovo compito
+          </button>
+          <span style="margin-top: 10px;"></span>
+          <div class="menu-inner-shadow"></div>
+          <button type="button" style="border-radius: 0;" class="btn btn-info btn-link" onclick="location.href='../'">
             <span class="tf-icons bx bx-chevron-left me-1"></span>Inizio
         </button>
-        
-        <!-- Adicionando um espaço -->
-        <span style="margin-top: 10px;"></span>
-          <button id="Register" type="button" class="btn btn-warning" style="border-radius: 0; padding: 3vh;" onclick="location.href='./html/signin'">
-            <span class="tf-icons bx bx-user me-1"></span>Registra l'account
-        </button>
-
-        <button id="Categoria" type="button" class="btn btn-danger btn-link" style="border-radius: 0;" onclick="location.href='../html/New-Category'">
-          <span class="tf-icons bx bx-plus me-1"></span>Categoria
-      </button>
-      <span style="margin-top: 10px;"></span>
-        
-      <button id="Perfil" type="button" class="btn btn-warning btn-link" style="border-radius: 0;" onclick="location.href='../html/profilo'">
-        <span class="tf-icons bx bx-user me-1"></span>Profilo
-    </button>
-          
-
-      <script>
-        const session = "<?php if(empty($_SESSION['Id_User'])){echo '';}else{echo '23';} ?>";
-        
-        const perfilElement = document.getElementById('Perfil');
-        const categoriaElement = document.getElementById('Categoria');
-        const registerElement = document.getElementById('Register');
-        
-        if (session === '') {
-            perfilElement.classList.add('d-none');
-            categoriaElement.classList.add('d-none');
-            registerElement.classList.remove('d-none');
-        } else {
-            perfilElement.classList.remove('d-none');
-            categoriaElement.classList.remove('d-none');
-            registerElement.classList.add('d-none');
-        }
-    </script>
-      <ul class="menu-inner py-2 overflow-auto" style="overflow-x: hidden; overflow-y: scroll; height: 100vh;">
+    <ul class="menu-inner py-2 overflow-auto" style="overflow-x: hidden; overflow-y: scroll; height: 100vh;">
         <li class="menu-item">
           <!-- Components -->
           <ul class="menu-inner py-2 overflow-auto">
@@ -211,142 +182,124 @@
                 });
             });
         </script>
-              <style>
-                .menu-inner {
-                  overflow-x: hidden;
-                  overflow-y: scroll;
-                  height: 100vh;
-                  scrollbar-width: none; /* For Firefox */
-                }
-              
-                .menu-inner::-webkit-scrollbar {
-                  width: 0; /* Remove scrollbar space */
-                  background: transparent; /* Optional: just to avoid a flash of white when scrolling */
-                }
-              </style>
-              </li>
-        </ul>
-        </aside>
-        <!-- / Menu -->
+                <style>
+                  .menu-inner {
+                    overflow-x: hidden;
+                    overflow-y: scroll;
+                    height: 100vh;
+                    scrollbar-width: none; /* For Firefox */
+                  }
+                
+                  .menu-inner::-webkit-scrollbar {
+                    width: 0; /* Remove scrollbar space */
+                    background: transparent; /* Optional: just to avoid a flash of white when scrolling */
+                  }
+                </style>
+                </li>
+          </ul>
         
-
-        <!-- Layout container -->
+        </aside>
         <div class="layout-page">
 
-                <!-- Content wrapper -->
-                <div class="content-wrapper">
-          
-                  <!-- Content -->
+            
                   
-                    <div class="container-xxl flex-grow-1 container-p-y">
-                      
-                      
-                <h4 class="py-3 mb-4"><span class="text-muted fw-light">Nuovo compito/</span> 
-                  Aggiungi una nuova attività</h4>
-                
-                <!-- Basic Layout -->
-                <div class="row">
-                  <div class="col-xl">
-                    <div class="card mb-4">
-                      <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Modulo attività</h5>
-                        <small class="text-muted float-end">Compila i campi per aggiungere una nuova attività</small>
-                      </div>
-                      <div class="card-body">
-                        <form id="newTaskForm" class="mb-3" action="../html/New-Task" method="post" autocomplete="off">
-                          <div class="mb-3">
-                              <label class="form-label" for="titolo">Titolo</label>
-                              <div class="input-group input-group-merge">
-                                  <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
-                                  <input type="text" class="form-control" id="titolo" name="titolo" placeholder="Titolo" aria-label="Titolo" aria-describedby="basic-icon-default-fullname2" />
-                              </div>
-                          </div>            
-                          <div class="mb-3">
-                              <label class="form-label" for="avidita">Avidità</label>
-                              <div class="input-group input-group-merge">
-                                  <span id="basic-icon-default-message2" class="input-group-text"><i class="bx bx-comment"></i></span>
-                                  <textarea id="avidita" name="avidita" class="form-control" style="height: 100px;" placeholder="Scrivi dove si trova la tua nuova attività" aria-label="Scrivi dove si trova la tua nuova attività" aria-describedby="basic-icon-default-message2"></textarea>
-                              </div>
-                          </div>
-                          <div class="mb-3">
-                              <label class="form-label" for="data">Data finale</label>
-                              <div class="input-group input-group-merge">
-                                  <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-calendar"></i></span>
-                                  <input type="date" class="form-control" id="data" name="data" aria-label="" aria-describedby="basic-icon-default-fullname2" />
-                                  <div id="dataError" class="invalid-feedback" style="display:none;">A data final deve ser maior que a data atual.</div>
-                              </div>
-                          </div> 
-                          <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-message">Categoria</label>
-                            <div class="input-group input-group-merge">
-                                <span id="basic-icon-default-message2" class="input-group-text"><i class="bx bx-folder"></i></span>
-                                <select id="defaultSelect" class="form-select" name="categoria">
-                                    <!-- Opções serão adicionadas aqui -->
-                                </select>
+            
+                  <!-- Content wrapper -->
+                  <div class="content-wrapper">
+            
+                    <!-- Content -->
+                    
+                      <div class="container-xxl flex-grow-1 container-p-y">
+                        
+                    
+        
+                        <div class="container">
+                            <h6 class="mt-2 text-muted">Attività</h6>
+                            <div class="card mb-4">
+                                <div class="card-body" id="taskDetails">
+                                    <!-- Detalhes da tarefa serão adicionados aqui -->
+                                </div>
                             </div>
                         </div>
                         
                         <script>
-                            // Converte os dados das categorias em um objeto JavaScript
-                            const options = JSON.parse('<?php echo $tasksJson4; ?>');
-                        
-                            // Seleciona o seletor de categorias
-                            const selectElement = document.getElementById('defaultSelect');
-                        
-                            // Para cada categoria, cria uma opção e adiciona ao seletor
-                            options.forEach(category => {
-                                const option = document.createElement('option');
-                                option.value = category.id_category;
-                                option.textContent = category.name;
-                                selectElement.appendChild(option);
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const task = JSON.parse('<?php echo $task5; ?>');
+                                const taskDetails = document.getElementById('taskDetails');
+                                if (task && Object.keys(task).length > 0) {
+                                    taskDetails.innerHTML = `
+                                        <h5 class="card-title">${task.title}</h5>
+                                        <div class="card-subtitle text-muted mb-3">${task.category_name}</div>
+                                        <p class="card-text">${task.description}</p>
+                                        <tr>
+                                            <td class="py-3">
+                                                <small class="text-muted">Data finale</small><h3 class="mb-7">${task.final_date}</h1>
+                                            </td>
+                                        </tr>
+                                        <div class="row">
+                                        <div class="col">
+                                            <form method="post" action="../html/complettask">
+                                                <input type="hidden" name="idtask" value="${task.id_task}" />
+                                                <button class="btn rounded-pill btn-outline-success" type="submit">Completa l'attività</button>
+                                            </form>
+                                        </div>
+                                        <div class="col">
+                                            <form method="post" action="../html/delettask">
+                                                <input type="hidden" name="idtask" value="${task.id_task}" />
+                                                <button class="btn rounded-pill btn-outline-danger" type="submit">Eliminare l'attività</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                        
+                                    `;
+                                } else {
+                                    taskDetails.innerHTML = '<p>No task details available.</p>';
+                                }
                             });
-                        </script> 
-                          <button type="submit" class="btn btn-primary">Inviare</button>
-                      </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-      
-                </div>
-                <!-- / Content -->
-                
-                <div class="content-backdrop fade"></div>
-              </div>
-              <!-- Content wrapper -->
+                        </script>
+              
             </div>
-            <!-- / Layout page -->
-          </div>
-      
-          
-          
-          <!-- Overlay -->
-          <div class="layout-overlay layout-menu-toggle"></div>
-          
-          
-        </div>
-        <!-- / Layout wrapper -->
+            
+        
 
-      
+
+            
+ 
+            
+            
+            
+            
+        
+            
+            
+            
+                      </div>
+                      <!-- / Content -->
+            
+                      
+                      <div class="content-backdrop fade"></div>
+                    </div>
+                    <!-- Content wrapper -->
+                  </div>
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
-    <script src="../assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="../assets/vendor/libs/popper/popper.js"></script>
-    <script src="../assets/vendor/js/bootstrap.js"></script>
-    <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="../../../../../assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../../../../../assets/vendor/libs/popper/popper.js"></script>
+    <script src="../../../../../assets/vendor/js/bootstrap.js"></script>
+    <script src="../../../../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 
-    <script src="../assets/vendor/js/menu.js"></script>
+    <script src="../../../../../assets/vendor/js/menu.js"></script>
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-    <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+    <script src="../../../../../assets/vendor/libs/apex-charts/apexcharts.js"></script>
 
     <!-- Main JS -->
-    <script src="../assets/js/main.js"></script>
+    <script src="../../../../../assets/js/main.js"></script>
 
     <!-- Page JS -->
-    <script src="../assets/js/dashboards-analytics.js"></script>
+    <script src="../../../../../assets/js/dashboards-analytics.js"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>

@@ -85,7 +85,7 @@
             <span class="tf-icons bx bx-user me-1"></span>Registra l'account
         </button>
         
-        <button id="Perfil" type="button" class="btn btn-warning" style="border-radius: 0; padding: 3vh;" onclick="location.href='../html/New-Task'">
+        <button id="Perfil" type="button" class="btn btn-warning" style="border-radius: 0; padding: 3vh;" onclick="location.href='../html/profilo'">
           <span class="tf-icons bx bx-user me-1"></span>Profilo
         </button>
           
@@ -104,71 +104,119 @@
             registerElement.classList.add('d-none');
         }
     </script>
-    
-        
-       
-              <!-- Components -->
-              <!-- Alta Urgenza Section -->
-              <li class="menu-header small text-uppercase"><span class="menu-header-text">Alta urgenza</span></li>
-              <div class="container">
-                  <div class="row" id="taskList"></div>
-              </div>
-
-              <!-- Seção Normale -->
-              <li class="menu-header small text-uppercase"><span class="menu-header-text">Normale</span></li>
-              <div class="container">
-                  <div class="row" id="taskListar"></div>
-              </div>
-
-              <!-- Seção Ho Tempo -->
-              <li class="menu-header small text-uppercase"><span class="menu-header-text">Ho tempo</span><span>&#128512;</span></li>
-              <div class="container">
-                  <div class="row" id="taskListHoTempo"></div>
-              </div>
-
-              <script>
-                  // Converte os dados das tarefas de Alta Urgenza em um objeto JavaScript
-                  const tasks1 = JSON.parse('<?php echo $tasksJson1; ?>');
-
-                  // Seleciona o contêiner onde as tarefas de Alta Urgenza serão adicionadas
-                  const taskContainer1 = document.getElementById('taskList');
-
-                  // Para cada tarefa de Alta Urgenza, cria um card e adiciona ao contêiner
-                  tasks1.forEach(task => {
-                      const card = document.createElement('div');
-                      card.className = 'col-12'; // Tarefa ocupa toda a linha
-                      card.innerHTML = `<a href="">${task.title}</a>`; // Exibe o nome da categoria
-                      taskContainer1.appendChild(card);
-                  });
-
-                  // Converte os dados das tarefas Normale em um objeto JavaScript
-                  const tasks2 = JSON.parse('<?php echo $tasksJson2; ?>');
-
-                  // Seleciona o contêiner onde as tarefas Normale serão adicionadas
-                  const taskContainer2 = document.getElementById('taskListar');
-
-                  // Para cada tarefa Normale, cria um card e adiciona ao contêiner
-                  tasks2.forEach(task => {
-                      const card = document.createElement('div');
-                      card.className = 'col-12'; // Tarefa ocupa toda a linha
-                      card.innerHTML = `${task.title}`; // Exibe o nome da categoria
-                      taskContainer2.appendChild(card);
-                  });
-
-                  // Converte os dados das tarefas Ho Tempo em um objeto JavaScript
-                  const tasks3 = JSON.parse('<?php echo $tasksJson3; ?>');
-
-                  // Seleciona o contêiner onde as tarefas Ho Tempo serão adicionadas
-                  const taskContainer3 = document.getElementById('taskListHoTempo');
-
-                  // Para cada tarefa Ho Tempo, cria um card e adiciona ao contêiner
-                  tasks3.forEach(task => {
-                      const card = document.createElement('div');
-                      card.className = 'col-12'; // Tarefa ocupa toda a linha
-                      card.innerHTML = `${task.title}`; // Exibe o nome da categoria
-                      taskContainer3.appendChild(card);
-                  });
-              </script>
+    <ul class="menu-inner py-2 overflow-auto" style="overflow-x: hidden; overflow-y: scroll; height: 100vh;">
+      <li class="menu-item">
+        <!-- Components -->
+        <ul class="menu-inner py-2 overflow-auto">
+          <!-- Alta Urgenza Section -->
+          <li class="menu-header small text-uppercase"><span class="menu-header-text">Alta urgenza</span></li>
+          <div class="container">
+              <div class="row" id="taskList"></div>
+          </div>
+  
+          <!-- Seção Normale -->
+          <li class="menu-header small text-uppercase"><span class="menu-header-text">Normale</span></li>
+          <div class="container">
+              <div class="row" id="taskListar"></div>
+          </div>
+  
+          <!-- Seção Ho Tempo -->
+          <li class="menu-header small text-uppercase"><span class="menu-header-text">Ho tempo</span><span>&#128512;</span></li>
+          <div class="container">
+              <div class="row" id="taskListHoTempo"></div>
+          </div>
+  
+          <!-- Categorias -->
+          <li class="menu-header small text-uppercase"><span class="menu-header-text">Categorias</span><span>&#128512;</span></li>
+          <div class="container">
+              <div class="row" id="taskListCategory"></div>
+          </div>
+      </ul>
+  
+      <script>
+          document.addEventListener('DOMContentLoaded', function() {
+              // Converte os dados das tarefas de Alta Urgenza em um objeto JavaScript
+              const tasks1 = JSON.parse('<?php echo $tasksJson1; ?>');
+  
+              // Seleciona o contêiner onde as tarefas de Alta Urgenza serão adicionadas
+              const taskContainer1 = document.getElementById('taskList');
+  
+              // Para cada tarefa de Alta Urgenza, cria um card e adiciona ao contêiner
+              tasks1.forEach(task => {
+                  const card = document.createElement('div');
+                  card.className = 'col-12'; // Tarefa ocupa toda a linha
+                  card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
+                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da tarefa
+                  taskContainer1.appendChild(card);
+              });
+  
+              // Converte os dados das tarefas Normale em um objeto JavaScript
+              const tasks2 = JSON.parse('<?php echo $tasksJson2; ?>');
+  
+              // Seleciona o contêiner onde as tarefas Normale serão adicionadas
+              const taskContainer2 = document.getElementById('taskListar');
+  
+              // Para cada tarefa Normale, cria um card e adiciona ao contêiner
+              tasks2.forEach(task => {
+                  const card = document.createElement('div');
+                  card.className = 'col-12'; // Tarefa ocupa toda a linha
+                  card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
+                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da tarefa
+                  taskContainer2.appendChild(card);
+              });
+  
+              // Converte os dados das tarefas Ho Tempo em um objeto JavaScript
+              const tasks3 = JSON.parse('<?php echo $tasksJson3; ?>');
+  
+              // Seleciona o contêiner onde as tarefas Ho Tempo serão adicionadas
+              const taskContainer3 = document.getElementById('taskListHoTempo');
+  
+              // Para cada tarefa Ho Tempo, cria um card e adiciona ao contêiner
+              tasks3.forEach(task => {
+                  const card = document.createElement('div');
+                  card.className = 'col-12'; // Tarefa ocupa toda a linha
+                  card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
+                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da tarefa
+                  taskContainer3.appendChild(card);
+              });
+  
+              // Converte os dados das categorias em um objeto JavaScript
+              const tasks4 = JSON.parse('<?php echo $tasksJson4; ?>');
+  
+              // Seleciona o contêiner onde as categorias serão adicionadas
+              const taskContainer4 = document.getElementById('taskListCategory');
+  
+              // Para cada categoria, cria um card e adiciona ao contêiner
+              tasks4.forEach(task => {
+                  const card = document.createElement('div');
+                  card.className = 'col-12'; // Categoria ocupa toda a linha
+                  card.innerHTML = `<form method="post" action="../html/deletecategory"><div class="d-flex justify-content-between align-items-center">
+            <span>${task.name}</span> <!-- Exibe o nome da categoria -->
+            <input type="hidden" value="${task.id_category}" name="idcategory"/>
+            <button class="btn btn-link" type="submit">
+              <span class="tf-icons bx bx-trash p-0"></span>
+            </button>
+        </div></form>`; // Exibe o nome da categoria
+                  taskContainer4.appendChild(card);
+              });
+          });
+      </script>
+              <style>
+                .menu-inner {
+                  overflow-x: hidden;
+                  overflow-y: scroll;
+                  height: 100vh;
+                  scrollbar-width: none; /* For Firefox */
+                }
+              
+                .menu-inner::-webkit-scrollbar {
+                  width: 0; /* Remove scrollbar space */
+                  background: transparent; /* Optional: just to avoid a flash of white when scrolling */
+                }
+              </style>
+              </li>
+        </ul>
+      
         
         </aside>
         <!-- / Menu --> 
