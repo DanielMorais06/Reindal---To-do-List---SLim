@@ -32,3 +32,7 @@ $app->post('/html/logout', 'TaskController:postLogout');
 $app->get('/html/deletecategory', 'TaskController:getDeleteCategory')->setName('html.deletecategory');
 $app->post('/html/deletecategory', 'TaskController:postDeleteCategory');
 
+$app->get('/html/category', 'TaskController:getCategory')->setName('html.category');
+$app->post('/html/category', 'TaskController:postCategory');
+
+

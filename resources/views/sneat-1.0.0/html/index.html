@@ -189,13 +189,16 @@
                       const card = document.createElement('div');
                       card.className = 'col-12';
                       task.name = task.name.replace(/\*\*/g, "'");
-                      card.innerHTML = `<form method="post" action="./html/deletecategory"><div class="d-flex justify-content-between align-items-center">
-            <span>${task.name}</span> <!-- Exibe o nome da categoria -->
-            <input type="hidden" value="${task.id_category}" name="idcategory"/>
-            <button class="btn btn-link" type="submit">
-              <span class="tf-icons bx bx-trash p-0"></span>
-            </button>
-        </div></form>`; // Exibe o nome da categoria
+                      card.innerHTML = `<div class="d-flex justify-content-between align-items-center">
+                        <form method="post" action="./html/category"><input type="hidden" name="category" value="${task.id_category}" /><button class="btn btn-link p-0"><span>${task.name}</span></button></form>
+                        <form method="post" action="./html/deletecategory">
+                            <input type="hidden" value="${task.id_category}" name="idcategory"/>
+                            <button class="btn btn-link" type="submit">
+                                <span class="tf-icons bx bx-trash p-0"></span>
+                            </button>
+                        </form>
+                    </div>
+                    `; 
                       taskContainer4.appendChild(card);
                   });
               </script>
@@ -321,39 +324,8 @@
           </div>
           
                     </div>
-                    <div id="alertContainer" class="position-fixed bottom-0 end-0 p-3" style="display: none;">
-                      <div class="toast align-items-center text-white bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="d-flex">
-                          <div class="toast-body" id="alertMessage"></div>
-                          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-                      </div>
-                    </div>
                     
-                    <script>
-                      // Função para mostrar o alerta
-                      function showAlert(message) {
-                        var alertContainer = document.getElementById('alertContainer');
-                        var alertMessage = document.getElementById('alertMessage');
-                        alertMessage.innerText = message;
-                        alertContainer.style.display = 'block';
-                    
-                        // Ativar o toast assim que a página for carregada
-                        var toastEl = document.querySelector('.toast');
-                        var toast = new bootstrap.Toast(toastEl);
-                        toast.show();
-                    
-                        // Ocultar o alerta após alguns segundos
-                        setTimeout(function() {
-                          alertContainer.style.display = 'none';
-                        }, 5000); // 5000 milissegundos = 5 segundos
-                      }
-                    
-                      // Suponha que ocorra um erro e você deseja exibir uma mensagem de erro
-                      var errorMessage = "Impossibile eliminare la categoria.";
-                      showAlert(errorMessage);
-                    </script>
-                    
+                  
           
                     
                     

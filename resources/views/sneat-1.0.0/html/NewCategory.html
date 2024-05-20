@@ -199,13 +199,15 @@
                   const card = document.createElement('div');
                   card.className = 'col-12'; // Categoria ocupa toda a linha
                   task.name = task.name.replace(/\*\*/g, "'");
-                  card.innerHTML = `<form method="post" action="../html/deletecategory"><div class="d-flex justify-content-between align-items-center">
-            <span>${task.name}</span> <!-- Exibe o nome da categoria -->
-            <input type="hidden" value="${task.id_category}" name="idcategory"/>
-            <button class="btn btn-link" type="submit">
-              <span class="tf-icons bx bx-trash p-0"></span>
-            </button>
-        </div></form>`; // Exibe o nome da categoria
+                  card.innerHTML = `<div class="d-flex justify-content-between align-items-center">
+                        <form method="post" action="../html/category"><input type="hidden" name="category" value="${task.id_category}" /><button class="btn btn-link p-0"><span>${task.name}</span></button></form>
+                        <form method="post" action="../html/deletecategory">
+                            <input type="hidden" value="${task.id_category}" name="idcategory"/>
+                            <button class="btn btn-link" type="submit">
+                                <span class="tf-icons bx bx-trash p-0"></span>
+                            </button>
+                        </form>
+                    </div>`; // Exibe o nome da categoria
                   taskContainer4.appendChild(card);
               });
           });

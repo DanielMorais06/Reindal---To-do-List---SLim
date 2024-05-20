@@ -637,39 +637,80 @@ class TaskController extends Controller{
     
     }
     public function postDeleteCategory($request, $response) {
+
         $iduser = $_SESSION['Id_User'];
         $idcategory = $request->getParam('idcategory');
+
+        $query5 = "DELETE FROM  tasks WHERE category = :idcategory AND id_user = :iduser";
+        $stmt5 = $this->container->db->prepare($query5);
+        $stmt5->execute(['idcategory' => $idcategory, 'iduser' => $iduser]);
+
+        $query5 = "DELETE FROM  categorys WHERE id_category = :idcategory AND id_user = :iduser";
+        $stmt5 = $this->container->db->prepare($query5);
+        $stmt5->execute(['idcategory' => $idcategory, 'iduser' => $iduser]);
+       
+        return $response->withRedirect('/public/');
+    }
+
+    public function getCategory($request, $response){
+
+       
     
-        $queryCheckTasks = "SELECT COUNT(*) FROM tasks WHERE category = :idcategory AND id_user = :iduser";
-        $stmtCheckTasks = $this->container->db->prepare($queryCheckTasks);
-        $stmtCheckTasks->execute(['idcategory' => $idcategory, 'iduser' => $iduser]);
-        $numTasks = $stmtCheckTasks->fetchColumn();
+    }
+    public function postCategory($request, $response) {
+        $iduser = $_SESSION['Id_User'];
+        $idcategory = $request->getParam('category');
     
-        if ($numTasks > 0) {
-            // Se houver tarefas associadas, você pode lidar com isso aqui, como exibir uma mensagem de erro ou redirecionar para outra página.
-            // Neste exemplo, vamos apenas retornar uma resposta indicando que há tarefas associadas.
-            $_SESSION['alert'] = 'Existem tarefas associadas a esta categoria.';
-            return $response->withRedirect('/public/');
-        } else {
-            // Se não houver tarefas associadas, prossiga com a exclusão da categoria.
-            $queryDeleteCategory = "DELETE FROM categorys WHERE id_category = :idcategory AND id_user = :iduser";
-            $stmtDeleteCategory = $this->container->db->prepare($queryDeleteCategory);
-            $stmtDeleteCategory->execute(['idcategory' => $idcategory, 'iduser' => $iduser]);
+        // Define a data limite para 3 dias no futuro
+        $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
+        $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
+        $stmt1 = $this->container->db->prepare($query1);
+        $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
+        $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
+        $tasksJson1 = json_encode($tasks1);
     
-            // Verifica se a exclusão foi bem-sucedida
-            if ($stmtDeleteCategory->rowCount() > 0) {
-                $_SESSION['alert'] = 'Categoria excluída com sucesso.';
-                return $response->withRedirect('/public/');
-            } else {
-                // Se não foi possível excluir a categoria, você pode lidar com isso aqui, como exibir uma mensagem de erro.
-                $_SESSION['alert'] = 'Erro ao excluir a categoria.';
-                return $response->withRedirect('/public/');
-            }
-        }
+        // Define a data limite para uma semana no futuro
+        $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
+        $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
+        $stmt2 = $this->container->db->prepare($query2);
+        $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
+        $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
+        $tasksJson2 = json_encode($tasks2);
+    
+        // Define a data limite para a data atual
+        $dateLimit3 = date('Y-m-d');
+        $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
+        $stmt3 = $this->container->db->prepare($query3);
+        $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
+        $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
+        $tasksJson3 = json_encode($tasks3);
+    
+        $query4 = "SELECT * FROM categorys WHERE id_user = :iduser";
+        $stmt4 = $this->container->db->prepare($query4);
+        $stmt4->execute(['iduser' => $iduser]);
+        $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
+        $tasksJson4 = json_encode($tasks4);
+    
+        // Fetch all tasks for the specific category
+        $query5 = "SELECT t.*, c.name AS category_name, u.*
+           FROM tasks t
+           JOIN categorys c ON t.category = c.id_category
+           JOIN users u ON t.id_user = u.id_user
+           WHERE t.category = :idcategory";
+$stmt5 = $this->container->db->prepare($query5);
+$stmt5->execute(['idcategory' => $idcategory]);
+$tasksByCategory = $stmt5->fetchAll(\PDO::FETCH_ASSOC);
+$tasksJson5 = json_encode($tasksByCategory);
+    
+        return $this->container->view->render($response, '/sneat-1.0.0/html/Category.html', [
+            'tasksJson1' => $tasksJson1,
+            'tasksJson2' => $tasksJson2,
+            'tasksJson3' => $tasksJson3,
+            'tasksJson4' => $tasksJson4,
+            'tasksJson5' => $tasksJson5
+        ]);
     }
     
-    
-
 
 
 
