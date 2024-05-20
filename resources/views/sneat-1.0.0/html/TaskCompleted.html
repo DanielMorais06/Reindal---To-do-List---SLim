@@ -228,35 +228,74 @@
                         </div>
                         
                         <script>
-                            document.addEventListener('DOMContentLoaded', function() {
-                                const task = JSON.parse('<?php echo $task5; ?>');
-                                const taskDetails = document.getElementById('taskDetails');
-                                if (task && Object.keys(task).length > 0) {
+                          document.addEventListener('DOMContentLoaded', function() {
+                              const task = JSON.parse('<?php echo $task5; ?>');
+                              const taskDetails = document.getElementById('taskDetails');
+                      
+                              if (task && Object.keys(task).length > 0) {
                                   task.description = task.description.replace(/\*\*/g, "'");
-                                    taskDetails.innerHTML = `
-                                        <h5 class="card-title">${task.title}</h5>
-                                        <div class="card-subtitle text-muted mb-3">${task.category_name}</div>
-                                        <p class="card-text">${task.description}</p>
-                                        <tr>
-                                            <td class="py-3">
-                                                <small class="text-muted">Data finale</small><h3 class="mb-7">${task.final_date}</h1>
-                                            </td>
-                                        </tr>
-                                        <div class="row">
-                                        <div class="col">
-                                            <form method="post" action="../html/delettask">
-                                                <input type="hidden" name="idtask" value="${task.id_task}" />
-                                                <button class="btn rounded-pill btn-outline-danger" type="submit">Eliminare l'attività</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                        
-                                    `;
-                                } else {
-                                    taskDetails.innerHTML = '<p>No task details available.</p>';
-                                }
-                            });
-                        </script>
+                      
+                                  // Calcula o tempo restante
+                                  const endDate = new Date(task.final_date).getTime();
+                                  const now = new Date().getTime();
+                                  let timeRemaining = endDate - now;
+                      
+                                  const years = Math.floor(timeRemaining / (1000 * 60 * 60 * 24 * 365));
+                                  timeRemaining %= 1000 * 60 * 60 * 24 * 365;
+                                  const months = Math.floor(timeRemaining / (1000 * 60 * 60 * 24 * 30));
+                                  timeRemaining %= 1000 * 60 * 60 * 24 * 30;
+                                  const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                                  timeRemaining %= 1000 * 60 * 60 * 24;
+                                  const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+                                  timeRemaining %= 1000 * 60 * 60;
+                                  const minutes = Math.floor(timeRemaining / (1000 * 60));
+                                  timeRemaining %= 1000 * 60;
+                                  const seconds = Math.floor(timeRemaining / 1000);
+                      
+                                  let countdown = '';
+                      
+                                  if (years > 0) countdown += `${years} anos, `;
+                                  if (months > 0) countdown += `${months} meses, `;
+                                  if (days > 0) countdown += `${days} dias, `;
+                                  if (hours > 0) countdown += `${hours} horas, `;
+                                  if (minutes > 0) countdown += `${minutes} minutos, `;
+                                  if (seconds > 0) countdown += `${seconds} segundos`;
+                      
+                                  countdown = countdown.replace(/,\s*$/, ""); // Remove a vírgula no final, se houver
+                      
+                                  // Define o conteúdo HTML dos detalhes da tarefa
+                                  taskDetails.innerHTML = `
+                                      <h5 class="card-title">${task.title}</h5>
+                                      <div class="card-subtitle text-muted mb-3">${task.category_name}</div>
+                                      <p class="card-text larger-font">${task.description}</p>
+                                      <div class="row">
+                                          <div class="col">
+                                              <small class="text-muted">Data finale</small><h3 class="mb-7">${task.final_date}</h3>
+                                          </div>
+                                          <div class="col">
+                                              <small class="text-muted">Tempo restante</small><h3 class="mb-7">${countdown}</h3>
+                                          </div>
+                                      </div>
+                                      <style>
+                                          .larger-font {
+                                              font-size: 30px;
+                                              color: black;
+                                          }
+                                      </style>
+                                      <div class="row mt-3">
+                                          <div class="col">
+                                              <form method="post" action="../html/delettask">
+                                                  <input type="hidden" name="idtask" value="${task.id_task}" />
+                                                  <button class="btn rounded-pill btn-outline-danger" type="submit">Eliminare l'attività</button>
+                                              </form>
+                                          </div>
+                                      </div>
+                                  `;
+                              } else {
+                                  taskDetails.innerHTML = '<p>No task details available.</p>';
+                              }
+                          });
+                      </script>
               
             </div>
             

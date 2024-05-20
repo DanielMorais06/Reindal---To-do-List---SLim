@@ -139,6 +139,9 @@ class TaskController extends Controller{
     }
 
     public function getNewCategory($request, $response){
+        if(empty($_SESSION['Id_User'])){
+            return $this->container->view->render($response, 'sneat-1.0.0/html/Login.html');
+        } else {
         $iduser = $_SESSION['Id_User'];
 
             // Define a data limite para 3 dias no futuro
@@ -177,6 +180,7 @@ class TaskController extends Controller{
                 'tasksJson3' => $tasksJson3,
                 'tasksJson4' => $tasksJson4
             ]);
+        }
     
     }
     public function postNewCategory($request, $response){
