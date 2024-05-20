@@ -155,6 +155,7 @@
                 tasks1.forEach(task => {
                     const card = document.createElement('div');
                     card.className = 'col-12'; // Tarefa ocupa toda a linha
+                    task.title = task.title.replace(/\*\*/g, "'");
                     card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
                             <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da tarefa
                     taskContainer1.appendChild(card);
@@ -170,6 +171,7 @@
                 tasks2.forEach(task => {
                     const card = document.createElement('div');
                     card.className = 'col-12'; // Tarefa ocupa toda a linha
+                    task.title = task.title.replace(/\*\*/g, "'");
                     card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
                             <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da tarefa
                     taskContainer2.appendChild(card);
@@ -185,6 +187,7 @@
                 tasks3.forEach(task => {
                     const card = document.createElement('div');
                     card.className = 'col-12'; // Tarefa ocupa toda a linha
+                    task.title = task.title.replace(/\*\*/g, "'");
                     card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
                             <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da tarefa
                     taskContainer3.appendChild(card);
@@ -200,6 +203,7 @@
                 tasks4.forEach(task => {
                     const card = document.createElement('div');
                     card.className = 'col-12'; // Categoria ocupa toda a linha
+                    task.name = task.name.replace(/\*\*/g, "'");
                     card.innerHTML = `<form method="post" action="../html/deletecategory"><div class="d-flex justify-content-between align-items-center">
             <span>${task.name}</span> <!-- Exibe o nome da categoria -->
             <input type="hidden" value="${task.id_category}" name="idcategory"/>
@@ -255,31 +259,30 @@
                       <div class="card-body">
                         <form id="newTaskForm" class="mb-3" action="../html/New-Task" method="post" autocomplete="off">
                           <div class="mb-3">
-                              <label class="form-label" for="titolo">Titolo</label>
+                              <label class="form-label <?php echo $erroVazio ? 'text-danger' : ''; ?>" for="titolo">Titolo</label>
                               <div class="input-group input-group-merge">
                                   <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-user"></i></span>
                                   <input type="text" class="form-control" id="titolo" name="titolo" placeholder="Titolo" aria-label="Titolo" aria-describedby="basic-icon-default-fullname2" />
                               </div>
                           </div>            
                           <div class="mb-3">
-                            <label class="form-label" for="avidita">Avidità</label>
+                            <label class="form-label <?php echo $erroVazio ? 'text-danger' : ''; ?>" for="avidita">Avidità</label>
                             <div class="input-group input-group-merge">
                                 <span id="basic-icon-default-message2" class="input-group-text"><i class="bx bx-comment"></i></span>
                                 <textarea id="avidita" name="avidita" class="form-control"  placeholder="Scrivi dove si trova la tua nuova attività" aria-label="Scrivi dove si trova la tua nuova attività" aria-describedby="basic-icon-default-message2"></textarea>
                             </div>
                         </div>
                           <div class="mb-3">
-                              <label class="form-label" for="data">Data finale</label>
+                              <label class="form-label <?php echo $erroData ? 'text-danger' : ''; ?>" for="data">Data finale</label>
                               <div class="input-group input-group-merge">
                                   <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-calendar"></i></span>
                                   <input type="date" class="form-control" id="data" name="data" aria-label="" aria-describedby="basic-icon-default-fullname2" />
-                                  <div id="dataError" class="invalid-feedback" style="display:none;">A data final deve ser maior que a data atual.</div>
                               </div>
                           </div> 
                           <div class="mb-3">
-                            <label class="form-label" for="basic-icon-default-message">Categoria</label>
+                            <label class="form-label <?php echo $erroVazio ? 'text-danger' : ''; ?>" for="basic-icon-default-message">Categoria</label>
                             <div class="input-group input-group-merge">
-                                <span id="basic-icon-default-message2" class="input-group-text"><i class="bx bx-folder"></i></span>
+                                <span id="basic-icon-default-message2" class="input-group-text  "><i class="bx bx-folder"></i></span>
                                 <select id="defaultSelect" class="form-select" name="categoria">
                                     <!-- Opções serão adicionadas aqui -->
                                 </select>
@@ -287,22 +290,25 @@
                         </div>
                         
                         <script>
-                            // Converte os dados das categorias em um objeto JavaScript
                             const options = JSON.parse('<?php echo $tasksJson4; ?>');
                         
-                            // Seleciona o seletor de categorias
                             const selectElement = document.getElementById('defaultSelect');
                         
-                            // Para cada categoria, cria uma opção e adiciona ao seletor
                             options.forEach(category => {
                                 const option = document.createElement('option');
                                 option.value = category.id_category;
+                                category.name = category.name.replace(/\*\*/g, "'");
                                 option.textContent = category.name;
                                 selectElement.appendChild(option);
                             });
                         </script> 
                           <button type="submit" class="btn btn-primary">Inviare</button>
                       </form>
+                      <style>
+                        .error {
+                            border-color: red;
+                        }
+                    </style>
                       </div>
                     </div>
                   </div>

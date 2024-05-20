@@ -42,6 +42,8 @@ $container['db'] = function ($c) {
         $db['user'], $db['pass']);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    
     return $pdo;
 };
 
@@ -53,10 +55,6 @@ $container['view'] = function($container){
 
 $container['HomeController'] = function($container){
     return new App\Controllers\HomeController($container);
-};
-
-$container['AuthController'] = function($container){
-    return new App\Controllers\Auth\AuthController($container);
 };
 
 $container['TaskController'] = function($container){

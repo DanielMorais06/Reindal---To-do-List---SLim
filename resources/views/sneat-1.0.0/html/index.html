@@ -140,6 +140,7 @@
                   tasks1.forEach(task => {
                       const card = document.createElement('div');
                       card.className = 'col-12'; // Tarefa ocupa toda a linha
+                      task.title = task.title.replace(/\*\*/g, "'");
                       card.innerHTML = `<form method='post' action='./html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
                             <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da categoria
                       taskContainer1.appendChild(card);
@@ -155,6 +156,7 @@
                   tasks2.forEach(task => {
                       const card = document.createElement('div');
                       card.className = 'col-12'; // Tarefa ocupa toda a linha
+                      task.title = task.title.replace(/\*\*/g, "'");
                       card.innerHTML = `<form method='post' action='./html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
                             <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da categoria
                       taskContainer2.appendChild(card);
@@ -170,6 +172,7 @@
                   tasks3.forEach(task => {
                       const card = document.createElement('div');
                       card.className = 'col-12'; // Tarefa ocupa toda a linha
+                      task.title = task.title.replace(/\*\*/g, "'");
                       card.innerHTML = `<form method='post' action='./html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
                             <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da categoria
                       taskContainer3.appendChild(card);
@@ -184,7 +187,8 @@
                   // Para cada tarefa Ho Tempo, cria um card e adiciona ao contêiner
                   tasks4.forEach(task => {
                       const card = document.createElement('div');
-                      card.className = 'col-12'; // Tarefa ocupa toda a linha
+                      card.className = 'col-12';
+                      task.name = task.name.replace(/\*\*/g, "'");
                       card.innerHTML = `<form method="post" action="./html/deletecategory"><div class="d-flex justify-content-between align-items-center">
             <span>${task.name}</span> <!-- Exibe o nome da categoria -->
             <input type="hidden" value="${task.id_category}" name="idcategory"/>
@@ -229,20 +233,17 @@
         
           <h5 class="pb-1 mb-4">Attività</h5>
           <div class="row mb-5" id="taskListas">
-            <!-- Cards de tarefas serão adicionados aqui -->
         </div>
         
         <script>
-            // Converte os dados das tarefas em um objeto JavaScript
             const tasks = JSON.parse('<?php echo $tasksJson4; ?>');
         
-            // Seleciona o contêiner onde os cards de tarefa serão adicionados
             const taskContainer = document.getElementById('taskListas');
         
-            // Para cada tarefa, cria um card e adiciona ao contêiner
             tasks.forEach(task => {
                 const card = document.createElement('div');
                 card.className = 'col-md-6 col-lg-4';
+                task.description = task.description.replace(/\*\*/g, "'");
                 card.innerHTML = `
                 <form method='post' action='./html/task'>
                     <div class="card mb-3">
@@ -260,25 +261,23 @@
         </script>
         <h5 class="pb-1 mb-4">Completare le attività</h5>
         <div class="row mb-5" id="taskListas2">
-          <!-- Cards de tarefas serão adicionados aqui -->
+
       </div>
       
       <script>
-          // Converte os dados das tarefas em um objeto JavaScript
           const task = JSON.parse('<?php echo $tasksJson6; ?>');
       
-          // Seleciona o contêiner onde os cards de tarefa serão adicionados
           const taskContaine = document.getElementById('taskListas2');
       
-          // Para cada tarefa, cria um card e adiciona ao contêiner
           task.forEach(task => {
               const card = document.createElement('div');
               card.className = 'col-md-6 col-lg-4';
+              task.description = task.description.replace(/\*\*/g, "'");
               card.innerHTML = `
               <form method='post' action='./html/task'>
                   <div class="card mb-3">
                       <div class="card-body">
-                          <h5 class="card-title">${task.title}</h5>
+                          <h5 class="card-title text-success">${task.title}</h5>
                           <p class="card-text">${task.description}</p>
                           <input type="hidden" name="id_task" value='${task.id_task}'>
                           <button type='submit' class="btn btn-primary">Visualizza attività</button>
@@ -292,25 +291,22 @@
       
       <h5 class="pb-1 mb-4">Attività non completate in tempo</h5>
         <div class="row mb-5" id="taskListas9">
-          <!-- Cards de tarefas serão adicionados aqui -->
       </div>
       
       <script>
-          // Converte os dados das tarefas em um objeto JavaScript
           const taskes = JSON.parse('<?php echo $tasksJson7; ?>');
       
-          // Seleciona o contêiner onde os cards de tarefa serão adicionados
           const taskContaines = document.getElementById('taskListas9');
       
-          // Para cada tarefa, cria um card e adiciona ao contêiner
           taskes.forEach(task => {
               const card = document.createElement('div');
               card.className = 'col-md-6 col-lg-4';
+              task.description = task.description.replace(/\*\*/g, "'");
               card.innerHTML = `
               <form method='post' action='./html/task'>
                   <div class="card mb-3">
                       <div class="card-body">
-                          <h5 class="card-title">${task.title}</h5>
+                        <h5 class="card-title text-danger">${task.title}</h5>
                           <p class="card-text">${task.description}</p>
                           <input type="hidden" name="id_task" value='${task.id_task}'>
                           <button type='submit' class="btn btn-primary">Visualizza attività</button>
@@ -325,6 +321,39 @@
           </div>
           
                     </div>
+                    <div id="alertContainer" class="position-fixed bottom-0 end-0 p-3" style="display: none;">
+                      <div class="toast align-items-center text-white bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                          <div class="toast-body" id="alertMessage"></div>
+                          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <script>
+                      // Função para mostrar o alerta
+                      function showAlert(message) {
+                        var alertContainer = document.getElementById('alertContainer');
+                        var alertMessage = document.getElementById('alertMessage');
+                        alertMessage.innerText = message;
+                        alertContainer.style.display = 'block';
+                    
+                        // Ativar o toast assim que a página for carregada
+                        var toastEl = document.querySelector('.toast');
+                        var toast = new bootstrap.Toast(toastEl);
+                        toast.show();
+                    
+                        // Ocultar o alerta após alguns segundos
+                        setTimeout(function() {
+                          alertContainer.style.display = 'none';
+                        }, 5000); // 5000 milissegundos = 5 segundos
+                      }
+                    
+                      // Suponha que ocorra um erro e você deseja exibir uma mensagem de erro
+                      var errorMessage = "Impossibile eliminare la categoria.";
+                      showAlert(errorMessage);
+                    </script>
+                    
           
                     
                     

@@ -13,7 +13,7 @@ class TaskController extends Controller{
 
             // Define a data limite para 3 dias no futuro
             $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt1 = $this->container->db->prepare($query1);
             $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
             $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
@@ -21,7 +21,7 @@ class TaskController extends Controller{
 
             // Define a data limite para uma semana no futuro
             $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt2 = $this->container->db->prepare($query2);
             $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
             $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
@@ -29,7 +29,7 @@ class TaskController extends Controller{
 
             // Define a data limite para a data atual
             $dateLimit3 = date('Y-m-d');
-            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt3 = $this->container->db->prepare($query3);
             $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
             $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
@@ -55,22 +55,22 @@ class TaskController extends Controller{
         $avidita = $request->getParam('avidita');
         $data = $request->getParam('data');
         $categoria = $request->getParam('categoria');
+
+        $titolo = str_replace("'", "**", $titolo);
+        $avidita = str_replace("'", "**", $avidita);
     
         $errodata = 0;
         $errovazio = 0;
     
         $dataAtual = date('Y-m-d');
     
-        if ($data <= $dataAtual) {
+        if ($data < $dataAtual) {
             $errodata = 1;
         } 
     
         if(empty($titolo) || empty($avidita) || empty($data) || empty($categoria)){
             $errovazio = 1;
-        }
-
-        if (!preg_match('/^[a-zA-Z0-9\s]+$/', $titolo) || !preg_match('/^[a-zA-Z0-9\s]+$/', $avidita)) {
-            $errovazio = 1; 
+            $errodata = 1;
         }
     
         if($errodata == 0 && $errovazio == 0){
@@ -99,7 +99,7 @@ class TaskController extends Controller{
     
             // Define a data limite para 3 dias no futuro
             $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt1 = $this->container->db->prepare($query1);
             $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
             $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
@@ -107,7 +107,7 @@ class TaskController extends Controller{
     
             // Define a data limite para uma semana no futuro
             $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt2 = $this->container->db->prepare($query2);
             $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
             $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
@@ -115,7 +115,7 @@ class TaskController extends Controller{
     
             // Define a data limite para a data atual
             $dateLimit3 = date('Y-m-d');
-            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt3 = $this->container->db->prepare($query3);
             $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
             $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
@@ -131,7 +131,9 @@ class TaskController extends Controller{
                 'tasksJson1' => $tasksJson1,
                 'tasksJson2' => $tasksJson2,
                 'tasksJson3' => $tasksJson3,
-                'tasksJson4' => $tasksJson4
+                'tasksJson4' => $tasksJson4,
+                'erroData' => $errodata,
+                'erroVazio' => $errovazio
             ]);
         }
     }
@@ -141,7 +143,7 @@ class TaskController extends Controller{
 
             // Define a data limite para 3 dias no futuro
             $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt1 = $this->container->db->prepare($query1);
             $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
             $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
@@ -149,7 +151,7 @@ class TaskController extends Controller{
 
             // Define a data limite para uma semana no futuro
             $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt2 = $this->container->db->prepare($query2);
             $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
             $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
@@ -157,7 +159,7 @@ class TaskController extends Controller{
 
             // Define a data limite para a data atual
             $dateLimit3 = date('Y-m-d');
-            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt3 = $this->container->db->prepare($query3);
             $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
             $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
@@ -184,7 +186,7 @@ class TaskController extends Controller{
 
             // Define a data limite para 3 dias no futuro
             $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt1 = $this->container->db->prepare($query1);
             $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
             $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
@@ -192,7 +194,7 @@ class TaskController extends Controller{
 
             // Define a data limite para uma semana no futuro
             $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt2 = $this->container->db->prepare($query2);
             $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
             $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
@@ -200,7 +202,7 @@ class TaskController extends Controller{
 
             // Define a data limite para a data atual
             $dateLimit3 = date('Y-m-d');
-            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt3 = $this->container->db->prepare($query3);
             $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
             $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
@@ -219,46 +221,7 @@ class TaskController extends Controller{
                 'tasksJson4' => $tasksJson4
             ]);
         }else{
-            if (!preg_match('/^[a-zA-Z0-9\s]+$/', $categoria)) {
-                $iduser = $_SESSION['Id_User'];
-
-                // Define a data limite para 3 dias no futuro
-                $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-                $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
-                $stmt1 = $this->container->db->prepare($query1);
-                $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
-                $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
-                $tasksJson1 = json_encode($tasks1);
-    
-                // Define a data limite para uma semana no futuro
-                $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-                $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
-                $stmt2 = $this->container->db->prepare($query2);
-                $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
-                $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
-                $tasksJson2 = json_encode($tasks2);
-    
-                // Define a data limite para a data atual
-                $dateLimit3 = date('Y-m-d');
-                $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
-                $stmt3 = $this->container->db->prepare($query3);
-                $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
-                $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
-                $tasksJson3 = json_encode($tasks3);
-    
-                $query4 = "SELECT * FROM categorys WHERE id_user = :iduser";
-                $stmt4 = $this->container->db->prepare($query4);
-                $stmt4->execute(['iduser' => $iduser]);
-                $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
-                $tasksJson4 = json_encode($tasks4);
-    
-                return $this->container->view->render($response, '/sneat-1.0.0/html/NewCategory.html', [
-                    'tasksJson1' => $tasksJson1,
-                    'tasksJson2' => $tasksJson2,
-                    'tasksJson3' => $tasksJson3,
-                    'tasksJson4' => $tasksJson4
-                ]);
-            }else{
+            $categoria = str_replace("'", "**", $categoria);
                 $sql = "INSERT INTO categorys (id_user, name) VALUES (:id, :category)";
                 $stmt = $this->container->db->prepare($sql);
                 
@@ -275,31 +238,64 @@ class TaskController extends Controller{
         }
     
         
-    }
 
     public function getSignIn($request, $response){
             return $this->container->view->render($response, 'sneat-1.0.0/html/Login.html');
         
     }
 
-    public function postSignIn($request, $response){
+    public function postSignIn($request, $response) {
         $email = $request->getParam('email');
         $palavrapasse = $request->getParam('password');
-        
-        $sql = "SELECT id_user FROM users WHERE email=:email AND password=:palavrapasse";
-        $stmt = $this->container->db->prepare($sql);
-        $stmt->execute(['email' => $email, 'palavrapasse' => $palavrapasse]);
-        $user = $stmt->fetch(); // Obter a primeira linha de resultado
-        
-        if ($user) {
-            // Se o usuário existe, armazena o ID do usuário na sessão e redireciona
-            $_SESSION['Id_User'] = $user['id_user'];
-            return $response->withRedirect('/public/');
-        } else {
-            // Se o usuário não existe, renderiza a página de login novamente
-            return $this->container->view->render($response, 'sneat-1.0.0/html/Login.html');
+    
+        $erroPasse = 0;
+        $erroEmail = 0;
+    
+        if(empty($email)){
+            $erroEmail = 1;
         }
+    
+        if(empty($palavrapasse)){
+            $erroPasse = 1;
+        }
+    
+        if (strpos($palavrapasse, "'") !== false) {
+            $erroPasse = 1;
+        } 
+    
+        if (strpos($email, "'") !== false) {
+            $erroEmail = 1;
+        }
+    
+        if ($erroPasse == 0 && $erroEmail == 0) {
+            $sql = "SELECT id_user, password FROM users WHERE email=:email";
+            $stmt = $this->container->db->prepare($sql);
+            $stmt->execute(['email' => $email]);
+            $user = $stmt->fetch();
+
+            if ($user && $user['password'] === $palavrapasse) {
+                $_SESSION['Id_User'] = $user['id_user'];
+                return $response->withRedirect('/public/');
+            } else {
+                $erroPasse = 1;
+                $erroEmail = 1;
+                // Renderiza o template, independentemente dos erros
+                return $this->container->view->render($response, 'sneat-1.0.0/html/Login.html', [
+                    'erroSenha' => $erroPasse,
+                    'erroEmail' => $erroEmail
+                ]);
+            }
+        }else{
+            // Renderiza o template, independentemente dos erros
+            return $this->container->view->render($response, 'sneat-1.0.0/html/Login.html', [
+                'erroSenha' => $erroPasse,
+                'erroEmail' => $erroEmail
+            ]);
+        }
+        
+        
     }
+    
     
 
     public function getSignUp($request, $response){
@@ -310,6 +306,7 @@ class TaskController extends Controller{
         $nome = $request->getParam('nomeutente');
         $email = $request->getParam('e-mail');
         $palavrapasse = $request->getParam('password');
+        $nome= str_replace("'", "**", $nome);
         
         $erroNome = 0;
         $erroEmail = 0;
@@ -322,6 +319,15 @@ class TaskController extends Controller{
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $erroEmail = 1;
         }
+
+        if (strpos($palavrapasse, "'") !== false) {
+            $erroSenha = 1;
+        } 
+
+        
+        if (strpos($email, "'") !== false) {
+            $erroEmail = 1;
+        } 
         
     
         // Verificar se a senha atende aos critérios (letras maiúsculas, minúsculas e números)
@@ -344,7 +350,7 @@ class TaskController extends Controller{
         if($erroNome == 0 &&
         $erroEmail == 0 &&
         $erroSenha == 0){
-            
+
             $sql = "INSERT INTO users (email, name, password) VALUES (:email, :nome, :palavrapasse)";
             $stmt = $this->container->db->prepare($sql);
             
@@ -382,7 +388,7 @@ class TaskController extends Controller{
 
             // Define a data limite para 3 dias no futuro
             $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt1 = $this->container->db->prepare($query1);
             $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
             $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
@@ -390,7 +396,7 @@ class TaskController extends Controller{
 
             // Define a data limite para uma semana no futuro
             $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt2 = $this->container->db->prepare($query2);
             $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
             $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
@@ -398,7 +404,7 @@ class TaskController extends Controller{
 
             // Define a data limite para a data atual
             $dateLimit3 = date('Y-m-d');
-            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt3 = $this->container->db->prepare($query3);
             $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
             $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
@@ -433,7 +439,7 @@ class TaskController extends Controller{
 
             // Define a data limite para 3 dias no futuro
             $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt1 = $this->container->db->prepare($query1);
             $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
             $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
@@ -441,7 +447,7 @@ class TaskController extends Controller{
 
             // Define a data limite para uma semana no futuro
             $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt2 = $this->container->db->prepare($query2);
             $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
             $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
@@ -449,7 +455,7 @@ class TaskController extends Controller{
 
             // Define a data limite para a data atual
             $dateLimit3 = date('Y-m-d');
-            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt3 = $this->container->db->prepare($query3);
             $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
             $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
@@ -474,6 +480,7 @@ class TaskController extends Controller{
                 'userData' => $userData
             ]);
         }else{
+            $nome = str_replace("'", "**", $nome);
             $query5 = "Update users SET name=:nome WHERE id_user=:iduser";
             $stmt5 = $this->container->db->prepare($query5);
             $stmt5->execute(['nome' => $nome, 'iduser' => $iduser]);
@@ -495,7 +502,7 @@ class TaskController extends Controller{
     
         // Define a data limite para 3 dias no futuro
         $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-        $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+        $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
         $stmt1 = $this->container->db->prepare($query1);
         $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
         $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
@@ -503,7 +510,7 @@ class TaskController extends Controller{
     
         // Define a data limite para uma semana no futuro
         $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-        $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+        $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
         $stmt2 = $this->container->db->prepare($query2);
         $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
         $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
@@ -511,7 +518,7 @@ class TaskController extends Controller{
     
         // Define a data limite para a data atual
         $dateLimit3 = date('Y-m-d');
-        $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date > CURDATE() LIMIT 4";
+        $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
         $stmt3 = $this->container->db->prepare($query3);
         $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
         $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
@@ -547,14 +554,37 @@ class TaskController extends Controller{
                 'task5' => json_encode($task5)
             ]);
         }else{
-            return $this->container->view->render($response, '/sneat-1.0.0/html/Task.html', [
-                'tasksJson1' => $tasksJson1,
-                'tasksJson2' => $tasksJson2,
-                'tasksJson3' => $tasksJson3,
-                'tasksJson4' => $tasksJson4,
-                'task5' => json_encode($task5)
-            ]);
-        }
+            $queryCheckComplete = "SELECT Completed, final_date FROM tasks WHERE id_task = :idtask AND id_user = :iduser";
+            $stmtCheckComplete = $this->container->db->prepare($queryCheckComplete);
+            $stmtCheckComplete->execute(['idtask' => $idtask, 'iduser' => $iduser]);
+            $taskData = $stmtCheckComplete->fetch(\PDO::FETCH_ASSOC);
+
+            if ($taskData) {
+                $completed = $taskData['Completed'];
+                $finalDate = $taskData['final_date'];
+                
+                // Obtém a data atual
+                $currentDate = date('Y-m-d');
+                
+                if ($completed == 0 && $finalDate < $currentDate) {
+                    return $this->container->view->render($response, '/sneat-1.0.0/html/TaskCompleted.html', [
+                        'tasksJson1' => $tasksJson1,
+                        'tasksJson2' => $tasksJson2,
+                        'tasksJson3' => $tasksJson3,
+                        'tasksJson4' => $tasksJson4,
+                        'task5' => json_encode($task5)
+                    ]);
+                } else {
+                    return $this->container->view->render($response, '/sneat-1.0.0/html/Task.html', [
+                        'tasksJson1' => $tasksJson1,
+                        'tasksJson2' => $tasksJson2,
+                        'tasksJson3' => $tasksJson3,
+                        'tasksJson4' => $tasksJson4,
+                        'task5' => json_encode($task5)
+                    ]);
+                }
+            } 
+                    }
     
         
     }
@@ -607,20 +637,38 @@ class TaskController extends Controller{
     
     }
     public function postDeleteCategory($request, $response) {
-
         $iduser = $_SESSION['Id_User'];
         $idcategory = $request->getParam('idcategory');
-
-        $query5 = "DELETE FROM  tasks WHERE category = :idcategory AND id_user = :iduser";
-        $stmt5 = $this->container->db->prepare($query5);
-        $stmt5->execute(['idcategory' => $idcategory, 'iduser' => $iduser]);
-
-        $query5 = "DELETE FROM  categorys WHERE id_category = :idcategory AND id_user = :iduser";
-        $stmt5 = $this->container->db->prepare($query5);
-        $stmt5->execute(['idcategory' => $idcategory, 'iduser' => $iduser]);
-       
-        return $response->withRedirect('/public/');
+    
+        $queryCheckTasks = "SELECT COUNT(*) FROM tasks WHERE category = :idcategory AND id_user = :iduser";
+        $stmtCheckTasks = $this->container->db->prepare($queryCheckTasks);
+        $stmtCheckTasks->execute(['idcategory' => $idcategory, 'iduser' => $iduser]);
+        $numTasks = $stmtCheckTasks->fetchColumn();
+    
+        if ($numTasks > 0) {
+            // Se houver tarefas associadas, você pode lidar com isso aqui, como exibir uma mensagem de erro ou redirecionar para outra página.
+            // Neste exemplo, vamos apenas retornar uma resposta indicando que há tarefas associadas.
+            $_SESSION['alert'] = 'Existem tarefas associadas a esta categoria.';
+            return $response->withRedirect('/public/');
+        } else {
+            // Se não houver tarefas associadas, prossiga com a exclusão da categoria.
+            $queryDeleteCategory = "DELETE FROM categorys WHERE id_category = :idcategory AND id_user = :iduser";
+            $stmtDeleteCategory = $this->container->db->prepare($queryDeleteCategory);
+            $stmtDeleteCategory->execute(['idcategory' => $idcategory, 'iduser' => $iduser]);
+    
+            // Verifica se a exclusão foi bem-sucedida
+            if ($stmtDeleteCategory->rowCount() > 0) {
+                $_SESSION['alert'] = 'Categoria excluída com sucesso.';
+                return $response->withRedirect('/public/');
+            } else {
+                // Se não foi possível excluir a categoria, você pode lidar com isso aqui, como exibir uma mensagem de erro.
+                $_SESSION['alert'] = 'Erro ao excluir a categoria.';
+                return $response->withRedirect('/public/');
+            }
+        }
     }
+    
+    
 
 
 

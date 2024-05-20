@@ -12,7 +12,7 @@ class HomeController extends Controller{
 
             // Define a data limite para 3 dias no futuro
             $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' LIMIT 4";
+            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt1 = $this->container->db->prepare($query1);
             $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
             $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
@@ -20,7 +20,7 @@ class HomeController extends Controller{
 
             // Define a data limite para uma semana no futuro
             $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' LIMIT 4";
+            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt2 = $this->container->db->prepare($query2);
             $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
             $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
@@ -28,14 +28,14 @@ class HomeController extends Controller{
 
             // Define a data limite para a data atual
             $dateLimit3 = date('Y-m-d');
-            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' LIMIT 4";
+            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt3 = $this->container->db->prepare($query3);
             $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
             $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
             $tasksJson3 = json_encode($tasks3);
             
 
-        $query4 = "SELECT * FROM tasks WHERE id_user = '$iduser' AND Completed='0'"; 
+        $query4 = "SELECT * FROM tasks WHERE id_user = '$iduser' AND Completed='0' AND final_date >= CURDATE()"; 
         $stmt4 = $this->container->db->query($query4);
         $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
         $tasksJson4 = json_encode($tasks4);
@@ -50,7 +50,7 @@ class HomeController extends Controller{
         $tasks6 = $stmt6->fetchAll(\PDO::FETCH_ASSOC);
         $tasksJson6 = json_encode($tasks6);
 
-        $query7 = "SELECT * FROM tasks WHERE id_user = '$iduser' AND Completed='1' AND final_date <= CURDATE()";
+        $query7 = "SELECT * FROM tasks WHERE id_user = '$iduser' AND Completed='0' AND final_date < CURDATE()";
         $stmt7 = $this->container->db->query($query7);
         $tasks7 = $stmt7->fetchAll(\PDO::FETCH_ASSOC);
         $tasksJson7 = json_encode($tasks7);

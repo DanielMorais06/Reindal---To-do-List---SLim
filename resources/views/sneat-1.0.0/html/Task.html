@@ -126,6 +126,7 @@
                 tasks1.forEach(task => {
                     const card = document.createElement('div');
                     card.className = 'col-12'; // Tarefa ocupa toda a linha
+                    task.title = task.title.replace(/\*\*/g, "'");
                     card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
                             <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da tarefa
                     taskContainer1.appendChild(card);
@@ -141,6 +142,7 @@
                 tasks2.forEach(task => {
                     const card = document.createElement('div');
                     card.className = 'col-12'; // Tarefa ocupa toda a linha
+                    task.title = task.title.replace(/\*\*/g, "'");
                     card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
                             <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da tarefa
                     taskContainer2.appendChild(card);
@@ -156,6 +158,7 @@
                 tasks3.forEach(task => {
                     const card = document.createElement('div');
                     card.className = 'col-12'; // Tarefa ocupa toda a linha
+                    task.title = task.title.replace(/\*\*/g, "'");
                     card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
                             <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da tarefa
                     taskContainer3.appendChild(card);
@@ -170,7 +173,8 @@
                 // Para cada categoria, cria um card e adiciona ao contêiner
                 tasks4.forEach(task => {
                     const card = document.createElement('div');
-                    card.className = 'col-12'; // Categoria ocupa toda a linha
+                    card.className = 'col-12'; 
+                    task.name = task.name.replace(/\*\*/g, "'");
                     card.innerHTML = `<form method="post" action="../html/deletecategory"><div class="d-flex justify-content-between align-items-center">
             <span>${task.name}</span> <!-- Exibe o nome da categoria -->
             <input type="hidden" value="${task.id_category}" name="idcategory"/>
@@ -227,31 +231,32 @@
                                 const task = JSON.parse('<?php echo $task5; ?>');
                                 const taskDetails = document.getElementById('taskDetails');
                                 if (task && Object.keys(task).length > 0) {
-                                    taskDetails.innerHTML = `
-                                        <h5 class="card-title">${task.title}</h5>
-                                        <div class="card-subtitle text-muted mb-3">${task.category_name}</div>
-                                        <p class="card-text">${task.description}</p>
-                                        <tr>
-                                            <td class="py-3">
-                                                <small class="text-muted">Data finale</small><h3 class="mb-7">${task.final_date}</h1>
-                                            </td>
-                                        </tr>
-                                        <div class="row">
-                                        <div class="col">
-                                            <form method="post" action="../html/complettask">
-                                                <input type="hidden" name="idtask" value="${task.id_task}" />
-                                                <button class="btn rounded-pill btn-outline-success" type="submit">Completa l'attività</button>
-                                            </form>
-                                        </div>
-                                        <div class="col">
-                                            <form method="post" action="../html/delettask">
-                                                <input type="hidden" name="idtask" value="${task.id_task}" />
-                                                <button class="btn rounded-pill btn-outline-danger" type="submit">Eliminare l'attività</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                        
-                                    `;
+                                  task.description = task.description.replace(/\*\*/g, "'");
+
+                                  taskDetails.innerHTML = `
+                                      <h5 class="card-title">${task.title}</h5>
+                                      <div class="card-subtitle text-muted mb-3">${task.category_name}</div>
+                                      <p class="card-text">${task.description}</p>
+                                      <tr>
+                                          <td class="py-3">
+                                              <small class="text-muted">Data finale</small><h3 class="mb-7">${task.final_date}</h3>
+                                          </td>
+                                      </tr>
+                                      <div class="row">
+                                          <div class="col">
+                                              <form method="post" action="../html/complettask">
+                                                  <input type="hidden" name="idtask" value="${task.id_task}" />
+                                                  <button class="btn rounded-pill btn-outline-success" type="submit">Completa l'attività</button>
+                                              </form>
+                                          </div>
+                                          <div class="col">
+                                              <form method="post" action="../html/delettask">
+                                                  <input type="hidden" name="idtask" value="${task.id_task}" />
+                                                  <button class="btn rounded-pill btn-outline-danger" type="submit">Eliminare l'attività</button>
+                                              </form>
+                                          </div>
+                                      </div>
+                                  `;
                                 } else {
                                     taskDetails.innerHTML = '<p>No task details available.</p>';
                                 }

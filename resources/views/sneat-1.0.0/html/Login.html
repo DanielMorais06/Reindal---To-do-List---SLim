@@ -93,29 +93,29 @@ padding-bottom: 0px !important;
                           <p class="mb-4">Accedi al tuo account e inizia l'avventura</p>
   
                           <form id="formAuthentication" method="post" class="mb-3" action="../html/signin" autocomplete="off">
-                              <div class="mb-3">
-                                  <label for="email" class="form-label">E-mail</label>
-                                  <input type="text" class="form-control" id="email" name="email"
-                                      placeholder="email" autofocus="">
+                                <div class="mb-3">
+                                  <label for="email" class="form-label <?php echo $erroEmail ? 'text-danger' : ''; ?>">E-mail</label>
+                                  <input type="text" class="form-control" id="email" name="email" placeholder="email" autofocus="">
                               </div>
                               <div class="mb-3 form-password-toggle">
                                   <div class="d-flex justify-content-between">
-                                      <label class="form-label" for="password">Parola d'ordine</label>
+                                      <label class="form-label <?php echo $erroSenha ? 'text-danger' : ''; ?>" for="password">Parola d'ordine</label>
                                   </div>
                                   <div class="input-group input-group-merge">
-                                      <input type="password" id="password" class="form-control" name="password"
-                                          placeholder="············" aria-describedby="password">
-                                      <span class="input-group-text cursor-pointer" id="togglePassword">
-                                          <i class="bx bx-hide d-none"></i>
-                                          <i class="bx bx-show"></i>
-                                      </span>
+                                    <input type="password" id="password" class="form-control" name="password" placeholder="············" aria-describedby="password">
                                   </div>
                               </div>
+                              
                               <div class="mb-3">
                                   <button class="btn btn-primary d-grid w-100" type="submit">
                                     Login</button>
                               </div>
                           </form>
+                          <style>
+                            .error {
+                                border-color: red;
+                            }
+                        </style>
   
                           <p class="text-center">
                               <span>Nuovo sulla nostra piattaforma?</span>
@@ -139,22 +139,6 @@ padding-bottom: 0px !important;
       </div>
   </div>
   
-  
-  <script>
-    const togglePassword = document.getElementById('togglePassword');
-    const passwordInput = document.getElementById('password');
-
-    togglePassword.addEventListener('click', function () {
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        
-        const hideIcon = this.querySelector('.bx-hide');
-        const showIcon = this.querySelector('.bx-show');
-        
-        hideIcon.classList.toggle('d-none');
-        showIcon.classList.toggle('d-none');
-    });
-</script>
   
   
   <!-- / Content -->

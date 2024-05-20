@@ -150,6 +150,7 @@
               tasks1.forEach(task => {
                   const card = document.createElement('div');
                   card.className = 'col-12'; // Tarefa ocupa toda a linha
+                  task.title = task.title.replace(/\*\*/g, "'");
                   card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
                             <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da tarefa
                   taskContainer1.appendChild(card);
@@ -165,6 +166,7 @@
               tasks2.forEach(task => {
                   const card = document.createElement('div');
                   card.className = 'col-12'; // Tarefa ocupa toda a linha
+                  task.title = task.title.replace(/\*\*/g, "'");
                   card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
                             <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da tarefa
                   taskContainer2.appendChild(card);
@@ -180,6 +182,7 @@
               tasks3.forEach(task => {
                   const card = document.createElement('div');
                   card.className = 'col-12'; // Tarefa ocupa toda a linha
+                  task.title = task.title.replace(/\*\*/g, "'");
                   card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
                             <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da tarefa
                   taskContainer3.appendChild(card);
@@ -195,6 +198,7 @@
               tasks4.forEach(task => {
                   const card = document.createElement('div');
                   card.className = 'col-12'; // Categoria ocupa toda a linha
+                  task.name = task.name.replace(/\*\*/g, "'");
                   card.innerHTML = `<form method="post" action="../html/deletecategory"><div class="d-flex justify-content-between align-items-center">
             <span>${task.name}</span> <!-- Exibe o nome da categoria -->
             <input type="hidden" value="${task.id_category}" name="idcategory"/>
