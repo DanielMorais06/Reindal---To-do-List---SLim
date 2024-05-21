@@ -1,23 +1,25 @@
 <?php
 
 namespace App\Controllers;
+use App\DBAccess\HomeDbAccess;
 
 class HomeController extends Controller{
 
     public function index($request, $response) {
+        $_SESSION['Id_User']=18;
         if(empty($_SESSION['Id_User'])){
-            return $this->container->view->render($response, '/sneat-1.0.0/html/index.html');
+            $this->container->logger->info('SUCESSFULL! Render /sneat-1.0.0/html/index.phtml');
+            return $this->container->view->render($response, '/sneat-1.0.0/html/index.phtml');
         }else{
             $iduser = $_SESSION['Id_User'];
 
-            $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt1 = $this->container->db->prepare($query1);
-            $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
-            $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson1 = json_encode($tasks1);
+            // Instancie a classe HomeDbAccess e passe o PDO do container
+            $dbAccess = new HomeDbAccess($this->container->db);
 
-            $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
+            // Obtenha as tarefas
+            $tasksJson1 = $dbAccess->getTasksDueInThreeDays($iduser);
+
+            /*$dateLimit2 = date('Y-m-d', strtotime('+1 week'));
             $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
             $stmt2 = $this->container->db->prepare($query2);
             $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
@@ -50,16 +52,10 @@ class HomeController extends Controller{
         $query7 = "SELECT * FROM tasks WHERE id_user = '$iduser' AND Completed='0' AND final_date < CURDATE()";
         $stmt7 = $this->container->db->query($query7);
         $tasks7 = $stmt7->fetchAll(\PDO::FETCH_ASSOC);
-        $tasksJson7 = json_encode($tasks7);
+        $tasksJson7 = json_encode($tasks7);*/
     
-        return $this->container->view->render($response, '/sneat-1.0.0/html/index.html', [
-            'tasksJson1' => $tasksJson1,
-            'tasksJson2' => $tasksJson2,
-            'tasksJson3' => $tasksJson3,
-            'tasksJson4' => $tasksJson4,
-            'tasksJson5' => $tasksJson5,
-            'tasksJson6' => $tasksJson6, 
-            'tasksJson7' => $tasksJson7 
+        return $this->container->view->render($response, '/sneat-1.0.0/html/index.phtml', [
+            'tasksJson1' => $tasksJson1
         ]);
         } 
         

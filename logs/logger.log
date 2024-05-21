@@ -1,9 +1,4 @@
-[2024-05-21T11:03:08.172481+02:00] app_logger.INFO: Ação: GET http://localhost:8080/public/ [] []
-[2024-05-21T11:03:53.056878+02:00] app_logger.INFO: Ação: GET http://localhost:8080/public/ [] []
-[2024-05-21T11:04:13.219422+02:00] app_logger.INFO: Action: GET http://localhost:8080/public/ [] []
-[2024-05-21T11:05:48.084471+02:00] app_logger.INFO: Action: GET http://localhost:8080/public/ [] []
-[2024-05-21T11:07:58.837381+02:00] app_logger.INFO: Action: GET http://localhost:8080/public/ [] []
-[2024-05-21T11:10:04.653647+02:00] app_logger.INFO: Action: GET http://localhost:8080/public/ [] []
-[2024-05-21T11:10:11.993864+02:00] app_logger.INFO: Action: GET http://localhost:8080/public/ [] []
-[2024-05-21T11:10:13.964622+02:00] app_logger.INFO: Action: GET http://localhost:8080/public/ [] []
-[2024-05-21T11:10:23.403369+02:00] app_logger.INFO: Action: GET http://localhost:8080/public/ [] []
+
+[2024-05-21T12:07:10.091700+02:00] logger.INFO: SUCESSFULL! Render /sneat-1.0.0/html/index.html [] []
+[2024-05-21T12:25:40.394024+02:00] logger.INFO: SUCESSFULL! Render /sneat-1.0.0/html/index.html [] []
+[2024-05-21T12:25:51.489127+02:00] logger.INFO: SUCESSFULL! Render /sneat-1.0.0/html/index.phtml [] []

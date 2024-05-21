@@ -32,8 +32,20 @@ $config = [
         ]
     ],
 ];
+$config['displayErrorDetails'] = true;
+$config['addContentLengthHeader'] = false;
+
+$config['db']['host']   = $_ENV['DB_HOST'];
+$config['db']['user']   = $_ENV['DB_USERNAME'];
+$config['db']['pass']   = $_ENV['DB_PASSWORD'];
+$config['db']['dbname'] = $_ENV['DB_DATABASE'];
+
+$app = new \Slim\App([
+    'settings' => $config
+]);
 
 $app = new \Slim\App($config);
+
 
 // Adiciona o serviço de log ao contêiner do Slim
 $container = $app->getContainer();
