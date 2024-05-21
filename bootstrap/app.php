@@ -4,22 +4,30 @@ session_start();
 
 require __DIR__ . '/../vendor/autoload.php';
 
+
+use Dotenv\Dotenv;
+
+// Carrega as variáveis de ambiente do arquivo .env
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
+// Configurações do aplicativo Slim
 $app = new \Slim\App([
     'settings' => [
         'displayErrorDetails' => true,
         'db' => [
-            'driver' => 'mysql',
-            'host' => 'localhost',
-            'database' => 'slimtest',
-            'username' => 'root',
-            'password' => '',
-            'charset' => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix' => '',
+            'driver' => $_ENV['DB_DRIVER'],
+            'host' => $_ENV['DB_HOST'],
+            'database' => $_ENV['DB_DATABASE'],
+            'username' => $_ENV['DB_USERNAME'],
+            'password' => $_ENV['DB_PASSWORD'],
+            'charset' => $_ENV['DB_CHARSET'],
+            'collation' => $_ENV['DB_COLLATION'],
+            'prefix' => $_ENV['DB_PREFIX'],
         ]
     ],
-    
 ]);
+
 
 
 $config['displayErrorDetails'] = true;
