@@ -4,17 +4,21 @@ session_start();
 
 require __DIR__ . '/../vendor/autoload.php';
 
-
 use Dotenv\Dotenv;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use App\Middlewares\LogMiddleware;
 
 // Carrega as variáveis de ambiente do arquivo .env
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
+// Cria o serviço de log
+$logger = new Logger('app_logger');
+$logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/app.log', Logger::DEBUG));
+
 // Configurações do aplicativo Slim
-$app = new \Slim\App([
+$config = [
     'settings' => [
         'displayErrorDetails' => true,
         'db' => [
@@ -28,33 +32,21 @@ $app = new \Slim\App([
             'prefix' => $_ENV['DB_PREFIX'],
         ]
     ],
-]);
+];
 
+$app = new \Slim\App($config);
 
-
-$config['displayErrorDetails'] = true;
-$config['addContentLengthHeader'] = false;
-
-$config['db']['host']   = $_ENV['DB_HOST'];
-$config['db']['user']   = $_ENV['DB_USERNAME'];
-$config['db']['pass']   = $_ENV['DB_PASSWORD'];
-$config['db']['dbname'] = $_ENV['DB_DATABASE'];
-
-$app = new \Slim\App([
-    'settings' => $config
-]);
-
-$logger = new Logger('app_logger');
-$logger->pushHandler(new StreamHandler(__DIR__ . '../logs/app.log', Logger::DEBUG));
-
-// Adiciona o logger ao contêiner do Slim
+// Adiciona o serviço de log ao contêiner do Slim
 $container = $app->getContainer();
 $container['logger'] = function ($c) use ($logger) {
     return $logger;
 };
 
-$container = $app->getContainer();
+// Cria e adiciona o middleware de log
+$logMiddleware = new LogMiddleware($container->get('logger'));
+$app->add($logMiddleware);
 
+// Adiciona o contêiner e os controladores ao aplicativo
 $container['db'] = function ($c) {
     $db = $c['settings']['db'];
     $pdo = new PDO('mysql:host=' . $db['host'] . ';dbname=' . $db['dbname'],
@@ -62,15 +54,13 @@ $container['db'] = function ($c) {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-    
     return $pdo;
 };
 
 $container['view'] = function($container){
-    $view=new \Slim\Views\PhpRenderer(__DIR__.'/../logs/app.log');
+    $view=new \Slim\Views\PhpRenderer(__DIR__.'/../resources/views');
     return $view;
 };
-
 
 $container['HomeController'] = function($container){
     return new App\Controllers\HomeController($container);
@@ -80,5 +70,4 @@ $container['TaskController'] = function($container){
     return new App\Controllers\TaskController($container);
 };
 
-require __DIR__ . '/../app/routes.php';
-
+require __DIR__ . '../../app/routes.php';

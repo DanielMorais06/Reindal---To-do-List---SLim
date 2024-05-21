@@ -1,0 +1,5 @@
+[2024-05-21T11:03:08.172481+02:00] app_logger.INFO: Ação: GET http://localhost:8080/public/ [] []
+[2024-05-21T11:03:53.056878+02:00] app_logger.INFO: Ação: GET http://localhost:8080/public/ [] []
+[2024-05-21T11:04:13.219422+02:00] app_logger.INFO: Action: GET http://localhost:8080/public/ [] []
+[2024-05-21T11:05:48.084471+02:00] app_logger.INFO: Action: GET http://localhost:8080/public/ [] []
+[2024-05-21T11:07:58.837381+02:00] app_logger.INFO: Action: GET http://localhost:8080/public/ [] []
