@@ -6,6 +6,8 @@ require __DIR__ . '/../vendor/autoload.php';
 
 
 use Dotenv\Dotenv;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 // Carrega as variáveis de ambiente do arquivo .env
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
@@ -33,14 +35,23 @@ $app = new \Slim\App([
 $config['displayErrorDetails'] = true;
 $config['addContentLengthHeader'] = false;
 
-$config['db']['host']   = 'localhost';
-$config['db']['user']   = 'root';
-$config['db']['pass']   = '';
-$config['db']['dbname'] = 'slimtest';
+$config['db']['host']   = $_ENV['DB_HOST'];
+$config['db']['user']   = $_ENV['DB_USERNAME'];
+$config['db']['pass']   = $_ENV['DB_PASSWORD'];
+$config['db']['dbname'] = $_ENV['DB_DATABASE'];
 
 $app = new \Slim\App([
     'settings' => $config
 ]);
+
+$logger = new Logger('app_logger');
+$logger->pushHandler(new StreamHandler(__DIR__ . '../logs/app.log', Logger::DEBUG));
+
+// Adiciona o logger ao contêiner do Slim
+$container = $app->getContainer();
+$container['logger'] = function ($c) use ($logger) {
+    return $logger;
+};
 
 $container = $app->getContainer();
 
@@ -56,7 +67,7 @@ $container['db'] = function ($c) {
 };
 
 $container['view'] = function($container){
-    $view=new \Slim\Views\PhpRenderer(__DIR__.'/../resources/views');
+    $view=new \Slim\Views\PhpRenderer(__DIR__.'/../logs/app.log');
     return $view;
 };
 
