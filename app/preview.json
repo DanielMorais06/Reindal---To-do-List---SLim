@@ -1,0 +1,20 @@
+[
+    {
+        "id_task": 44,
+        "id_user": 18,
+        "title": " Lavorare in To do List",
+        "description": "Devo lavorare a To Do List cos\u00ec posso mostrare l**azienda e iniziare a lavorare sul progetto aziendale",
+        "category": 29,
+        "final_date": "2024-05-22",
+        "Completed": 0
+    },
+    {
+        "id_task": 46,
+        "id_user": 18,
+        "title": "Avvia il progetto mydeal",
+        "description": "\u00c8 necessario avviare il progetto mydeal anche quando so di avere gi\u00e0 il database pronto",
+        "category": 29,
+        "final_date": "2024-05-22",
+        "Completed": 0
+    }
+]

@@ -1,644 +1,591 @@
 <?php
 
 namespace App\Controllers;
+
 use App\Controllers\Controller;
+use App\DBAccess\HomeDbAccess;
 
-class TaskController extends Controller{
+class TaskController extends Controller
+{
 
-    public function getNewTask($request, $response){
-        if(empty($_SESSION['Id_User'])){
+    public function getNewTask($request, $response)
+    {
+        try {
+        if (empty($_SESSION['Id_User'])) {
             return $this->container->view->render($response, 'sneat-1.0.0/html/Login.html');
         } else {
             $iduser = $_SESSION['Id_User'];
 
-            $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt1 = $this->container->db->prepare($query1);
-            $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
-            $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson1 = json_encode($tasks1);
+            
+                $dbAccess = new HomeDbAccess($this->container);
+                $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
+                $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
 
-            $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt2 = $this->container->db->prepare($query2);
-            $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
-            $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson2 = json_encode($tasks2);
+                $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
+                $tasksJson2 = $dbAccess->getNormale($iduser, $dateLimit1, $dateLimit2);
 
-            $dateLimit3 = date('Y-m-d');
-            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt3 = $this->container->db->prepare($query3);
-            $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
-            $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson3 = json_encode($tasks3);
+                $dateLimit3 = date('Y-m-d');
+                $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
+                $tasksJson4 = $dbAccess->getCategorys($iduser);
 
-            $query4 = "SELECT * FROM categorys WHERE id_user = :iduser";
-            $stmt4 = $this->container->db->prepare($query4);
-            $stmt4->execute(['iduser' => $iduser]);
-            $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson4 = json_encode($tasks4);
+                return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.phtml', [
+                    'tasksJson1' => json_encode($tasksJson1),
+                    'tasksJson2' => json_encode($tasksJson2),
+                    'tasksJson3' => json_encode($tasksJson3),
+                    'tasksJson4' => json_encode($tasksJson4)
+                ]);
+            
 
-            return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.phtml', [
-                'tasksJson1' => $tasksJson1,
-                'tasksJson2' => $tasksJson2,
-                'tasksJson3' => $tasksJson3,
-                'tasksJson4' => $tasksJson4
-            ]);
         }
+    } catch (\Exception $e) {
+        $this->container->logger->error($e->getMessage(), ['exception' => $e]);
+    }
     }
 
-    public function postNewTask($request, $response){
+    public function postNewTask($request, $response)
+    {
+        try {
+        $dbAccess = new HomeDbAccess($this->container);
         $titolo = $request->getParam('titolo');
         $avidita = $request->getParam('avidita');
         $data = $request->getParam('data');
         $categoria = $request->getParam('categoria');
+        $iduser = $_SESSION['Id_User'];
+        $errodata = 0;
+        $errovazio = 0;
+
+        $targetDir = "/sneat-1.0.0/uploads/";
+
+        $imageName = basename($_FILES["imagem"]["name"]);
+        $targetFile = $targetDir . $imageName;
+        $imagePath = $targetDir . $imageName; 
+
+        $errovazio = 0;
+
+        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+                $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
+                $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
+
+                $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
+                $tasksJson2 = $dbAccess->getNormale($iduser, $dateLimit1, $dateLimit2);
+
+                $dateLimit3 = date('Y-m-d');
+                $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
+                $tasksJson4 = $dbAccess->getCategorys($iduser);
+
+                return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.phtml', [
+                    'tasksJson1' => json_encode($tasksJson1),
+                    'tasksJson2' => json_encode($tasksJson2),
+                    'tasksJson3' => json_encode($tasksJson3),
+                    'tasksJson4' => json_encode($tasksJson4)
+                ]);
+        }
+
+        if ($_FILES["imagem"]["size"] == 0) {
+            $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
+            $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
+
+            $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
+            $tasksJson2 = $dbAccess->getNormale($iduser, $dateLimit1, $dateLimit2);
+
+            $dateLimit3 = date('Y-m-d');
+            $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
+            $tasksJson4 = $dbAccess->getCategorys($iduser);
+
+            return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.phtml', [
+                'tasksJson1' => json_encode($tasksJson1),
+                'tasksJson2' => json_encode($tasksJson2),
+                'tasksJson3' => json_encode($tasksJson3),
+                'tasksJson4' => json_encode($tasksJson4)
+            ]);
+            
+        }
+
+        if (!move_uploaded_file($_FILES["imagem"]["tmp_name"], $targetFile)) {
+            $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
+            $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
+
+            $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
+            $tasksJson2 = $dbAccess->getNormale($iduser, $dateLimit1, $dateLimit2);
+
+            $dateLimit3 = date('Y-m-d');
+            $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
+            $tasksJson4 = $dbAccess->getCategorys($iduser);
+
+            return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.phtml', [
+                'tasksJson1' => json_encode($tasksJson1),
+                'tasksJson2' => json_encode($tasksJson2),
+                'tasksJson3' => json_encode($tasksJson3),
+                'tasksJson4' => json_encode($tasksJson4)
+            ]);
+        }
 
         $titolo = str_replace("'", "**", $titolo);
         $avidita = str_replace("'", "**", $avidita);
-    
-        $errodata = 0;
-        $errovazio = 0;
-    
+
+        
+
         $dataAtual = date('Y-m-d');
-    
+
         if ($data < $dataAtual) {
             $errodata = 1;
-        } 
-    
-        if(empty($titolo) || empty($avidita) || empty($data) || empty($categoria)){
+        }
+
+        if (empty($titolo) || empty($avidita) || empty($data) || empty($categoria)) {
             $errovazio = 1;
             $errodata = 1;
         }
-    
-        if($errodata == 0 && $errovazio == 0){
-            $sql = "INSERT INTO tasks (category, description, final_date, title, id_user, Completed) VALUES (:category, :descrito, :dat, :title, :id_user, 0)";
-            $stmt = $this->container->db->prepare($sql);
-    
-            // Usar bindParam para garantir a segurança dos dados
-            $stmt->bindParam(':category', $categoria);
-            $stmt->bindParam(':descrito', $avidita);
-            $stmt->bindParam(':dat', $data);
-            $stmt->bindParam(':title', $titolo);
-            $stmt->bindParam(':id_user', $_SESSION['Id_User']);
-    
-            // Execute a consulta com os valores fornecidos
-            $stmt->execute();
+
+        if ($errodata == 0 && $errovazio == 0) {
             
-            // Verifica se a inserção foi bem-sucedida
-            if ($stmt->rowCount() > 0) {
-                // Redireciona para a página inicial ou renderiza o template, conforme necessário
-                return $response->withRedirect('/public/');
-            } else {
-                echo "Erro ao inserir registro.";
-            }
+               
+                $stmt = $dbAccess->getInsertTask($iduser, $categoria, $avidita, $data, $titolo, $imagePath);
+
+                if ($stmt->rowCount() > 0) {
+                    return $response->withRedirect('/public/');
+                }
+            
         } else {
             $iduser = $_SESSION['Id_User'];
-    
-            // Define a data limite para 3 dias no futuro
-            $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt1 = $this->container->db->prepare($query1);
-            $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
-            $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson1 = json_encode($tasks1);
-    
-            // Define a data limite para uma semana no futuro
-            $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt2 = $this->container->db->prepare($query2);
-            $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
-            $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson2 = json_encode($tasks2);
-    
-            // Define a data limite para a data atual
-            $dateLimit3 = date('Y-m-d');
-            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt3 = $this->container->db->prepare($query3);
-            $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
-            $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson3 = json_encode($tasks3);
-    
-            $query4 = "SELECT * FROM categorys WHERE id_user = :iduser";
-            $stmt4 = $this->container->db->prepare($query4);
-            $stmt4->execute(['iduser' => $iduser]);
-            $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson4 = json_encode($tasks4);
-    
-            return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.phtml', [
-                'tasksJson1' => $tasksJson1,
-                'tasksJson2' => $tasksJson2,
-                'tasksJson3' => $tasksJson3,
-                'tasksJson4' => $tasksJson4,
-                'erroData' => $errodata,
-                'erroVazio' => $errovazio
-            ]);
+
+                $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
+                $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
+
+                $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
+                $tasksJson2 = $dbAccess->getNormale($iduser, $dateLimit1, $dateLimit2);
+
+                $dateLimit3 = date('Y-m-d');
+                $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
+                $tasksJson4 = $dbAccess->getCategorys($iduser);
+
+                return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.phtml', [
+                    'tasksJson1' => json_encode($tasksJson1),
+                    'tasksJson2' => json_encode($tasksJson2),
+                    'tasksJson3' => json_encode($tasksJson3),
+                    'tasksJson4' => json_encode($tasksJson4),
+                    'erroData' => $errodata,
+                    'erroVazio' => $errovazio
+                ]);
+           
         }
+    } catch (\Exception $e) {
+        $this->container->logger->error($e->getMessage(), ['exception' => $e]);
+    }
     }
 
-    public function getNewCategory($request, $response){
-        if(empty($_SESSION['Id_User'])){
+    public function getNewCategory($request, $response)
+    {
+        if (empty($_SESSION['Id_User'])) {
             return $this->container->view->render($response, 'sneat-1.0.0/html/Login.phtml');
         } else {
-        $iduser = $_SESSION['Id_User'];
-
-            // Define a data limite para 3 dias no futuro
-            $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt1 = $this->container->db->prepare($query1);
-            $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
-            $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson1 = json_encode($tasks1);
-
-            // Define a data limite para uma semana no futuro
-            $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt2 = $this->container->db->prepare($query2);
-            $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
-            $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson2 = json_encode($tasks2);
-
-            // Define a data limite para a data atual
-            $dateLimit3 = date('Y-m-d');
-            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt3 = $this->container->db->prepare($query3);
-            $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
-            $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson3 = json_encode($tasks3);
-
-            $query4 = "SELECT * FROM categorys WHERE id_user = :iduser";
-            $stmt4 = $this->container->db->prepare($query4);
-            $stmt4->execute(['iduser' => $iduser]);
-            $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson4 = json_encode($tasks4);
-
-            return $this->container->view->render($response, '/sneat-1.0.0/html/NewCategory.phtml', [
-                'tasksJson1' => $tasksJson1,
-                'tasksJson2' => $tasksJson2,
-                'tasksJson3' => $tasksJson3,
-                'tasksJson4' => $tasksJson4
-            ]);
-        }
-    
-    }
-    public function postNewCategory($request, $response){
-        $categoria = $request->getParam('categoria');
-        if(empty($categoria)){
             $iduser = $_SESSION['Id_User'];
 
-            // Define a data limite para 3 dias no futuro
-            $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt1 = $this->container->db->prepare($query1);
-            $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
-            $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson1 = json_encode($tasks1);
+            try {
+                $dbAccess = new HomeDbAccess($this->container);
+                $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
+                $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
 
-            // Define a data limite para uma semana no futuro
-            $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt2 = $this->container->db->prepare($query2);
-            $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
-            $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson2 = json_encode($tasks2);
+                $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
+                $tasksJson2 = $dbAccess->getNormale($iduser, $dateLimit1, $dateLimit2);
 
-            // Define a data limite para a data atual
-            $dateLimit3 = date('Y-m-d');
-            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt3 = $this->container->db->prepare($query3);
-            $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
-            $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson3 = json_encode($tasks3);
+                $dateLimit3 = date('Y-m-d');
+                $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
+                $tasksJson4 = $dbAccess->getCategorys($iduser);
 
-            $query4 = "SELECT * FROM categorys WHERE id_user = :iduser";
-            $stmt4 = $this->container->db->prepare($query4);
-            $stmt4->execute(['iduser' => $iduser]);
-            $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson4 = json_encode($tasks4);
+                return $this->container->view->render($response, '/sneat-1.0.0/html/NewCategory.phtml', [
+                    'tasksJson1' => json_encode($tasksJson1),
+                    'tasksJson2' => json_encode($tasksJson2),
+                    'tasksJson3' => json_encode($tasksJson3),
+                    'tasksJson4' => json_encode($tasksJson4)
+                ]);
+            } catch (\Exception $e) {
+                $this->container->logger->error($e->getMessage(), ['exception' => $e]);
+            }
+        }
 
-            return $this->container->view->render($response, '/sneat-1.0.0/html/NewCategory.phtml', [
-                'tasksJson1' => $tasksJson1,
-                'tasksJson2' => $tasksJson2,
-                'tasksJson3' => $tasksJson3,
-                'tasksJson4' => $tasksJson4
-            ]);
-        }else{
-            $categoria = str_replace("'", "**", $categoria);
-                $sql = "INSERT INTO categorys (id_user, name) VALUES (:id, :category)";
-                $stmt = $this->container->db->prepare($sql);
-                
-                // Execute a consulta com os valores fornecidos
-                $stmt->execute(['category' => $categoria, 'id' => $_SESSION['Id_User']]);
-                
-                // Verifica se a inserção foi bem-sucedida
+    }
+    public function postNewCategory($request, $response)
+    {
+        $categoria = $request->getParam('categoria');
+        $iduser = $_SESSION['Id_User'];
+        if (empty($categoria)) {
+
+            try {
+                $dbAccess = new HomeDbAccess($this->container);
+                $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
+                $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
+
+                $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
+                $tasksJson2 = $dbAccess->getNormale($iduser, $dateLimit1, $dateLimit2);
+
+                $dateLimit3 = date('Y-m-d');
+                $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
+                $tasksJson4 = $dbAccess->getCategorys($iduser);
+
+                return $this->container->view->render($response, '/sneat-1.0.0/html/NewCategory.phtml', [
+                    'tasksJson1' => json_encode($tasksJson1),
+                    'tasksJson2' => json_encode($tasksJson2),
+                    'tasksJson3' => json_encode($tasksJson3),
+                    'tasksJson4' => json_encode($tasksJson4)
+                ]);
+            } catch (\Exception $e) {
+                $this->container->logger->error($e->getMessage(), ['exception' => $e]);
+            }
+        } else {
+            try {
+                $dbAccess = new HomeDbAccess($this->container);
+                $categoria = str_replace("'", "**", $categoria);
+                $stmt = $dbAccess->getInsertCategory($iduser, $categoria);
                 if ($stmt->rowCount() > 0) {
                     return $response->withRedirect('/public/');
                 } else {
                     echo "Erro ao inserir registro.";
                 }
+            } catch (\Exception $e) {
+                $this->container->logger->error($e->getMessage(), ['exception' => $e]);
             }
         }
-    
-        
-
-    public function getSignIn($request, $response){
-            return $this->container->view->render($response, 'sneat-1.0.0/html/Login.phtml');
-        
     }
 
-    public function postSignIn($request, $response) {
-        $email = $request->getParam('email');
-        $palavrapasse = $request->getParam('password');
-    
-        $erroPasse = 0;
-        $erroEmail = 0;
-    
-        if(empty($email)){
-            $erroEmail = 1;
-        }
-    
-        if(empty($palavrapasse)){
-            $erroPasse = 1;
-        }
-    
-        if (strpos($palavrapasse, "'") !== false) {
-            $erroPasse = 1;
-        } 
-    
-        if (strpos($email, "'") !== false) {
-            $erroEmail = 1;
-        }
-    
-        if ($erroPasse == 0 && $erroEmail == 0) {
-            $sql = "SELECT id_user, password FROM users WHERE email=:email";
-            $stmt = $this->container->db->prepare($sql);
-            $stmt->execute(['email' => $email]);
-            $user = $stmt->fetch();
 
-            if ($user && $user['password'] === $palavrapasse) {
-                $_SESSION['Id_User'] = $user['id_user'];
-                return $response->withRedirect('/public/');
-            } else {
-                $erroPasse = 1;
+
+    public function getSignIn($request, $response)
+    {
+        return $this->container->view->render($response, 'sneat-1.0.0/html/Login.phtml');
+    }
+
+    public function postSignIn($request, $response)
+    {
+        try {
+            $email = $request->getParam('email');
+            $palavrapasse = $request->getParam('password');
+
+            $erroPasse = 0;
+            $erroEmail = 0;
+
+            if (empty($email)) {
                 $erroEmail = 1;
-                // Renderiza o template, independentemente dos erros
+            }
+
+            if (empty($palavrapasse)) {
+                $erroPasse = 1;
+            }
+
+            if (strpos($palavrapasse, "'") !== false) {
+                $erroPasse = 1;
+            }
+
+            if (strpos($email, "'") !== false) {
+                $erroEmail = 1;
+            }
+
+            if ($erroPasse == 0 && $erroEmail == 0) {
+                $dbAccess = new HomeDbAccess($this->container);
+                $stmt = $dbAccess->getLogin($email);
+                $user = $stmt->fetch();
+
+                if ($user && $user['password'] === $palavrapasse) {
+                    $_SESSION['Id_User'] = $user['id_user'];
+                    return $response->withRedirect('/public/');
+                } else {
+                    $erroPasse = 1;
+                    $erroEmail = 1;
+                    return $this->container->view->render($response, 'sneat-1.0.0/html/Login.phtml', [
+                        'erroSenha' => $erroPasse,
+                        'erroEmail' => $erroEmail
+                    ]);
+                }
+
+            } else {
                 return $this->container->view->render($response, 'sneat-1.0.0/html/Login.phtml', [
                     'erroSenha' => $erroPasse,
                     'erroEmail' => $erroEmail
                 ]);
             }
-        }else{
-            // Renderiza o template, independentemente dos erros
-            return $this->container->view->render($response, 'sneat-1.0.0/html/Login.phtml', [
-                'erroSenha' => $erroPasse,
-                'erroEmail' => $erroEmail
-            ]);
+        } catch (\Exception $e) {
+            $this->container->logger->error($e->getMessage(), ['exception' => $e]);
         }
-        
-        
     }
-    
-    
 
-    public function getSignUp($request, $response){
+    public function getSignUp($request, $response)
+    {
         return $this->container->view->render($response, 'sneat-1.0.0/html/Register.phtml');
     }
-    
-    public function postSignUp($request, $response){
-        $nome = $request->getParam('nomeutente');
-        $email = $request->getParam('e-mail');
-        $palavrapasse = $request->getParam('password');
-        $nome= str_replace("'", "**", $nome);
-        
-        $erroNome = 0;
-        $erroEmail = 0;
-        $erroSenha = 0;
-    
-        if (preg_match('/[0-9]/', $nome)) {
-            $erroNome = 1;
-        }
-        
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $erroEmail = 1;
-        }
 
-        if (strpos($palavrapasse, "'") !== false) {
-            $erroSenha = 1;
-        } 
+    public function postSignUp($request, $response)
+    {
+        try {
+            $nome = $request->getParam('nomeutente');
+            $email = $request->getParam('e-mail');
+            $palavrapasse = $request->getParam('password');
+            $nome = str_replace("'", "**", $nome);
 
-        
-        if (strpos($email, "'") !== false) {
-            $erroEmail = 1;
-        } 
-        
-    
-        // Verificar se a senha atende aos critérios (letras maiúsculas, minúsculas e números)
-        if (!preg_match('/[A-Z]/', $palavrapasse) || !preg_match('/[a-z]/', $palavrapasse) || !preg_match('/[0-9]/', $palavrapasse)) {
-            $erroSenha = 1;
-        }
-    
-        // Consulta SQL para verificar se o email já está presente na tabela
-        $sql = "SELECT COUNT(*) FROM users WHERE email = :email";
-        $stmt = $this->container->db->prepare($sql);
-        $stmt->execute(['email' => $email]);
-        $count = $stmt->fetchColumn();
-    
-        // Verificar se o email já está registrado
-        if ($count > 0) {
-            $erroEmail = 1;
-        }
-        
-    
-        if($erroNome == 0 &&
-        $erroEmail == 0 &&
-        $erroSenha == 0){
+            $erroNome = 0;
+            $erroEmail = 0;
+            $erroSenha = 0;
 
-            $sql = "INSERT INTO users (email, name, password) VALUES (:email, :nome, :palavrapasse)";
-            $stmt = $this->container->db->prepare($sql);
-            
-            // Execute a consulta com os valores fornecidos
-            $stmt->execute(['email' => $email, 'nome' => $nome, 'palavrapasse' => $palavrapasse]);
-            
-            // Verifica se a inserção foi bem-sucedida
-            if ($stmt->rowCount() > 0) {
-                // Obtém o ID do usuário recém-criado
-                $idUsuario = $this->container->db->lastInsertId();
-                
-                // Armazena o ID do usuário na sessão
-                $_SESSION['Id_User'] = $idUsuario;
-                
-                // Redireciona para a página inicial ou renderiza o template, conforme necessário
-                return $response->withRedirect('/public/');
-            } else {
-                echo "Erro ao inserir registro.";
+            if (preg_match('/[0-9]/', $nome)) {
+                $erroNome = 1;
             }
-        }else{
-            // Renderiza a página novamente com as informações de erro
-            return $this->container->view->render($response, 'sneat-1.0.0/html/Register.phtml', [
-                'erroNome' => $erroNome,
-                'erroEmail' => $erroEmail,
-                'erroSenha' => $erroSenha
-            ]);
+
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $erroEmail = 1;
+            }
+
+            if (strpos($palavrapasse, "'") !== false) {
+                $erroSenha = 1;
+            }
+
+            if (strpos($email, "'") !== false) {
+                $erroEmail = 1;
+            }
+
+            if (!preg_match('/[A-Z]/', $palavrapasse) || !preg_match('/[a-z]/', $palavrapasse) || !preg_match('/[0-9]/', $palavrapasse)) {
+                $erroSenha = 1;
+            }
+            $dbAccess = new HomeDbAccess($this->container);
+
+            $stmt = $dbAccess->getEmailValidation($email);
+            $count = $stmt->fetchColumn();
+
+            if ($count > 0) {
+                $erroEmail = 1;
+            }
+
+
+            if (
+                $erroNome == 0 &&
+                $erroEmail == 0 &&
+                $erroSenha == 0
+            ) {
+
+                $stmt = $dbAccess->getRegister($email, $nome, $palavrapasse);
+
+                if ($stmt->rowCount() > 0) {
+                    $idUsuario = $this->container->db->lastInsertId();
+
+                    $_SESSION['Id_User'] = $idUsuario;
+
+                    return $response->withRedirect('/public/');
+                } else {
+                    echo "Erro ao inserir registro.";
+                }
+            } else {
+                return $this->container->view->render($response, 'sneat-1.0.0/html/Register.phtml', [
+                    'erroNome' => $erroNome,
+                    'erroEmail' => $erroEmail,
+                    'erroSenha' => $erroSenha
+                ]);
+            }
+        } catch (\Exception $e) {
+            $this->container->logger->error($e->getMessage(), ['exception' => $e]);
         }
-    
-        
+
     }
 
-    public function getProfilo($request, $response){
+    public function getProfilo($request, $response)
+    {
 
         $iduser = $_SESSION['Id_User'];
 
-            // Define a data limite para 3 dias no futuro
+        try {
+            $dbAccess = new HomeDbAccess($this->container);
             $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt1 = $this->container->db->prepare($query1);
-            $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
-            $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson1 = json_encode($tasks1);
+            $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
 
-            // Define a data limite para uma semana no futuro
             $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt2 = $this->container->db->prepare($query2);
-            $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
-            $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson2 = json_encode($tasks2);
+            $tasksJson2 = $dbAccess->getNormale($iduser, $dateLimit1, $dateLimit2);
 
-            // Define a data limite para a data atual
             $dateLimit3 = date('Y-m-d');
-            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt3 = $this->container->db->prepare($query3);
-            $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
-            $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson3 = json_encode($tasks3);
+            $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
+            $tasksJson4 = $dbAccess->getCategorys($iduser);
 
-            $query4 = "SELECT * FROM categorys WHERE id_user = :iduser";
-            $stmt4 = $this->container->db->prepare($query4);
-            $stmt4->execute(['iduser' => $iduser]);
-            $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson4 = json_encode($tasks4);
-
-            $query5 = "SELECT * FROM users WHERE id_user = :iduser";
-            $stmt5 = $this->container->db->prepare($query5);
-            $stmt5->execute(['iduser' => $iduser]);
-            $userData = $stmt5->fetch(\PDO::FETCH_ASSOC);
+            $userData = $dbAccess->getProfilo($iduser);
 
             return $this->container->view->render($response, '/sneat-1.0.0/html/Profilo.phtml', [
-                'tasksJson1' => $tasksJson1,
-                'tasksJson2' => $tasksJson2,
-                'tasksJson3' => $tasksJson3,
-                'tasksJson4' => $tasksJson4,
+                'tasksJson1' => json_encode($tasksJson1),
+                'tasksJson2' => json_encode($tasksJson2),
+                'tasksJson3' => json_encode($tasksJson3),
+                'tasksJson4' => json_encode($tasksJson4),
                 'userData' => $userData
             ]);
-    
+        } catch (\Exception $e) {
+            $this->container->logger->error($e->getMessage(), ['exception' => $e]);
+        }
+
     }
-    public function postProfilo($request, $response){
+    public function postProfilo($request, $response)
+    {
+        try {
         $iduser = $_SESSION['Id_User'];
         $nome = $request->getParam('nome');
+        $dbAccess = new HomeDbAccess($this->container);
+        if (empty($nome)) {
+            
+               
+                $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
+                $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
 
-        if(empty($nome)){
-            $iduser = $_SESSION['Id_User'];
+                $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
+                $tasksJson2 = $dbAccess->getNormale($iduser, $dateLimit1, $dateLimit2);
 
-            // Define a data limite para 3 dias no futuro
+                $dateLimit3 = date('Y-m-d');
+                $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
+                $tasksJson4 = $dbAccess->getCategorys($iduser);
+
+                $userData = $dbAccess->getProfilo($iduser);
+
+                return $this->container->view->render($response, '/sneat-1.0.0/html/Profilo.phtml', [
+                    'tasksJson1' => json_encode($tasksJson1),
+                    'tasksJson2' => json_encode($tasksJson2),
+                    'tasksJson3' => json_encode($tasksJson3),
+                    'tasksJson4' => json_encode($tasksJson4),
+                    'userData' => $userData
+                ]);
+            
+        } else {
+            $nome = str_replace("'", "**", $nome);
+            $stmt5 = $dbAccess->getAlterName($iduser);
+            $stmt5->execute(['nome' => $nome, 'iduser' => $iduser]);
+
             $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt1 = $this->container->db->prepare($query1);
-            $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
-            $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson1 = json_encode($tasks1);
+            $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
 
-            // Define a data limite para uma semana no futuro
             $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-            $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt2 = $this->container->db->prepare($query2);
-            $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
-            $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson2 = json_encode($tasks2);
+            $tasksJson2 = $dbAccess->getNormale($iduser, $dateLimit1, $dateLimit2);
 
-            // Define a data limite para a data atual
             $dateLimit3 = date('Y-m-d');
-            $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-            $stmt3 = $this->container->db->prepare($query3);
-            $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
-            $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson3 = json_encode($tasks3);
+            $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
+            $tasksJson4 = $dbAccess->getCategorys($iduser);
 
-            $query4 = "SELECT * FROM categorys WHERE id_user = :iduser";
-            $stmt4 = $this->container->db->prepare($query4);
-            $stmt4->execute(['iduser' => $iduser]);
-            $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
-            $tasksJson4 = json_encode($tasks4);
-
-            $query5 = "SELECT * FROM users WHERE id_user = :iduser";
-            $stmt5 = $this->container->db->prepare($query5);
-            $stmt5->execute(['iduser' => $iduser]);
-            $userData = $stmt5->fetch(\PDO::FETCH_ASSOC);
+            $userData = $dbAccess->getProfilo($iduser);
 
             return $this->container->view->render($response, '/sneat-1.0.0/html/Profilo.phtml', [
-                'tasksJson1' => $tasksJson1,
-                'tasksJson2' => $tasksJson2,
-                'tasksJson3' => $tasksJson3,
-                'tasksJson4' => $tasksJson4,
+                'tasksJson1' => json_encode($tasksJson1),
+                'tasksJson2' => json_encode($tasksJson2),
+                'tasksJson3' => json_encode($tasksJson3),
+                'tasksJson4' => json_encode($tasksJson4),
                 'userData' => $userData
             ]);
-        }else{
-            $nome = str_replace("'", "**", $nome);
-            $query5 = "Update users SET name=:nome WHERE id_user=:iduser";
-            $stmt5 = $this->container->db->prepare($query5);
-            $stmt5->execute(['nome' => $nome, 'iduser' => $iduser]);
-           
-            return $response->withRedirect('/public/');
         }
-
+    } catch (\Exception $e) {
+        $this->container->logger->error($e->getMessage(), ['exception' => $e]);
+    }
 
     }
 
-    public function getTask($request, $response){
-
-       
-    
-    }
-    public function postTask($request, $response) {
+    public function getTask($request, $response)
+    {}
+    public function postTask($request, $response)
+    {
         $iduser = $_SESSION['Id_User'];
         $idtask = $request->getParam('id_task');
-    
-        // Define a data limite para 3 dias no futuro
-        $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-        $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-        $stmt1 = $this->container->db->prepare($query1);
-        $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
-        $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
-        $tasksJson1 = json_encode($tasks1);
-    
-        // Define a data limite para uma semana no futuro
-        $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-        $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-        $stmt2 = $this->container->db->prepare($query2);
-        $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
-        $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
-        $tasksJson2 = json_encode($tasks2);
-    
-        // Define a data limite para a data atual
-        $dateLimit3 = date('Y-m-d');
-        $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-        $stmt3 = $this->container->db->prepare($query3);
-        $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
-        $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
-        $tasksJson3 = json_encode($tasks3);
-    
-        $query4 = "SELECT * FROM categorys WHERE id_user = :iduser";
-        $stmt4 = $this->container->db->prepare($query4);
-        $stmt4->execute(['iduser' => $iduser]);
-        $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
-        $tasksJson4 = json_encode($tasks4);
-    
-        // Obtém os detalhes da tarefa específica
-        $query5 = "SELECT t.*, c.name AS category_name 
-           FROM tasks t 
-           JOIN categorys c ON t.category = c.id_category 
-           WHERE t.id_task = :idtask AND t.id_user = :iduser";
-            $stmt5 = $this->container->db->prepare($query5);
-            $stmt5->execute(['idtask' => $idtask, 'iduser' => $iduser]);
-            $task5 = $stmt5->fetch(\PDO::FETCH_ASSOC);
 
-        // Verifica se a tarefa está marcada como completa
-        $queryCheckComplete = "SELECT Completed FROM tasks WHERE id_task = :idtask AND id_user = :iduser";
-        $stmtCheckComplete = $this->container->db->prepare($queryCheckComplete);
-        $stmtCheckComplete->execute(['idtask' => $idtask, 'iduser' => $iduser]);
-        $isComplete = $stmtCheckComplete->fetchColumn();
+        try {
+            $dbAccess = new HomeDbAccess($this->container);
+            $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
+            $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
 
-        if ($isComplete == 1) {
-            return $this->container->view->render($response, '/sneat-1.0.0/html/TaskCompleted.phtml', [
-                'tasksJson1' => $tasksJson1,
-                'tasksJson2' => $tasksJson2,
-                'tasksJson3' => $tasksJson3,
-                'tasksJson4' => $tasksJson4,
-                'task5' => json_encode($task5)
-            ]);
-        }else{
-            $queryCheckComplete = "SELECT Completed, final_date FROM tasks WHERE id_task = :idtask AND id_user = :iduser";
-            $stmtCheckComplete = $this->container->db->prepare($queryCheckComplete);
-            $stmtCheckComplete->execute(['idtask' => $idtask, 'iduser' => $iduser]);
-            $taskData = $stmtCheckComplete->fetch(\PDO::FETCH_ASSOC);
+            $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
+            $tasksJson2 = $dbAccess->getNormale($iduser, $dateLimit1, $dateLimit2);
 
-            if ($taskData) {
-                $completed = $taskData['Completed'];
-                $finalDate = $taskData['final_date'];
-                
-                // Obtém a data atual
-                $currentDate = date('Y-m-d');
-                
-                if ($completed == 0 && $finalDate < $currentDate) {
-                    return $this->container->view->render($response, '/sneat-1.0.0/html/TaskCompleted.phtml', [
-                        'tasksJson1' => $tasksJson1,
-                        'tasksJson2' => $tasksJson2,
-                        'tasksJson3' => $tasksJson3,
-                        'tasksJson4' => $tasksJson4,
-                        'task5' => json_encode($task5)
-                    ]);
-                } else {
-                    return $this->container->view->render($response, '/sneat-1.0.0/html/Task.phtml', [
-                        'tasksJson1' => $tasksJson1,
-                        'tasksJson2' => $tasksJson2,
-                        'tasksJson3' => $tasksJson3,
-                        'tasksJson4' => $tasksJson4,
-                        'task5' => json_encode($task5)
-                    ]);
-                }
-            } 
+            $dateLimit3 = date('Y-m-d');
+            $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
+            $tasksJson4 = $dbAccess->getCategorys($iduser);
+            $task5 = $dbAccess->getTaskDetails($iduser, $idtask);
+
+            $queryCheckComplete = $dbAccess->getCheckCompleted($iduser, $idtask);
+
+            $isComplete = $queryCheckComplete->fetchColumn();
+
+            if ($isComplete == 1) {
+                return $this->container->view->render($response, '/sneat-1.0.0/html/TaskCompleted.phtml', [
+                    'tasksJson1' => json_encode($tasksJson1),
+                    'tasksJson2' => json_encode($tasksJson2),
+                    'tasksJson3' => json_encode($tasksJson3),
+                    'tasksJson4' => json_encode($tasksJson4),
+                    'task5' => json_encode($task5)
+                ]);
+            } else {
+                $taskData = $dbAccess->getCheckCompletedData($iduser, $idtask);
+                if ($taskData) {
+                    $completed = $taskData['Completed'];
+                    $finalDate = $taskData['final_date'];
+
+                    // Obtém a data atual
+                    $currentDate = date('Y-m-d');
+
+                    if ($completed == 0 && $finalDate < $currentDate) {
+                        return $this->container->view->render($response, '/sneat-1.0.0/html/TaskCompleted.phtml', [
+                            'tasksJson1' => json_encode($tasksJson1),
+                            'tasksJson2' => json_encode($tasksJson2),
+                            'tasksJson3' => json_encode($tasksJson3),
+                            'tasksJson4' => json_encode($tasksJson4),
+                            'task5' => json_encode($task5)
+                        ]);
+                    } else {
+                        return $this->container->view->render($response, '/sneat-1.0.0/html/Task.phtml', [
+                            'tasksJson1' => json_encode($tasksJson1),
+                            'tasksJson2' => json_encode($tasksJson2),
+                            'tasksJson3' => json_encode($tasksJson3),
+                            'tasksJson4' => json_encode($tasksJson4),
+                            'task5' => json_encode($task5)
+                        ]);
                     }
-    
-        
+                }
+            }
+
+        } catch (\Exception $e) {
+            $this->container->logger->error($e->getMessage(), ['exception' => $e]);
+        }
     }
 
-    public function getCompletTask($request, $response){
-
-       
-    
+    public function getCompletTask($request, $response)
+    {
     }
-    public function postCompletTask($request, $response) {
+    public function postCompletTask($request, $response)
+    {
 
         $iduser = $_SESSION['Id_User'];
-        $idtask = $request->getParam('idtask'); 
+        $idtask = $request->getParam('idtask');
 
         $query5 = "UPDATE tasks SET Completed='1' WHERE id_user = :iduser AND id_task = :idtask";
         $stmt5 = $this->container->db->prepare($query5);
         $stmt5->execute(['iduser' => $iduser, 'idtask' => $idtask]);
-       
+
         return $response->withRedirect('/public/');
     }
 
-    public function getDeletTask($request, $response){
-
-       
-    
+    public function getDeletTask($request, $response)
+    {
     }
-    public function postDeletTask($request, $response) {
-
+    public function postDeletTask($request, $response)
+    {
         $iduser = $_SESSION['Id_User'];
         $idtask = $request->getParam('idtask');
 
         $query5 = "DELETE FROM tasks WHERE id_task = :idtask AND id_user = :iduser";
         $stmt5 = $this->container->db->prepare($query5);
         $stmt5->execute(['idtask' => $idtask, 'iduser' => $iduser]);
-       
+
         return $response->withRedirect('/public/');
     }
 
-    public function getLogout($request, $response){
+    public function getLogout($request, $response)
+    {
 
-       session_destroy();
+        session_destroy();
         return $response->withRedirect('/public/');
     }
-    public function postLogout($request, $response) {       
-        
-    }
+    public function postLogout($request, $response)
+    {}
 
-    public function getDeleteCategory($request, $response){
-
-       
-    
-    }
-    public function postDeleteCategory($request, $response) {
+    public function getDeleteCategory($request, $response)
+    {}
+    public function postDeleteCategory($request, $response)
+    {
 
         $iduser = $_SESSION['Id_User'];
         $idcategory = $request->getParam('idcategory');
@@ -650,72 +597,45 @@ class TaskController extends Controller{
         $query5 = "DELETE FROM  categorys WHERE id_category = :idcategory AND id_user = :iduser";
         $stmt5 = $this->container->db->prepare($query5);
         $stmt5->execute(['idcategory' => $idcategory, 'iduser' => $iduser]);
-       
+
         return $response->withRedirect('/public/');
     }
 
-    public function getCategory($request, $response){
-
-       
-    
-    }
-    public function postCategory($request, $response) {
+    public function getCategory($request, $response)
+    {}
+    public function postCategory($request, $response)
+    {
         $iduser = $_SESSION['Id_User'];
         $idcategory = $request->getParam('category');
-    
-        // Define a data limite para 3 dias no futuro
-        $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-        $query1 = "SELECT * FROM tasks WHERE final_date <= :dateLimit1 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-        $stmt1 = $this->container->db->prepare($query1);
-        $stmt1->execute(['dateLimit1' => $dateLimit1, 'iduser' => $iduser]);
-        $tasks1 = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
-        $tasksJson1 = json_encode($tasks1);
-    
-        // Define a data limite para uma semana no futuro
-        $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-        $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-        $stmt2 = $this->container->db->prepare($query2);
-        $stmt2->execute(['dateLimit1' => $dateLimit1, 'dateLimit2' => $dateLimit2, 'iduser' => $iduser]);
-        $tasks2 = $stmt2->fetchAll(\PDO::FETCH_ASSOC);
-        $tasksJson2 = json_encode($tasks2);
-    
-        // Define a data limite para a data atual
-        $dateLimit3 = date('Y-m-d');
-        $query3 = "SELECT * FROM tasks WHERE final_date > :dateLimit2 AND final_date > :dateLimit3 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
-        $stmt3 = $this->container->db->prepare($query3);
-        $stmt3->execute(['dateLimit2' => $dateLimit2, 'dateLimit3' => $dateLimit3, 'iduser' => $iduser]);
-        $tasks3 = $stmt3->fetchAll(\PDO::FETCH_ASSOC);
-        $tasksJson3 = json_encode($tasks3);
-    
-        $query4 = "SELECT * FROM categorys WHERE id_user = :iduser";
-        $stmt4 = $this->container->db->prepare($query4);
-        $stmt4->execute(['iduser' => $iduser]);
-        $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
-        $tasksJson4 = json_encode($tasks4);
-    
-        // Fetch all tasks for the specific category
-        $query5 = "SELECT t.*, c.name AS category_name, u.*
-           FROM tasks t
-           JOIN categorys c ON t.category = c.id_category
-           JOIN users u ON t.id_user = u.id_user
-           WHERE t.category = :idcategory";
-$stmt5 = $this->container->db->prepare($query5);
-$stmt5->execute(['idcategory' => $idcategory]);
-$tasksByCategory = $stmt5->fetchAll(\PDO::FETCH_ASSOC);
-$tasksJson5 = json_encode($tasksByCategory);
-    
-        return $this->container->view->render($response, '/sneat-1.0.0/html/Category.phtml', [
-            'tasksJson1' => $tasksJson1,
-            'tasksJson2' => $tasksJson2,
-            'tasksJson3' => $tasksJson3,
-            'tasksJson4' => $tasksJson4,
-            'tasksJson5' => $tasksJson5
-        ]);
+
+        try {
+            $dbAccess = new HomeDbAccess($this->container);
+            $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
+            $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
+
+            $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
+            $tasksJson2 = $dbAccess->getNormale($iduser, $dateLimit1, $dateLimit2);
+
+            $dateLimit3 = date('Y-m-d');
+            $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
+            $tasksJson4 = $dbAccess->getCategorys($iduser);
+            $tasksJson5 = $dbAccess->getCategoryDetails($iduser, $idcategory);
+
+            return $this->container->view->render($response, '/sneat-1.0.0/html/Category.phtml', [
+                'tasksJson1' => json_encode($tasksJson1),
+                'tasksJson2' => json_encode($tasksJson2),
+                'tasksJson3' => json_encode($tasksJson3),
+                'tasksJson4' => json_encode($tasksJson4),
+                'tasksJson5' => json_encode($tasksJson5),
+            ]);
+        } catch (\Exception $e) {
+            $this->container->logger->error($e->getMessage(), ['exception' => $e]);
+        }
     }
-    
 
 
 
 
-    
+
+
 }

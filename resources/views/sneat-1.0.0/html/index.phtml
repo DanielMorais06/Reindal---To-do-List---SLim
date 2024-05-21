@@ -143,6 +143,7 @@
 
                   tasks1.forEach(task => {
                       const card = document.createElement('div');
+                      console.log(task);
                       card.className = 'col-12'; 
                       task.title = task.title.replace(/\*\*/g, "'");
                       card.innerHTML = `<form method='post' action='./html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
