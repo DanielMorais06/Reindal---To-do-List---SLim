@@ -9,13 +9,12 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use App\Middlewares\LogMiddleware;
 
-// Carrega as variáveis de ambiente do arquivo .env
 $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 // Cria o serviço de log
 $logger = new Logger('app_logger');
-$logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/app.log', Logger::DEBUG));
+$logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/logger.log', Logger::DEBUG));
 
 // Configurações do aplicativo Slim
 $config = [

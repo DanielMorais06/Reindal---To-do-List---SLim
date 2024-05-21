@@ -14,10 +14,7 @@ class LogMiddleware {
     }
 
     public function __invoke(Request $request, Response $response, callable $next): Response {
-        // Registra uma mensagem de log com o método HTTP e a URL
         $this->logger->info('Action: ' . $request->getMethod() . ' ' . $request->getUri());
-
-        // Retorna a resposta sem chamar o próximo middleware
         return $response;
     }
 }
