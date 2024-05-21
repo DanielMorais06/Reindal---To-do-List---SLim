@@ -37,13 +37,15 @@ $app = new \Slim\App($config);
 
 // Adiciona o serviço de log ao contêiner do Slim
 $container = $app->getContainer();
-$container['logger'] = function ($c) use ($logger) {
+$logger = new Logger('logger');
+
+// Adicionar um manipulador (handler) para armazenar mensagens em um arquivo
+$logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/logger.log', Logger::DEBUG));
+
+// Adiciona o logger ao container
+$container['logger'] = function($container) use ($logger) {
     return $logger;
 };
-
-// Cria e adiciona o middleware de log
-$logMiddleware = new LogMiddleware($container->get('logger'));
-$app->add($logMiddleware);
 
 // Adiciona o contêiner e os controladores ao aplicativo
 $container['db'] = function ($c) {
