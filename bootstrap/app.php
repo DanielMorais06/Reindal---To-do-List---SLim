@@ -14,7 +14,29 @@ $dotenv->load();
 
 // Cria o serviço de log
 $logger = new Logger('app_logger');
-$logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/logger.log', Logger::DEBUG));
+$logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/logger.log', Logger::DEBUG, Logger::INFO, Logger::ERROR));
+
+// Configurações do aplicativo Slim
+$config = [
+    'settings' => [
+        'displayErrorDetails' => true,
+        'db' => [
+            'driver' => $_ENV['DB_DRIVER'],
+            'host' => $_ENV['DB_HOST'],
+            'database' => $_ENV['DB_DATABASE'],
+            'username' => $_ENV['DB_USERNAME'],
+            'password' => $_ENV['DB_PASSWORD'],
+            'charset' => $_ENV['DB_CHARSET'],
+            'collation' => $_ENV['DB_COLLATION'],
+            'prefix' => $_ENV['DB_PREFIX'],
+        ]
+    ],
+];
+
+$app = new \Slim\App([
+    'settings' => $config
+]);
+$app = new \Slim\App($config);
 
 // Configurações do aplicativo Slim
 $config = [
@@ -43,9 +65,17 @@ $config['db']['dbname'] = $_ENV['DB_DATABASE'];
 $app = new \Slim\App([
     'settings' => $config
 ]);
-
 $app = new \Slim\App($config);
 
+$container['db'] = function ($c) {
+    $db = $c['settings']['db'];
+    $pdo = new PDO('mysql:host=' . $db['host'] . ';dbname=' . $db['dbname'],
+    $db['user'], $db['pass']);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    return $pdo;
+};
 
 // Adiciona o serviço de log ao contêiner do Slim
 $container = $app->getContainer();
@@ -60,15 +90,7 @@ $container['logger'] = function($container) use ($logger) {
 };
 
 // Adiciona o contêiner e os controladores ao aplicativo
-$container['db'] = function ($c) {
-    $db = $c['settings']['db'];
-    $pdo = new PDO('mysql:host=' . $db['host'] . ';dbname=' . $db['dbname'],
-        $db['user'], $db['pass']);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-    return $pdo;
-};
+
 
 $container['view'] = function($container){
     $view=new \Slim\Views\PhpRenderer(__DIR__.'/../resources/views');

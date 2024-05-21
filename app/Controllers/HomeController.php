@@ -4,20 +4,19 @@ namespace App\Controllers;
 use App\DBAccess\HomeDbAccess;
 
 class HomeController extends Controller{
-
+    
     public function index($request, $response) {
-        $_SESSION['Id_User']=18;
         if(empty($_SESSION['Id_User'])){
             $this->container->logger->info('SUCESSFULL! Render /sneat-1.0.0/html/index.phtml');
             return $this->container->view->render($response, '/sneat-1.0.0/html/index.phtml');
         }else{
             $iduser = $_SESSION['Id_User'];
-
-            // Instancie a classe HomeDbAccess e passe o PDO do container
-            $dbAccess = new HomeDbAccess($this->container->db);
-
-            // Obtenha as tarefas
+            $dbAccess = new HomeDbAccess($this->container);
             $tasksJson1 = $dbAccess->getTasksDueInThreeDays($iduser);
+
+            return $this->container->view->render($response, '/sneat-1.0.0/html/index.phtml', [
+                'tasksJson1' => json_encode($tasksJson1)
+            ]);
 
             /*$dateLimit2 = date('Y-m-d', strtotime('+1 week'));
             $query2 = "SELECT * FROM tasks WHERE final_date > :dateLimit1 AND final_date <= :dateLimit2 AND id_user = :iduser AND Completed='0' AND final_date >= CURDATE() LIMIT 4";
@@ -54,9 +53,7 @@ class HomeController extends Controller{
         $tasks7 = $stmt7->fetchAll(\PDO::FETCH_ASSOC);
         $tasksJson7 = json_encode($tasks7);*/
     
-        return $this->container->view->render($response, '/sneat-1.0.0/html/index.phtml', [
-            'tasksJson1' => $tasksJson1
-        ]);
+        
         } 
         
     }

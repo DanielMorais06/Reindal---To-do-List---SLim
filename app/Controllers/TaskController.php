@@ -38,7 +38,7 @@ class TaskController extends Controller{
             $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
             $tasksJson4 = json_encode($tasks4);
 
-            return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.html', [
+            return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.phtml', [
                 'tasksJson1' => $tasksJson1,
                 'tasksJson2' => $tasksJson2,
                 'tasksJson3' => $tasksJson3,
@@ -124,7 +124,7 @@ class TaskController extends Controller{
             $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
             $tasksJson4 = json_encode($tasks4);
     
-            return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.html', [
+            return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.phtml', [
                 'tasksJson1' => $tasksJson1,
                 'tasksJson2' => $tasksJson2,
                 'tasksJson3' => $tasksJson3,
@@ -137,7 +137,7 @@ class TaskController extends Controller{
 
     public function getNewCategory($request, $response){
         if(empty($_SESSION['Id_User'])){
-            return $this->container->view->render($response, 'sneat-1.0.0/html/Login.html');
+            return $this->container->view->render($response, 'sneat-1.0.0/html/Login.phtml');
         } else {
         $iduser = $_SESSION['Id_User'];
 
@@ -171,7 +171,7 @@ class TaskController extends Controller{
             $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
             $tasksJson4 = json_encode($tasks4);
 
-            return $this->container->view->render($response, '/sneat-1.0.0/html/NewCategory.html', [
+            return $this->container->view->render($response, '/sneat-1.0.0/html/NewCategory.phtml', [
                 'tasksJson1' => $tasksJson1,
                 'tasksJson2' => $tasksJson2,
                 'tasksJson3' => $tasksJson3,
@@ -215,7 +215,7 @@ class TaskController extends Controller{
             $tasks4 = $stmt4->fetchAll(\PDO::FETCH_ASSOC);
             $tasksJson4 = json_encode($tasks4);
 
-            return $this->container->view->render($response, '/sneat-1.0.0/html/NewCategory.html', [
+            return $this->container->view->render($response, '/sneat-1.0.0/html/NewCategory.phtml', [
                 'tasksJson1' => $tasksJson1,
                 'tasksJson2' => $tasksJson2,
                 'tasksJson3' => $tasksJson3,
@@ -241,7 +241,7 @@ class TaskController extends Controller{
         
 
     public function getSignIn($request, $response){
-            return $this->container->view->render($response, 'sneat-1.0.0/html/Login.html');
+            return $this->container->view->render($response, 'sneat-1.0.0/html/Login.phtml');
         
     }
 
@@ -281,14 +281,14 @@ class TaskController extends Controller{
                 $erroPasse = 1;
                 $erroEmail = 1;
                 // Renderiza o template, independentemente dos erros
-                return $this->container->view->render($response, 'sneat-1.0.0/html/Login.html', [
+                return $this->container->view->render($response, 'sneat-1.0.0/html/Login.phtml', [
                     'erroSenha' => $erroPasse,
                     'erroEmail' => $erroEmail
                 ]);
             }
         }else{
             // Renderiza o template, independentemente dos erros
-            return $this->container->view->render($response, 'sneat-1.0.0/html/Login.html', [
+            return $this->container->view->render($response, 'sneat-1.0.0/html/Login.phtml', [
                 'erroSenha' => $erroPasse,
                 'erroEmail' => $erroEmail
             ]);
@@ -300,7 +300,7 @@ class TaskController extends Controller{
     
 
     public function getSignUp($request, $response){
-        return $this->container->view->render($response, 'sneat-1.0.0/html/Register.html');
+        return $this->container->view->render($response, 'sneat-1.0.0/html/Register.phtml');
     }
     
     public function postSignUp($request, $response){
@@ -373,7 +373,7 @@ class TaskController extends Controller{
             }
         }else{
             // Renderiza a página novamente com as informações de erro
-            return $this->container->view->render($response, 'sneat-1.0.0/html/Register.html', [
+            return $this->container->view->render($response, 'sneat-1.0.0/html/Register.phtml', [
                 'erroNome' => $erroNome,
                 'erroEmail' => $erroEmail,
                 'erroSenha' => $erroSenha
@@ -422,7 +422,7 @@ class TaskController extends Controller{
             $stmt5->execute(['iduser' => $iduser]);
             $userData = $stmt5->fetch(\PDO::FETCH_ASSOC);
 
-            return $this->container->view->render($response, '/sneat-1.0.0/html/Profilo.html', [
+            return $this->container->view->render($response, '/sneat-1.0.0/html/Profilo.phtml', [
                 'tasksJson1' => $tasksJson1,
                 'tasksJson2' => $tasksJson2,
                 'tasksJson3' => $tasksJson3,
@@ -473,7 +473,7 @@ class TaskController extends Controller{
             $stmt5->execute(['iduser' => $iduser]);
             $userData = $stmt5->fetch(\PDO::FETCH_ASSOC);
 
-            return $this->container->view->render($response, '/sneat-1.0.0/html/Profilo.html', [
+            return $this->container->view->render($response, '/sneat-1.0.0/html/Profilo.phtml', [
                 'tasksJson1' => $tasksJson1,
                 'tasksJson2' => $tasksJson2,
                 'tasksJson3' => $tasksJson3,
@@ -547,7 +547,7 @@ class TaskController extends Controller{
         $isComplete = $stmtCheckComplete->fetchColumn();
 
         if ($isComplete == 1) {
-            return $this->container->view->render($response, '/sneat-1.0.0/html/TaskCompleted.html', [
+            return $this->container->view->render($response, '/sneat-1.0.0/html/TaskCompleted.phtml', [
                 'tasksJson1' => $tasksJson1,
                 'tasksJson2' => $tasksJson2,
                 'tasksJson3' => $tasksJson3,
@@ -568,7 +568,7 @@ class TaskController extends Controller{
                 $currentDate = date('Y-m-d');
                 
                 if ($completed == 0 && $finalDate < $currentDate) {
-                    return $this->container->view->render($response, '/sneat-1.0.0/html/TaskCompleted.html', [
+                    return $this->container->view->render($response, '/sneat-1.0.0/html/TaskCompleted.phtml', [
                         'tasksJson1' => $tasksJson1,
                         'tasksJson2' => $tasksJson2,
                         'tasksJson3' => $tasksJson3,
@@ -576,7 +576,7 @@ class TaskController extends Controller{
                         'task5' => json_encode($task5)
                     ]);
                 } else {
-                    return $this->container->view->render($response, '/sneat-1.0.0/html/Task.html', [
+                    return $this->container->view->render($response, '/sneat-1.0.0/html/Task.phtml', [
                         'tasksJson1' => $tasksJson1,
                         'tasksJson2' => $tasksJson2,
                         'tasksJson3' => $tasksJson3,
@@ -704,7 +704,7 @@ $stmt5->execute(['idcategory' => $idcategory]);
 $tasksByCategory = $stmt5->fetchAll(\PDO::FETCH_ASSOC);
 $tasksJson5 = json_encode($tasksByCategory);
     
-        return $this->container->view->render($response, '/sneat-1.0.0/html/Category.html', [
+        return $this->container->view->render($response, '/sneat-1.0.0/html/Category.phtml', [
             'tasksJson1' => $tasksJson1,
             'tasksJson2' => $tasksJson2,
             'tasksJson3' => $tasksJson3,
