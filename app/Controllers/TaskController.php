@@ -12,6 +12,7 @@ class TaskController extends Controller
     {
         try {
             if (empty($_SESSION['Id_User'])) {
+                $this->container->logger->info('Failed! Riendirected /sneat-1.0.0/html/Login.phtml');
                 return $this->container->view->render($response, 'sneat-1.0.0/html/Login.phtml');
             } else {
                 $iduser = $_SESSION['Id_User'];
@@ -137,7 +138,7 @@ class TaskController extends Controller
                 }
             
             } else {
-
+                $this->container->logger->info('Failed! Riendirected /sneat-1.0.0/html/NewTask.phtml');
                 $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
                 $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
 
@@ -166,12 +167,14 @@ class TaskController extends Controller
 
     public function getNewCategory($request, $response)
     {
+        try {
         if (empty($_SESSION['Id_User'])) {
+            $this->container->logger->info('Failed! Riendirected /sneat-1.0.0/html/Login.phtml');
             return $this->container->view->render($response, 'sneat-1.0.0/html/Login.phtml');
         } else {
             $iduser = $_SESSION['Id_User'];
 
-            try {
+            
                 $dbAccess = new HomeDbAccess($this->container);
                 $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
                 $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
@@ -189,20 +192,20 @@ class TaskController extends Controller
                     'tasksJson3' => json_encode($tasksJson3),
                     'tasksJson4' => json_encode($tasksJson4)
                 ]);
-            } catch (\Exception $e) {
-                $this->container->logger->error($e->getMessage(), ['exception' => $e]);
-            }
+            
+        }} catch (\Exception $e) {
+            $this->container->logger->error($e->getMessage(), ['exception' => $e]);
         }
 
     }
     public function postNewCategory($request, $response)
-    {
+    {        try {
         $categoria = $request->getParam('categoria');
         $iduser = $_SESSION['Id_User'];
+        $dbAccess = new HomeDbAccess($this->container);
         if (empty($categoria)) {
 
-            try {
-                $dbAccess = new HomeDbAccess($this->container);
+    
                 $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
                 $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
 
@@ -213,29 +216,25 @@ class TaskController extends Controller
                 $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
                 $tasksJson4 = $dbAccess->getCategorys($iduser);
 
+                $this->container->logger->info('Failed! Riendirected /sneat-1.0.0/html/NewCategory.phtml');
                 return $this->container->view->render($response, '/sneat-1.0.0/html/NewCategory.phtml', [
                     'tasksJson1' => json_encode($tasksJson1),
                     'tasksJson2' => json_encode($tasksJson2),
                     'tasksJson3' => json_encode($tasksJson3),
                     'tasksJson4' => json_encode($tasksJson4)
                 ]);
-            } catch (\Exception $e) {
-                $this->container->logger->error($e->getMessage(), ['exception' => $e]);
-            }
+            
         } else {
-            try {
-                $dbAccess = new HomeDbAccess($this->container);
+                
                 $categoria = str_replace("'", "**", $categoria);
                 $stmt = $dbAccess->getInsertCategory($iduser, $categoria);
                 if ($stmt->rowCount() > 0) {
                     return $response->withRedirect('/public/');
-                } else {
-                    echo "Erro ao inserir registro.";
-                }
-            } catch (\Exception $e) {
-                $this->container->logger->error($e->getMessage(), ['exception' => $e]);
-            }
+                } 
         }
+    } catch (\Exception $e) {
+        $this->container->logger->error($e->getMessage(), ['exception' => $e]);
+    }
     }
 
 
@@ -250,6 +249,7 @@ class TaskController extends Controller
         try {
             $email = $request->getParam('email');
             $palavrapasse = $request->getParam('password');
+            $dbAccess = new HomeDbAccess($this->container);
 
             $erroPasse = 0;
             $erroEmail = 0;
@@ -271,7 +271,7 @@ class TaskController extends Controller
             }
 
             if ($erroPasse == 0 && $erroEmail == 0) {
-                $dbAccess = new HomeDbAccess($this->container);
+                
                 $stmt = $dbAccess->getLogin($email);
                 $user = $stmt->fetch();
 
@@ -281,6 +281,7 @@ class TaskController extends Controller
                 } else {
                     $erroPasse = 1;
                     $erroEmail = 1;
+                    $this->container->logger->info('Failed! Riendirected /sneat-1.0.0/html/Login.phtml');
                     return $this->container->view->render($response, 'sneat-1.0.0/html/Login.phtml', [
                         'erroSenha' => $erroPasse,
                         'erroEmail' => $erroEmail
@@ -288,6 +289,7 @@ class TaskController extends Controller
                 }
 
             } else {
+                $this->container->logger->info('Failed! Riendirected /sneat-1.0.0/html/Login.phtml');
                 return $this->container->view->render($response, 'sneat-1.0.0/html/Login.phtml', [
                     'erroSenha' => $erroPasse,
                     'erroEmail' => $erroEmail
@@ -362,6 +364,7 @@ class TaskController extends Controller
                     echo "Erro ao inserir registro.";
                 }
             } else {
+                $this->container->logger->info('Failed! Riendirected /sneat-1.0.0/html/Register.phtml');
                 return $this->container->view->render($response, 'sneat-1.0.0/html/Register.phtml', [
                     'erroNome' => $erroNome,
                     'erroEmail' => $erroEmail,
@@ -378,9 +381,10 @@ class TaskController extends Controller
     {
 
         $iduser = $_SESSION['Id_User'];
+        $dbAccess = new HomeDbAccess($this->container);
 
         try {
-            $dbAccess = new HomeDbAccess($this->container);
+            
             $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
             $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
 
@@ -392,6 +396,8 @@ class TaskController extends Controller
             $tasksJson4 = $dbAccess->getCategorys($iduser);
 
             $userData = $dbAccess->getProfilo($iduser);
+
+            $this->container->logger->info('Failed! Riendirected /sneat-1.0.0/html/Profilo.phtml');
 
             return $this->container->view->render($response, '/sneat-1.0.0/html/Profilo.phtml', [
                 'tasksJson1' => json_encode($tasksJson1),
@@ -425,6 +431,7 @@ class TaskController extends Controller
                 $tasksJson4 = $dbAccess->getCategorys($iduser);
 
                 $userData = $dbAccess->getProfilo($iduser);
+                
 
                 return $this->container->view->render($response, '/sneat-1.0.0/html/Profilo.phtml', [
                     'tasksJson1' => json_encode($tasksJson1),

@@ -8,8 +8,11 @@ class HomeController extends Controller{
 
     public function index($request, $response) {
         if(empty($_SESSION['Id_User'])){
-            $this->container->logger->info('SUCESSFULL! Render /sneat-1.0.0/html/index.phtml');
+            try{
             return $this->container->view->render($response, '/sneat-1.0.0/html/index.phtml');
+            }catch (\Exception $e) {
+                $this->container->logger->error($e->getMessage(), ['exception' => $e]);
+            }
         }else{
             $iduser = $_SESSION['Id_User'];
         
@@ -27,7 +30,6 @@ class HomeController extends Controller{
                 $tasksJson5 = $dbAccess->getCategorys($iduser);
                 $tasksJson6 = $dbAccess->getTasksCompleted($iduser);
                 $tasksJson7 = $dbAccess->getTasksIncompleted($iduser);
-    
                 return $this->container->view->render($response, '/sneat-1.0.0/html/index.phtml', [
                     'tasksJson1' => json_encode($tasksJson1),
                     'tasksJson2' => json_encode($tasksJson2),

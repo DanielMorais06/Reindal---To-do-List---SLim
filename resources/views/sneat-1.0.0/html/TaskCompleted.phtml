@@ -78,38 +78,41 @@
         <div class="menu-inner-shadow"></div>
         <button type="button" style="border-radius: 0;" class="btn btn-primary btn-link"
           onclick="location.href='../html/New-Task'">
-          <span class="tf-icons bx bx-plus me-1"></span>Nuovo compito
+          <span class="tf-icons bx bx-plus me-1"></span> <span data-translate="new-task">Nuovo compito</span>
         </button>
         <span style="margin-top: 10px;"></span>
         <div class="menu-inner-shadow"></div>
         <button type="button" style="border-radius: 0;" class="btn btn-info btn-link" onclick="location.href='../'">
-          <span class="tf-icons bx bx-chevron-left me-1"></span>Inizio
+          <span class="tf-icons bx bx-chevron-left me-1"></span><span data-translate="home">Inizio</span>
         </button>
         <ul class="menu-inner py-2 overflow-auto" style="overflow-x: hidden; overflow-y: scroll; height: 100vh;">
           <li class="menu-item">
             <!-- Components -->
             <ul class="menu-inner py-2 overflow-auto">
               <!-- Alta Urgenza Section -->
-              <li class="menu-header small text-uppercase"><span class="menu-header-text">Alta urgenza</span></li>
+              <li class="menu-header small text-uppercase"><span class="menu-header-text"
+                  data-translate="high-urgency">Alta urgenza</span></li>
               <div class="container">
                 <div class="row" id="taskList"></div>
               </div>
 
               <!-- Seção Normale -->
-              <li class="menu-header small text-uppercase"><span class="menu-header-text">Normale</span></li>
+              <li class="menu-header small text-uppercase"><span class="menu-header-text"
+                  data-translate="normal">Normale</span></li>
               <div class="container">
                 <div class="row" id="taskListar"></div>
               </div>
 
               <!-- Seção Ho Tempo -->
-              <li class="menu-header small text-uppercase"><span class="menu-header-text">Ho
+              <li class="menu-header small text-uppercase"><span class="menu-header-text" data-translate="in-time">Ho
                   tempo</span><span>&#128512;</span></li>
               <div class="container">
                 <div class="row" id="taskListHoTempo"></div>
               </div>
 
               <!-- Categorias -->
-              <li class="menu-header small text-uppercase"><span class="menu-header-text">Categorias</span></li>
+              <li class="menu-header small text-uppercase"><span class="menu-header-text"
+                  data-translate="categories">Categorias</span></li>
               <div class="container">
                 <div class="row" id="taskListCategory"></div>
               </div>
@@ -117,86 +120,65 @@
 
             <script>
               document.addEventListener('DOMContentLoaded', function () {
-                const task = JSON.parse('<?php echo $task5; ?>');
-                const taskDetails = document.getElementById('taskDetails');
+                const tasks1 = JSON.parse('<?php echo $tasksJson1; ?>');
 
-                function updateCountdown() {
-                  if (task && Object.keys(task).length > 0) {
-                    task.description = task.description.replace(/\*\*/g, "'");
+                const taskContainer1 = document.getElementById('taskList');
 
-                    // Calcula o tempo restante
-                    const endDate = new Date(task.final_date).getTime();
-                    const now = new Date().getTime();
-                    let timeRemaining = endDate - now;
+                tasks1.forEach(task => {
+                  const card = document.createElement('div');
+                  card.className = 'col-12';
+                  task.title = task.title.replace(/\*\*/g, "'");
+                  card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
+                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`;
+                  taskContainer1.appendChild(card);
+                });
 
-                    const years = Math.floor(timeRemaining / (1000 * 60 * 60 * 24 * 365));
-                    timeRemaining %= 1000 * 60 * 60 * 24 * 365;
-                    const months = Math.floor(timeRemaining / (1000 * 60 * 60 * 24 * 30));
-                    timeRemaining %= 1000 * 60 * 60 * 24 * 30;
-                    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-                    timeRemaining %= 1000 * 60 * 60 * 24;
-                    const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
-                    timeRemaining %= 1000 * 60 * 60;
-                    const minutes = Math.floor(timeRemaining / (1000 * 60));
-                    timeRemaining %= 1000 * 60;
-                    const seconds = Math.floor(timeRemaining / 1000);
+                const tasks2 = JSON.parse('<?php echo $tasksJson2; ?>');
 
-                    let countdown = '';
+                const taskContainer2 = document.getElementById('taskListar');
 
-                    if (years > 0) countdown += `${years} anni, `;
-                    if (months > 0) countdown += `${months} mesi, `;
-                    if (days > 0) countdown += `${days} giorni, `;
-                    if (hours > 0) countdown += `${hours} ore, `;
-                    if (minutes > 0) countdown += `${minutes} minuti, `;
-                    if (seconds > 0) countdown += `${seconds} secondi`;
+                tasks2.forEach(task => {
+                  const card = document.createElement('div');
+                  card.className = 'col-12';
+                  task.title = task.title.replace(/\*\*/g, "'");
+                  card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
+                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`;
+                  taskContainer2.appendChild(card);
+                });
 
-                    countdown = countdown.replace(/,\s*$/, "");
+                const tasks3 = JSON.parse('<?php echo $tasksJson3; ?>');
 
-                    let fileButtons = '';
-                    if (task.File) {
-                      const files = task.File.split('ºº');
-                      files.forEach(file => {
-                        const fileName = file.replace('uploads/', '');
-                        fileButtons += `<span style="margin-left: 10px;"></span><a href="/public/${file}" class="btn btn-outline-secondary mt-3 ml-2" download="${fileName}">
-              <span class="tf-icons bx bx-download me-3"></span>${fileName}
-          </a>`;
-                      });
-                    }
+                const taskContainer3 = document.getElementById('taskListHoTempo');
 
-                    taskDetails.innerHTML = `
-        <h1>${task.title}</h1>
-        <div class="card-subtitle text-muted mb-3">${task.category_name}</div>
-        <small class="text-muted">Descrizione</small>
-        <h3 class="mb-10">${task.description}</h3>
-        <div class="row">
-            <div class="col">
-                <small class="text-muted">Data finale</small><h3 class="mb-7">${task.final_date}</h3>
-            </div>
-            <div class="col">
-                <small class="text-muted">Tempo rimasto</small><h3 class="mb-7">${countdown}</h3>
-            </div>
-        </div>
-        <small class="text-muted">Files</small>
-        <div id="fileButtons">${fileButtons}</div>
-        <div class="row mt-3">
-            <div class="col">
-                <form method="post" action="../html/delettask">
-                    <input type="hidden" name="idtask" value="${task.id_task}" />
-                    <button class="btn rounded-pill btn-outline-danger" type="submit">Eliminare l'attività</button>
-                </form>
-            </div>
-        </div>
-      `;
+                tasks3.forEach(task => {
+                  const card = document.createElement('div');
+                  card.className = 'col-12';
+                  task.title = task.title.replace(/\*\*/g, "'");
+                  card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
+                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`;
+                  taskContainer3.appendChild(card);
+                });
 
-                  } else {
-                    taskDetails.innerHTML = '<p>No task details available.</p>';
-                  }
-                }
+                const tasks4 = JSON.parse('<?php echo $tasksJson4; ?>');
 
-                updateCountdown();
-                setInterval(updateCountdown, 1000);
+                const taskContainer4 = document.getElementById('taskListCategory');
+
+                tasks4.forEach(task => {
+                  const card = document.createElement('div');
+                  card.className = 'col-12';
+                  task.name = task.name.replace(/\*\*/g, "'");
+                  card.innerHTML = `<div class="d-flex justify-content-between align-items-center">
+                        <form method="post" action="../html/category"><input type="hidden" name="category" value="${task.id_category}" /><button class="btn btn-link p-0"><span>${task.name}</span></button></form>
+                        <form method="post" action="../html/deletecategory">
+                            <input type="hidden" value="${task.id_category}" name="idcategory"/>
+                            <button class="btn btn-link" type="submit">
+                                <span class="tf-icons bx bx-trash p-0"></span>
+                            </button>
+                        </form>
+                    </div>`;
+                  taskContainer4.appendChild(card);
+                });
               });
-
             </script>
             <style>
               .menu-inner {
@@ -227,10 +209,36 @@
 
           <div class="container-xxl flex-grow-1 container-p-y">
 
+            <div class="mt-1  py-0 mb-0  " style="margin-left:147vh;">
+              <div class="btn-group mb-0" id="dropdown-icon-demo">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <i class="bx bx-globe me-1"></i> <span data-translate="languages">Languages</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="pt"><span
+                        class="flag-icon flag-icon-pt flag-icon-squared"></span>Portuguese</a></li>
+                  <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="es"><span
+                        class="flag-icon flag-icon-es flag-icon-squared"></span>Spanish</a></li>
+                  <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="it"><span
+                        class="flag-icon flag-icon-it flag-icon-squared"></span>Italian</a></li>
+                  <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="en"><span
+                        class="flag-icon flag-icon-gb flag-icon-squared"></span>English</a></li>
+                  <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="de"><span
+                        class="flag-icon flag-icon-de flag-icon-squared"></span>German</a></li>
+                  <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="fr"><span
+                        class="flag-icon flag-icon-fr flag-icon-squared"></span>French</a></li>
+                  <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="sa"><span
+                        class="flag-icon flag-icon-sa flag-icon-squared"></span>Arabic</a></li>
+                </ul>
+              </div>
+            </div>
+            <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" />
 
 
             <div class="container">
-              <h6 class="mt-2 text-muted">Attività</h6>
+              <h6 class="mt-2 text-muted" data-translate="activity">Attività</h6>
               <div class="card mb-4">
                 <div class="card-body" id="taskDetails">
                 </div>
@@ -242,68 +250,97 @@
                 const task = JSON.parse('<?php echo $task5; ?>');
                 const taskDetails = document.getElementById('taskDetails');
 
-                if (task && Object.keys(task).length > 0) {
-                  task.description = task.description.replace(/\*\*/g, "'");
+                function displayTaskDetails() {
+                  if (task && Object.keys(task).length > 0) {
+                    task.description = task.description.replace(/\*\*/g, "'");
 
-                  const endDate = new Date(task.final_date).getTime();
-                  const now = new Date().getTime();
-                  let timeRemaining = endDate - now;
+                    let fileButtons = '';
+                    if (task.File == '') {
+                      fileButtons += `<h5>Nessun documento</h5>`;
+                    } else {
+                      const files = task.File.split('ºº');
+                      const iduser = <?php echo json_encode($_SESSION['Id_User']); ?>;
+                      files.forEach(file => {
+                        const fileName = file.replace(`uploads${iduser}/`, '');
+                        fileButtons += `<span style="margin-left: 10px;"></span><a href="/public/${file}" class="btn btn-outline-secondary mt-3 ml-2" download="${fileName}">
+            <span class="tf-icons bx bx-download me-3"></span>${fileName}
+            </a>`;
+                      });
+                    }
 
-                  const years = Math.floor(timeRemaining / (1000 * 60 * 60 * 24 * 365));
-                  timeRemaining %= 1000 * 60 * 60 * 24 * 365;
-                  const months = Math.floor(timeRemaining / (1000 * 60 * 60 * 24 * 30));
-                  timeRemaining %= 1000 * 60 * 60 * 24 * 30;
-                  const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-                  timeRemaining %= 1000 * 60 * 60 * 24;
-                  const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
-                  timeRemaining %= 1000 * 60 * 60;
-                  const minutes = Math.floor(timeRemaining / (1000 * 60));
-                  timeRemaining %= 1000 * 60;
-                  const seconds = Math.floor(timeRemaining / 1000);
+                    taskDetails.innerHTML = `
+          <h1 data-translate="task-title">${task.title}</h1>
+          <div class="card-subtitle text-muted mb-3">${task.category_name}</div>
+          <small class="text-muted" data-translate="description">Descrizione</small>
+          <h3 class="mb-10" data-translate="task-description">${task.description}</h3>
+          <div class="row">
+            <div class="col">
+              <small class="text-muted" data-translate="final-date">Data finale</small><h3 class="mb-7">${task.final_date}</h3>
+            </div>
+          </div>
+          <small class="text-muted">Files</small>
+          <div id="fileButtons">${fileButtons}</div>
+          <div class="row mt-3">
+            <div class="col">
+              <form method="post" action="../html/delettask">
+                <input type="hidden" name="idtask" value="${task.id_task}" />
+                <button class="btn rounded-pill btn-outline-danger" type="submit" data-translate="delete-activity">Eliminare l'attività</button>
+              </form>
+            </div>
+          </div>
+        `;
 
-                  let countdown = '';
-
-                  if (years > 0) countdown += `${years} anos, `;
-                  if (months > 0) countdown += `${months} meses, `;
-                  if (days > 0) countdown += `${days} dias, `;
-                  if (hours > 0) countdown += `${hours} horas, `;
-                  if (minutes > 0) countdown += `${minutes} minutos, `;
-                  if (seconds > 0) countdown += `${seconds} segundos`;
-
-                  countdown = countdown.replace(/,\s*$/, "");
-
-                  taskDetails.innerHTML = `
-                                      <h5 class="card-title">${task.title}</h5>
-                                      <div class="card-subtitle text-muted mb-3">${task.category_name}</div>
-                                      <p class="card-text larger-font">${task.description}</p>
-                                      <div class="row">
-                                          <div class="col">
-                                              <small class="text-muted">Data finale</small><h3 class="mb-7">${task.final_date}</h3>
-                                          </div>
-                                          <div class="col">
-                                              <small class="text-muted">Tempo restante</small><h3 class="mb-7">${countdown}</h3>
-                                          </div>
-                                      </div>
-                                      <style>
-                                          .larger-font {
-                                              font-size: 30px;
-                                              color: black;
-                                          }
-                                      </style>
-                                      <div class="row mt-3">
-                                          <div class="col">
-                                              <form method="post" action="../html/delettask">
-                                                  <input type="hidden" name="idtask" value="${task.id_task}" />
-                                                  <button class="btn rounded-pill btn-outline-danger" type="submit">Eliminare l'attività</button>
-                                              </form>
-                                          </div>
-                                      </div>
-                                  `;
-                } else {
-                  taskDetails.innerHTML = '<p>No task details available.</p>';
+                    // Chama a função de tradução após a atualização do conteúdo
+                    loadTranslations();
+                  } else {
+                    taskDetails.innerHTML = '<p>No task details available.</p>';
+                  }
                 }
+
+                displayTaskDetails();
               });
+
+              // Função para definir um cookie com o idioma selecionado
+              function setLanguageCookie(language) {
+                document.cookie = `language=${language};path=/;`;
+              }
+
+              // Função para carregar as traduções com base no idioma selecionado ou armazenado em cookie
+              function loadTranslations() {
+                // Obtém o idioma armazenado no cookie, se existir
+                const cookieLanguage = document.cookie.replace(/(?:(?:^|.*;\s*)language\s*=\s*([^;]*).*$)|^.*$/, "$1");
+
+                // Define o idioma como o idioma armazenado no cookie ou padrão para 'en' (inglês)
+                const language = cookieLanguage || 'en';
+
+                // Carrega as traduções correspondentes ao idioma selecionado
+                fetch(`../../../../../../../app/langs/lang_${language}.json`)
+                  .then(response => response.json())
+                  .then(data => {
+                    // Itera sobre as chaves do JSON e substitui o texto nas páginas HTML
+                    for (const key in data) {
+                      const elements = document.querySelectorAll(`[data-translate="${key}"]`);
+                      elements.forEach(element => {
+                        element.textContent = data[key];
+                      });
+                    }
+                  })
+                  .catch(error => console.error('Erro ao carregar traduções:', error));
+              }
+
+              // Event listener para alterar o idioma quando o usuário selecionar uma opção no dropdown
+              document.querySelectorAll('.dropdown-item[data-lang]').forEach(item => {
+                item.addEventListener('click', function () {
+                  const language = this.dataset.lang;
+                  setLanguageCookie(language); // Define o cookie com o idioma selecionado
+                  loadTranslations();
+                });
+              });
+
+              // Carrega as traduções ao carregar a página
+              window.addEventListener('DOMContentLoaded', loadTranslations);
             </script>
+
 
           </div>
 
@@ -331,22 +368,23 @@
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
-    <script src="../../../../../assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="../../../../../assets/vendor/libs/popper/popper.js"></script>
-    <script src="../../../../../assets/vendor/js/bootstrap.js"></script>
-    <script src="../../../../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/popper/popper.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/js/bootstrap.js"></script>
+    <script
+      src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 
-    <script src="../../../../../assets/vendor/js/menu.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/js/menu.js"></script>
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-    <script src="../../../../../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/apex-charts/apexcharts.js"></script>
 
     <!-- Main JS -->
-    <script src="../../../../../assets/js/main.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/js/main.js"></script>
 
     <!-- Page JS -->
-    <script src="../../../../../assets/js/dashboards-analytics.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/js/dashboards-analytics.js"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>

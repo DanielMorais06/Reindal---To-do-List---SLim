@@ -31,6 +31,7 @@
     "description-placeholder": "Scrivi dove si trova la tua nuova attività",
     "dd-mm-yyyy": "dd-mm-aaaa",
     "file": "File",
+    "no-files": "Nessun documento",
     "add-file": "Aggiungi un file",
     "send": "Iniviare",
     "new-category": "Nuova categoria",
@@ -46,7 +47,7 @@
     "welcome-profile-message": "Benvenuto per organize lifes in cui abbiamo un mondo per organizzare la tua vita",
     "owner": "Proprietario",
     "time-left": "Tempo rimasto",
-    "Complete-activity": "Completa l'attività",
+    "finish-activity": "Completa l'attività",
     "delete-activity": "Eliminare l'attività",
     "filter": "Filtra",
     "all-categories": "Tutte le categorie",
@@ -72,10 +73,15 @@
     "years": "Anni",
     "week": "Settimana",
     "weeks": "Settimane",
+    "day": "giorno",
+    "hour": "ora",
+    "minute": "minuti",
+    "second" : "secondo",
     "deadline-passed": "Il termine è scaduto",
     "show-task": "Visualizza attivitá",
     "create-account": "Registra l'account",
     "languages": "Le lingue",
     "config-account": "Impostazioni dell'account",
-    "account": "Account"
+    "account": "Account",
+    "moment": "Stato"
 }

@@ -31,6 +31,7 @@
     "description-placeholder": "Escreve a descrição da tua nova atividade",
     "dd-mm-yyyy": "dd-mm-aaaa",
     "file": "Ficheiro",
+    "no-files": "Sem Ficheiros",
     "add-file": "Adiciona um ficheiro",
     "send": "Enviar",
     "new-category": "Nova categoria",
@@ -46,7 +47,7 @@
     "welcome-register-message": "A sua aventura começa aqui!",
     "owner": "Proprietário",
     "time-left": "Tempo restante",
-    "complete-activity": "Completa atividade",
+    "finish-activity": "Completa atividade",
     "delete-activity": "Eliminar atividade",
     "filter": "Filtrar",
     "all-categories": "Todas as categorias",
@@ -72,10 +73,15 @@
     "years": "Anos",
     "week": "Semana",
     "weeks": "Semanas",
+    "day": "dia",
+    "hour": "hora",
+    "minute": "minuto",
+    "second" : "segundo",
     "deadline-passed": "Prazo expirou",
     "create-account": "Registrar Conta",
     "show-task": "Visualizar Tarefa",
     "languages": "Idiomas",
     "config-account": "Configurações de Conta",
-    "account": "Conta"
+    "account": "Conta",
+    "moment": "Estado"
 }

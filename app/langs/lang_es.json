@@ -31,6 +31,7 @@
     "description-placeholder": "Escribe dónde está ubicado tu nuevo negocio",
     "dd-mm-yyyy": "dd-mm-aaaa",
     "file": "Archivo",
+    "no-files": "Sin archivos",
     "add-file": "Agregar un archivo",
     "send": "Enviar",
     "new-category": "Nueva categoría",
@@ -46,7 +47,7 @@
     "welcome-register-message": "La aventura comienza aquí!",
     "owner": "Dueño",
     "time-left": "Tiempo restante",
-    "Complete-activity": "Completa la actividad",
+    "finish-activity": "Completa la actividad",
     "delete-activity": "Eliminar la tarea",
     "filter": "Filtrar",
     "all-categories": "Todas las categorias",
@@ -72,10 +73,15 @@
     "years": "Años",
     "week": "Semana",
     "weeks": "Semanas",
+    "day": "día",
+    "hour": "hora",
+    "minute": "minuto",
+    "second" : "segundo",
     "deadline-passed": "El plazo ha expirado",
     "create-account": "Registra tu cuenta",
     "show-task": "Ver Tarea",
     "languages": "Idiomas",
     "config-account": "Configuraciones de la cuenta",
-    "account": "Cuenta"
+    "account": "Cuenta",
+    "moment": "Estado"
 }

@@ -78,38 +78,38 @@
         <div class="menu-inner-shadow"></div>
         <button type="button" style="border-radius: 0;" class="btn btn-primary btn-link"
           onclick="location.href='../html/New-Task'">
-          <span class="tf-icons bx bx-plus me-1"></span>Nuovo compito
+          <span class="tf-icons bx bx-plus me-1"></span><span data-translate="new-task">Nuovo compito</span>
         </button>
         <span style="margin-top: 10px;"></span>
         <div class="menu-inner-shadow"></div>
         <button type="button" style="border-radius: 0;" class="btn btn-info btn-link" onclick="location.href='../'">
-          <span class="tf-icons bx bx-chevron-left me-1"></span>Inizio
+          <span class="tf-icons bx bx-chevron-left me-1"></span><span data-translate="home">Inizio</span>
         </button>
         <ul class="menu-inner py-2 overflow-auto" style="overflow-x: hidden; overflow-y: scroll; height: 100vh;">
           <li class="menu-item">
             <!-- Components -->
             <ul class="menu-inner py-2 overflow-auto">
               <!-- Alta Urgenza Section -->
-              <li class="menu-header small text-uppercase"><span class="menu-header-text">Alta urgenza</span></li>
+              <li class="menu-header small text-uppercase"><span class="menu-header-text" data-translate="high-urgency">Alta urgenza</span></li>
               <div class="container">
                 <div class="row" id="taskList"></div>
               </div>
 
               <!-- Seção Normale -->
-              <li class="menu-header small text-uppercase"><span class="menu-header-text">Normale</span></li>
+              <li class="menu-header small text-uppercase"><span class="menu-header-text" data-translate="normal">Normale</span></li>
               <div class="container">
                 <div class="row" id="taskListar"></div>
               </div>
 
               <!-- Seção Ho Tempo -->
-              <li class="menu-header small text-uppercase"><span class="menu-header-text">Ho
+              <li class="menu-header small text-uppercase"><span class="menu-header-text" data-translate="in-time">Ho
                   tempo</span><span>&#128512;</span></li>
               <div class="container">
                 <div class="row" id="taskListHoTempo"></div>
               </div>
 
               <!-- Categorias -->
-              <li class="menu-header small text-uppercase"><span class="menu-header-text">Categorias</span></li>
+              <li class="menu-header small text-uppercase"><span class="menu-header-text" data-translate="new-category">Categorias</span></li>
               <div class="container">
                 <div class="row" id="taskListCategory"></div>
               </div>
@@ -205,33 +205,40 @@
               <h4 class="mb-0"></h4>
               <div class="btn-group" id="dropdown-icon-demo">
               <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bx bx-globe me-1"></i> Languages
+                <i class="bx bx-globe me-1"></i> <span data-translate="languages">Languages</span>
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
-                <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="pt"><span class="flag-icon flag-icon-pt flag-icon-squared"></span>Português</a></li>
-                <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="es"><span class="flag-icon flag-icon-es flag-icon-squared"></span>Español</a></li>
-                <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="it"><span class="flag-icon flag-icon-it flag-icon-suspred"></span>Italiano</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center"><i class="bx bx-chevron-right scaleX-n1-rtl"></i>Separated link</a></li>
-              </ul>
+                  <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="pt"><span
+                        class="flag-icon flag-icon-pt flag-icon-squared"></span>Portuguese</a></li>
+                  <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="es"><span
+                        class="flag-icon flag-icon-es flag-icon-squared"></span>Spanish</a></li>
+                  <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="it"><span
+                        class="flag-icon flag-icon-it flag-icon-squared"></span>Italian</a></li>
+                  <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="en"><span
+                        class="flag-icon flag-icon-gb flag-icon-squared"></span>English</a></li>
+                  <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="de"><span
+                        class="flag-icon flag-icon-de flag-icon-squared"></span>German</a></li>
+                  <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="fr"><span
+                        class="flag-icon flag-icon-fr flag-icon-squared"></span>French</a></li>
+                  <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="sa"><span
+                        class="flag-icon flag-icon-sa flag-icon-squared"></span>Arabic</a></li>
+                </ul>
             </div>
             </div>
             <link rel="stylesheet"
               href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" />
 
             <div class="card">
-              <h5 class="card-header">Categoria</h5>
+              <h5 class="card-header" data-translate="category">Categoria</h5>
 
               <div class="table-responsive text-nowrap">
                 <table class="table" id="taskTable">
                   <thead>
                     <tr>
-                      <th>Attività</th>
-                      <th>Data finale</th>
-                      <th>Proprietario</th>
-                      <th>Stato</th>
+                      <th data-translate="activity">Attività</th>
+                      <th data-translate="final-date">Data finale</th>
+                      <th data-translate="owner">Proprietario</th>
+                      <th data-translate="moment">Stato</th>
                     </tr>
                   </thead>
                   <tbody class="table-border-bottom-0">
@@ -283,29 +290,74 @@
         });
       </script>
 
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+          // Função para definir um cookie com o idioma selecionado
+          function setLanguageCookie(language) {
+            document.cookie = `language=${language};path=/;`;
+          }
+
+          // Função para carregar as traduções com base no idioma selecionado ou armazenado em cookie
+          function loadTranslations() {
+            // Obtém o idioma armazenado no cookie, se existir
+            const cookieLanguage = document.cookie.replace(/(?:(?:^|.*;\s*)language\s*=\s*([^;]*).*$)|^.*$/, "$1");
+
+            // Define o idioma como o idioma armazenado no cookie ou padrão para 'en' (inglês)
+            const language = cookieLanguage || 'en';
+
+            // Carrega as traduções correspondentes ao idioma selecionado
+            fetch(`../../../../../../../app/langs/lang_${language}.json`)
+              .then(response => response.json())
+              .then(data => {
+                // Itera sobre as chaves do JSON e substitui o texto nas páginas HTML
+                for (const key in data) {
+                  const elements = document.querySelectorAll(`[data-translate="${key}"]`);
+                  elements.forEach(element => {
+                    element.textContent = data[key];
+                  });
+                  const placeholders = document.querySelectorAll(`[data-translate-placeholder="${key}"]`);
+                  placeholders.forEach(element => {
+                    element.setAttribute('placeholder', data[key]);
+                  });
+                }
+              })
+              .catch(error => console.error('Erro ao carregar traduções:', error));
+          }
+
+          // Event listener para alterar o idioma quando o usuário selecionar uma opção no dropdown
+          document.querySelectorAll('.dropdown-item[data-lang]').forEach(item => {
+            item.addEventListener('click', function () {
+              const language = this.dataset.lang;
+              setLanguageCookie(language); // Define o cookie com o idioma selecionado
+              loadTranslations(); // Carrega as traduções correspondentes
+            });
+          });
+
+          // Carrega as traduções ao carregar a página
+          window.addEventListener('DOMContentLoaded', loadTranslations);
+  </script>
 
       <!-- Core JS -->
-      <!-- build:js assets/vendor/js/core.js -->
-      <script src="../../../../../assets/vendor/libs/jquery/jquery.js"></script>
-      <script src="../../../../../assets/vendor/libs/popper/popper.js"></script>
-      <script src="../../../../../assets/vendor/js/bootstrap.js"></script>
-      <script src="../../../../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/popper/popper.js"></script>
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/js/bootstrap.js"></script>
+    <script
+      src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 
-      <script src="../../../../../assets/vendor/js/menu.js"></script>
-      <!-- endbuild -->
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/js/menu.js"></script>
+    <!-- endbuild -->
 
-      <!-- Vendors JS -->
-      <script src="../../../../../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+    <!-- Vendors JS -->
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/apex-charts/apexcharts.js"></script>
 
-      <!-- Main JS -->
-      <script src="../../../../../assets/js/main.js"></script>
+    <!-- Main JS -->
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/js/main.js"></script>
 
-      <!-- Page JS -->
-      <script src="../../../../../assets/js/dashboards-analytics.js"></script>
+    <!-- Page JS -->
+    <script src="../../../../../../resources/views/sneat-1.0.0/assets/js/dashboards-analytics.js"></script>
 
-      <!-- Place this tag in your head or just before your close body tag. -->
-      <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
 
 </html>
