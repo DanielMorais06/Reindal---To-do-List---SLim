@@ -11,12 +11,12 @@ class TaskController extends Controller
     public function getNewTask($request, $response)
     {
         try {
-        if (empty($_SESSION['Id_User'])) {
-            return $this->container->view->render($response, 'sneat-1.0.0/html/Login.html');
-        } else {
-            $iduser = $_SESSION['Id_User'];
+            if (empty($_SESSION['Id_User'])) {
+                return $this->container->view->render($response, 'sneat-1.0.0/html/Login.phtml');
+            } else {
+                $iduser = $_SESSION['Id_User'];
 
-            
+
                 $dbAccess = new HomeDbAccess($this->container);
                 $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
                 $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
@@ -34,37 +34,90 @@ class TaskController extends Controller
                     'tasksJson3' => json_encode($tasksJson3),
                     'tasksJson4' => json_encode($tasksJson4)
                 ]);
-            
 
+
+            }
+        } catch (\Exception $e) {
+            $this->container->logger->error($e->getMessage(), ['exception' => $e]);
         }
-    } catch (\Exception $e) {
-        $this->container->logger->error($e->getMessage(), ['exception' => $e]);
-    }
     }
 
     public function postNewTask($request, $response)
     {
         try {
-        $dbAccess = new HomeDbAccess($this->container);
-        $titolo = $request->getParam('titolo');
-        $avidita = $request->getParam('avidita');
-        $data = $request->getParam('data');
-        $categoria = $request->getParam('categoria');
-        $iduser = $_SESSION['Id_User'];
-        $errodata = 0;
-        $errovazio = 0;
+            $dbAccess = new HomeDbAccess($this->container);
+            $titolo = $request->getParam('titolo');
+            $avidita = $request->getParam('avidita');
+            $data = $request->getParam('data');
+            $categoria = $request->getParam('categoria');
+            $iduser = $_SESSION['Id_User'];
+            $errodata = 0;
+            $errovazio = 0;
 
-        $targetDir = "/sneat-1.0.0/uploads/";
+            $uploadedFiles = $_FILES['files'];
 
-        $imageName = basename($_FILES["imagem"]["name"]);
-        $targetFile = $targetDir . $imageName;
-        $imagePath = $targetDir . $imageName; 
 
-        $errovazio = 0;
 
-        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+            $filesArray = [];
+            $uploadDir = 'uploads'.$iduser.'/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
 
-        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+            // Process uploaded files
+            foreach ($uploadedFiles['error'] as $key => $error) {
+                if ($error == UPLOAD_ERR_OK) {
+                    $tmp_name = $uploadedFiles['tmp_name'][$key];
+                    $name = basename($uploadedFiles['name'][$key]);
+                    $destination = $uploadDir . $name;
+
+                    if (move_uploaded_file($tmp_name, $destination)) {
+                        $filesArray[] = $destination;
+                    } else {
+                        $filesArray = '';
+                    }
+                } else {
+                    $filesArray = '';
+                }
+            }
+
+            if (empty($filesArray)) {
+                $filesArray = '';
+            }
+
+            if ($filesArray == '') {
+
+            } else {
+                $filesArray = implode($filesArray);
+                $filesArray = preg_replace('/uploads'.$iduser.'\//', 'ººuploads'.$iduser.'/', $filesArray);
+
+
+                $filesArray = preg_replace('/^ºº/', '', $filesArray);
+
+                $filesArray = str_replace("'", "**", $filesArray);
+            }
+
+            $titolo = str_replace("'", "**", $titolo);
+            $avidita = str_replace("'", "**", $avidita);
+
+            $dataAtual = date('Y-m-d');
+
+            if ($data < $dataAtual) {
+
+                $errodata = 1;
+            
+            }
+
+            if (empty($titolo) || empty($avidita) || empty($data) || empty($categoria)) {
+
+                $errovazio = 1;
+                $errodata = 1;
+            
+            }
+
+            if ($errodata == 0 && $errovazio == 0) {
+
+                $stmt = $dbAccess->getInsertTask($iduser, $categoria, $avidita, $data, $titolo, $filesArray);
                 $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
                 $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
 
@@ -74,81 +127,16 @@ class TaskController extends Controller
                 $dateLimit3 = date('Y-m-d');
                 $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
                 $tasksJson4 = $dbAccess->getCategorys($iduser);
-
-                return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.phtml', [
-                    'tasksJson1' => json_encode($tasksJson1),
-                    'tasksJson2' => json_encode($tasksJson2),
-                    'tasksJson3' => json_encode($tasksJson3),
-                    'tasksJson4' => json_encode($tasksJson4)
-                ]);
-        }
-
-        if ($_FILES["imagem"]["size"] == 0) {
-            $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
-
-            $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-            $tasksJson2 = $dbAccess->getNormale($iduser, $dateLimit1, $dateLimit2);
-
-            $dateLimit3 = date('Y-m-d');
-            $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
-            $tasksJson4 = $dbAccess->getCategorys($iduser);
-
-            return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.phtml', [
-                'tasksJson1' => json_encode($tasksJson1),
-                'tasksJson2' => json_encode($tasksJson2),
-                'tasksJson3' => json_encode($tasksJson3),
-                'tasksJson4' => json_encode($tasksJson4)
-            ]);
-            
-        }
-
-        if (!move_uploaded_file($_FILES["imagem"]["tmp_name"], $targetFile)) {
-            $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
-
-            $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-            $tasksJson2 = $dbAccess->getNormale($iduser, $dateLimit1, $dateLimit2);
-
-            $dateLimit3 = date('Y-m-d');
-            $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
-            $tasksJson4 = $dbAccess->getCategorys($iduser);
-
-            return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.phtml', [
-                'tasksJson1' => json_encode($tasksJson1),
-                'tasksJson2' => json_encode($tasksJson2),
-                'tasksJson3' => json_encode($tasksJson3),
-                'tasksJson4' => json_encode($tasksJson4)
-            ]);
-        }
-
-        $titolo = str_replace("'", "**", $titolo);
-        $avidita = str_replace("'", "**", $avidita);
-
-        
-
-        $dataAtual = date('Y-m-d');
-
-        if ($data < $dataAtual) {
-            $errodata = 1;
-        }
-
-        if (empty($titolo) || empty($avidita) || empty($data) || empty($categoria)) {
-            $errovazio = 1;
-            $errodata = 1;
-        }
-
-        if ($errodata == 0 && $errovazio == 0) {
-            
-               
-                $stmt = $dbAccess->getInsertTask($iduser, $categoria, $avidita, $data, $titolo, $imagePath);
-
                 if ($stmt->rowCount() > 0) {
-                    return $response->withRedirect('/public/');
+                    return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.phtml', [
+                        'tasksJson1' => json_encode($tasksJson1),
+                        'tasksJson2' => json_encode($tasksJson2),
+                        'tasksJson3' => json_encode($tasksJson3),
+                        'tasksJson4' => json_encode($tasksJson4)
+                    ]);
                 }
             
-        } else {
-            $iduser = $_SESSION['Id_User'];
+            } else {
 
                 $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
                 $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
@@ -159,7 +147,6 @@ class TaskController extends Controller
                 $dateLimit3 = date('Y-m-d');
                 $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
                 $tasksJson4 = $dbAccess->getCategorys($iduser);
-
                 return $this->container->view->render($response, '/sneat-1.0.0/html/NewTask.phtml', [
                     'tasksJson1' => json_encode($tasksJson1),
                     'tasksJson2' => json_encode($tasksJson2),
@@ -168,11 +155,13 @@ class TaskController extends Controller
                     'erroData' => $errodata,
                     'erroVazio' => $errovazio
                 ]);
-           
+
+            }
+        
+        } catch (\Exception $e) {
+            $this->container->logger->error($e->getMessage(), ['exception' => $e]);
         }
-    } catch (\Exception $e) {
-        $this->container->logger->error($e->getMessage(), ['exception' => $e]);
-    }
+
     }
 
     public function getNewCategory($request, $response)
@@ -419,12 +408,12 @@ class TaskController extends Controller
     public function postProfilo($request, $response)
     {
         try {
-        $iduser = $_SESSION['Id_User'];
-        $nome = $request->getParam('nome');
-        $dbAccess = new HomeDbAccess($this->container);
-        if (empty($nome)) {
-            
-               
+            $iduser = $_SESSION['Id_User'];
+            $nome = $request->getParam('nome');
+            $dbAccess = new HomeDbAccess($this->container);
+            if (empty($nome)) {
+
+
                 $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
                 $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
 
@@ -444,40 +433,41 @@ class TaskController extends Controller
                     'tasksJson4' => json_encode($tasksJson4),
                     'userData' => $userData
                 ]);
-            
-        } else {
-            $nome = str_replace("'", "**", $nome);
-            $stmt5 = $dbAccess->getAlterName($iduser);
-            $stmt5->execute(['nome' => $nome, 'iduser' => $iduser]);
 
-            $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
-            $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
+            } else {
+                $nome = str_replace("'", "**", $nome);
+                $stmt5 = $dbAccess->getAlterName($iduser);
+                $stmt5->execute(['nome' => $nome, 'iduser' => $iduser]);
 
-            $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
-            $tasksJson2 = $dbAccess->getNormale($iduser, $dateLimit1, $dateLimit2);
+                $dateLimit1 = date('Y-m-d', strtotime('+3 days'));
+                $tasksJson1 = $dbAccess->getAltaUrgenza($iduser, $dateLimit1);
 
-            $dateLimit3 = date('Y-m-d');
-            $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
-            $tasksJson4 = $dbAccess->getCategorys($iduser);
+                $dateLimit2 = date('Y-m-d', strtotime('+1 week'));
+                $tasksJson2 = $dbAccess->getNormale($iduser, $dateLimit1, $dateLimit2);
 
-            $userData = $dbAccess->getProfilo($iduser);
+                $dateLimit3 = date('Y-m-d');
+                $tasksJson3 = $dbAccess->getHoTempo($iduser, $dateLimit2, $dateLimit3);
+                $tasksJson4 = $dbAccess->getCategorys($iduser);
 
-            return $this->container->view->render($response, '/sneat-1.0.0/html/Profilo.phtml', [
-                'tasksJson1' => json_encode($tasksJson1),
-                'tasksJson2' => json_encode($tasksJson2),
-                'tasksJson3' => json_encode($tasksJson3),
-                'tasksJson4' => json_encode($tasksJson4),
-                'userData' => $userData
-            ]);
+                $userData = $dbAccess->getProfilo($iduser);
+
+                return $this->container->view->render($response, '/sneat-1.0.0/html/Profilo.phtml', [
+                    'tasksJson1' => json_encode($tasksJson1),
+                    'tasksJson2' => json_encode($tasksJson2),
+                    'tasksJson3' => json_encode($tasksJson3),
+                    'tasksJson4' => json_encode($tasksJson4),
+                    'userData' => $userData
+                ]);
+            }
+        } catch (\Exception $e) {
+            $this->container->logger->error($e->getMessage(), ['exception' => $e]);
         }
-    } catch (\Exception $e) {
-        $this->container->logger->error($e->getMessage(), ['exception' => $e]);
-    }
 
     }
 
     public function getTask($request, $response)
-    {}
+    {
+    }
     public function postTask($request, $response)
     {
         $iduser = $_SESSION['Id_User'];
@@ -547,15 +537,18 @@ class TaskController extends Controller
     }
     public function postCompletTask($request, $response)
     {
+        try {
 
-        $iduser = $_SESSION['Id_User'];
-        $idtask = $request->getParam('idtask');
+            $iduser = $_SESSION['Id_User'];
+            $idtask = $request->getParam('idtask');
+            $dbAccess = new HomeDbAccess($this->container);
+            $stmt5 = $dbAccess->getCompleteTask($iduser);
+            $stmt5->execute(['iduser' => $iduser, 'idtask' => $idtask]);
+            return $response->withRedirect('/public/');
 
-        $query5 = "UPDATE tasks SET Completed='1' WHERE id_user = :iduser AND id_task = :idtask";
-        $stmt5 = $this->container->db->prepare($query5);
-        $stmt5->execute(['iduser' => $iduser, 'idtask' => $idtask]);
-
-        return $response->withRedirect('/public/');
+        } catch (\Exception $e) {
+            $this->container->logger->error($e->getMessage(), ['exception' => $e]);
+        }
     }
 
     public function getDeletTask($request, $response)
@@ -563,15 +556,45 @@ class TaskController extends Controller
     }
     public function postDeletTask($request, $response)
     {
-        $iduser = $_SESSION['Id_User'];
-        $idtask = $request->getParam('idtask');
+        try {
+            $iduser = $_SESSION['Id_User'];
+            $idtask = $request->getParam('idtask');
 
-        $query5 = "DELETE FROM tasks WHERE id_task = :idtask AND id_user = :iduser";
-        $stmt5 = $this->container->db->prepare($query5);
-        $stmt5->execute(['idtask' => $idtask, 'iduser' => $iduser]);
+            $dbAccess = new HomeDbAccess($this->container);
+            $stmt5 = $dbAccess->getDeleteTaskFiles($iduser, $idtask);
+            $stmt5->execute([':iduser' => $iduser, ':idtask' => $idtask]);
+            $filesResult = $stmt5->fetchAll(\PDO::FETCH_ASSOC);
 
-        return $response->withRedirect('/public/');
+            if ($filesResult) {
+                $filesString = $filesResult[0]['File'];
+                $filesArray = explode('ºº', $filesString);
+
+                foreach ($filesArray as $file) {
+                    $filePath = __DIR__ . '/../../public/' . $file;
+                    if (file_exists($filePath)) {
+                        if (unlink($filePath)) {
+                            $this->container->logger->info("Deleted file: " . $filePath);
+                        } else {
+                            $this->container->logger->error("Failed to delete file: " . $filePath);
+                        }
+                    } else {
+                        $this->container->logger->warning("File not found: " . $filePath);
+                    }
+                }
+            }
+
+            // Delete the task
+            $stmt5 = $dbAccess->getDeleteTask();
+            $stmt5->execute([':iduser' => $iduser, ':idtask' => $idtask]);
+
+            return $response->withRedirect('/public/');
+        } catch (\Exception $e) {
+            $this->container->logger->error($e->getMessage(), ['exception' => $e]);
+            return $response->withRedirect('/public/');
+        }
     }
+
+
 
     public function getLogout($request, $response)
     {
@@ -580,29 +603,31 @@ class TaskController extends Controller
         return $response->withRedirect('/public/');
     }
     public function postLogout($request, $response)
-    {}
+    {
+    }
 
     public function getDeleteCategory($request, $response)
-    {}
+    {
+    }
     public function postDeleteCategory($request, $response)
     {
 
         $iduser = $_SESSION['Id_User'];
         $idcategory = $request->getParam('idcategory');
+        try {
+            $dbAccess = new HomeDbAccess($this->container);
+            $stmt5 = $dbAccess->getDeleteCategory($iduser, $idcategory);
+            $stmt5->execute(['idcategory' => $idcategory, 'iduser' => $iduser]);
+            return $response->withRedirect('/public/');
 
-        $query5 = "DELETE FROM  tasks WHERE category = :idcategory AND id_user = :iduser";
-        $stmt5 = $this->container->db->prepare($query5);
-        $stmt5->execute(['idcategory' => $idcategory, 'iduser' => $iduser]);
-
-        $query5 = "DELETE FROM  categorys WHERE id_category = :idcategory AND id_user = :iduser";
-        $stmt5 = $this->container->db->prepare($query5);
-        $stmt5->execute(['idcategory' => $idcategory, 'iduser' => $iduser]);
-
-        return $response->withRedirect('/public/');
+        } catch (\Exception $e) {
+            $this->container->logger->error($e->getMessage(), ['exception' => $e]);
+        }
     }
 
     public function getCategory($request, $response)
-    {}
+    {
+    }
     public function postCategory($request, $response)
     {
         $iduser = $_SESSION['Id_User'];

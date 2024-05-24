@@ -124,23 +124,27 @@ class HomeDbAccess
 
     }
 
-    public function getInsertTask($iduser, $categoria, $avidita, $data, $titolo, $file)
+    public function getInsertTask($iduser, $categoria, $avidita, $data, $titolo, $filesArray)
     {
-        $sql = "INSERT INTO tasks (category, description, final_date, title, id_user, Completed, File) VALUES (:category, :descrito, :dat, :title, :id_user, 0, :file)";
-        $stmt = $this->container->db->prepare($sql);
+        try {
 
-        $stmt->bindParam(':category', $categoria);
-        $stmt->bindParam(':descrito', $avidita);
-        $stmt->bindParam(':dat', $data);
-        $stmt->bindParam(':title', $titolo);
-        $stmt->bindParam(':id_user', $iduser);
-        $stmt->bindParam(':file', $file);
+            $sql = "INSERT INTO tasks (category, description, final_date, title, id_user, Completed, File) 
+                VALUES (:category, :descrito, :dat, :title, :id_user, 0, :files)";
+            $stmt = $this->container->db->prepare($sql);
 
-        $stmt->execute();
+            $stmt->bindParam(':category', $categoria);
+            $stmt->bindParam(':descrito', $avidita);
+            $stmt->bindParam(':dat', $data);
+            $stmt->bindParam(':title', $titolo);
+            $stmt->bindParam(':id_user', $iduser);
+            $stmt->bindParam(':files', $filesArray);
 
+            $stmt->execute();
 
-        return $stmt;
-
+            return $stmt;
+        } catch (\Exception $e) {
+            $this->container->logger->info($e->getMessage(), ['exception' => $e]);
+        }
     }
 
     public function getInsertCategory($iduser, $categoria)
@@ -176,8 +180,8 @@ class HomeDbAccess
     public function getEmailValidation($email)
     {
         $sql = "SELECT COUNT(*) FROM users WHERE email = :email";
-            $stmt = $this->container->db->prepare($sql);
-            $stmt->execute(['email' => $email]);
+        $stmt = $this->container->db->prepare($sql);
+        $stmt->execute(['email' => $email]);
         return $stmt;
 
     }
@@ -185,10 +189,46 @@ class HomeDbAccess
     public function getAlterName($iduser)
     {
         $query5 = "Update users SET name=:nome WHERE id_user=:iduser";
-            $stmt5 = $this->container->db->prepare($query5);
+        $stmt5 = $this->container->db->prepare($query5);
 
         return $stmt5;
 
+    }
+
+    public function getCompleteTask($iduser)
+    {
+        $query5 = "UPDATE tasks SET Completed='1' WHERE id_user = :iduser AND id_task = :idtask";
+        $stmt5 = $this->container->db->prepare($query5);
+
+        return $stmt5;
+
+    }
+
+    public function getDeleteCategory($iduser, $idcategory)
+    {
+        $query4 = "DELETE FROM  tasks WHERE category = :idcategory AND id_user = :iduser";
+        $stmt4 = $this->container->db->prepare($query4);
+        $stmt4->execute(['idcategory' => $idcategory, 'iduser' => $iduser]);
+
+        $query5 = "DELETE FROM  categorys WHERE id_category = :idcategory AND id_user = :iduser";
+        $stmt5 = $this->container->db->prepare($query5);
+
+        return $stmt5;
+
+    }
+
+    public function getDeleteTask()
+    {
+        $query = "DELETE FROM tasks WHERE id_task = :idtask AND id_user = :iduser";
+        $stmt = $this->container->db->prepare($query);
+        return $stmt;
+    }
+
+    public function getDeleteTaskFiles($iduser, $idtask)
+    {
+        $query5 = "SELECT File FROM tasks WHERE id_task = :idtask AND id_user = :iduser";
+        $stmt5 = $this->container->db->prepare($query5);
+        return $stmt5;
     }
 
 }

@@ -1,169 +1,170 @@
 <!DOCTYPE html>
-<html
-  lang="en"
-  class="light-style layout-menu-fixed"
-  dir="ltr"
-  data-theme="theme-default"
-  data-assets-path="../assets/"
-  data-template="vertical-menu-template-free"
->
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
-    />
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+  data-template="vertical-menu-template-free">
 
-    <title>ORGANIZE LIFES || To Do List || FrameWork</title>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <meta name="description" content="" />
+  <title>ORGANIZE LIFES || To Do List || FrameWork</title>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg class='w-[46px] h-[46px] text-blue-500' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 12a28.076 28.076 0 0 1-1.091 9M7.231 4.37a8.994 8.994 0 0 1 12.88 3.73M2.958 15S3 14.577 3 12a8.949 8.949 0 0 1 1.735-5.307m12.84 3.088A5.98 5.98 0 0 1 18 12a30 30 0 0 1-.464 6.232M6 12a6 6 0 0 1 9.352-4.974M4 21a5.964 5.964 0 0 1 1.01-3.328 5.15 5.15 0 0 0 .786-1.926m8.66 2.486a13.96 13.96 0 0 1-.962 2.683M7.5 19.336C9 17.092 9 14.845 9 12a3 3 0 1 1 6 0c0 .749 0 1.521-.031 2.311M12 12c0 3 0 6-2 9'/%3E%3C/svg%3E">
+  <meta name="description" content="" />
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet"
-    />
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg class='w-[46px] h-[46px] text-blue-500' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 12a28.076 28.076 0 0 1-1.091 9M7.231 4.37a8.994 8.994 0 0 1 12.88 3.73M2.958 15S3 14.577 3 12a8.949 8.949 0 0 1 1.735-5.307m12.84 3.088A5.98 5.98 0 0 1 18 12a30 30 0 0 1-.464 6.232M6 12a6 6 0 0 1 9.352-4.974M4 21a5.964 5.964 0 0 1 1.01-3.328 5.15 5.15 0 0 0 .786-1.926m8.66 2.486a13.96 13.96 0 0 1-.962 2.683M7.5 19.336C9 17.092 9 14.845 9 12a3 3 0 1 1 6 0c0 .749 0 1.521-.031 2.311M12 12c0 3 0 6-2 9'/%3E%3C/svg%3E">
 
-    <!-- Icons. Uncomment required icon fonts -->
-    <link rel="stylesheet" href="../../../../../resources/views/sneat-1.0.0/assets/vendor/fonts/boxicons.css" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+    rel="stylesheet" />
 
-    <!-- Core CSS -->
-    <link rel="stylesheet" href="../../../../../resources/views/sneat-1.0.0/assets/vendor/css/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="../../../../../resources/views/sneat-1.0.0/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="../../../../../resources/views/sneat-1.0.0/assets/css/demo.css" />
+  <!-- Icons. Uncomment required icon fonts -->
+  <link rel="stylesheet" href="../../../../../resources/views/sneat-1.0.0/assets/vendor/fonts/boxicons.css" />
 
-    <!-- Vendors CSS -->
-    <link rel="stylesheet" href="../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="../../../../../resources/views/sneat-1.0.0/assets/vendor/css/core.css"
+    class="template-customizer-core-css" />
+  <link rel="stylesheet" href="../../../../../resources/views/sneat-1.0.0/assets/vendor/css/theme-default.css"
+    class="template-customizer-theme-css" />
+  <link rel="stylesheet" href="../../../../../resources/views/sneat-1.0.0/assets/css/demo.css" />
 
-    <link rel="stylesheet" href="../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/apex-charts/apex-charts.css" />
+  <!-- Vendors CSS -->
+  <link rel="stylesheet"
+    href="../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
-    <!-- Page CSS -->
+  <link rel="stylesheet"
+    href="../../../../../resources/views/sneat-1.0.0/assets/vendor/libs/apex-charts/apex-charts.css" />
 
-    <!-- Helpers -->
-    <script src="../../../../../resources/views/sneat-1.0.0/assets/vendor/js/helpers.js"></script>
+  <!-- Page CSS -->
 
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="../../../../../resources/views/sneat-1.0.0/assets/js/config.js"></script>
-  </head>
-  
+  <!-- Helpers -->
+  <script src="../../../../../resources/views/sneat-1.0.0/assets/vendor/js/helpers.js"></script>
 
-  <body>
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar">
-      <div class="layout-container">
-        <!-- Menu -->
+  <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+  <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+  <script src="../../../../../resources/views/sneat-1.0.0/assets/js/config.js"></script>
+</head>
 
-        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-          <div class="app-brand demo">
-            <a href="index.html" class="app-brand-link">
-              <span class="app-brand-logo demo">
-                <svg class="w-[46px] h-[46px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a28.076 28.076 0 0 1-1.091 9M7.231 4.37a8.994 8.994 0 0 1 12.88 3.73M2.958 15S3 14.577 3 12a8.949 8.949 0 0 1 1.735-5.307m12.84 3.088A5.98 5.98 0 0 1 18 12a30 30 0 0 1-.464 6.232M6 12a6 6 0 0 1 9.352-4.974M4 21a5.964 5.964 0 0 1 1.01-3.328 5.15 5.15 0 0 0 .786-1.926m8.66 2.486a13.96 13.96 0 0 1-.962 2.683M7.5 19.336C9 17.092 9 14.845 9 12a3 3 0 1 1 6 0c0 .749 0 1.521-.031 2.311M12 12c0 3 0 6-2 9"/>
-                </svg>
-                
-              </span>
-              <span class="app-brand-text demo menu-text fw-bolder ms-2">ORGANIZE LIFES</span>
+
+<body>
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <!-- Menu -->
+
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo">
+          <a href="index.html" class="app-brand-link">
+            <span class="app-brand-logo demo">
+              <svg class="w-[46px] h-[46px] text-gray-800 dark:text-white" aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 12a28.076 28.076 0 0 1-1.091 9M7.231 4.37a8.994 8.994 0 0 1 12.88 3.73M2.958 15S3 14.577 3 12a8.949 8.949 0 0 1 1.735-5.307m12.84 3.088A5.98 5.98 0 0 1 18 12a30 30 0 0 1-.464 6.232M6 12a6 6 0 0 1 9.352-4.974M4 21a5.964 5.964 0 0 1 1.01-3.328 5.15 5.15 0 0 0 .786-1.926m8.66 2.486a13.96 13.96 0 0 1-.962 2.683M7.5 19.336C9 17.092 9 14.845 9 12a3 3 0 1 1 6 0c0 .749 0 1.521-.031 2.311M12 12c0 3 0 6-2 9" />
+              </svg>
+
+            </span>
+            <span class="app-brand-text demo menu-text fw-bolder ms-2">ORGANIZE LIFES</span>
           </a>
-          
-            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-                <i class="bx bx-chevron-left bx-sm align-middle"></i>
-            </a>
+
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+          </a>
         </div>
 
-          <div class="menu-inner-shadow"></div>
-          <button type="button" style="border-radius: 0;" class="btn btn-primary btn-link" onclick="location.href='../html/New-Task'">
-              <span class="tf-icons bx bx-plus me-1"></span>Nuovo compito
-          </button>
-          <span style="margin-top: 10px;"></span>
-          <div class="menu-inner-shadow"></div>
-          <button type="button" style="border-radius: 0;" class="btn btn-info btn-link" onclick="location.href='../'">
-            <span class="tf-icons bx bx-chevron-left me-1"></span>Inizio
+        <div class="menu-inner-shadow"></div>
+        <button type="button" style="border-radius: 0;" class="btn btn-primary btn-link"
+          onclick="location.href='../html/New-Task'">
+          <span class="tf-icons bx bx-plus me-1"></span>Nuovo compito
         </button>
-    <ul class="menu-inner py-2 overflow-auto" style="overflow-x: hidden; overflow-y: scroll; height: 100vh;">
-        <li class="menu-item">
-          <!-- Components -->
-          <ul class="menu-inner py-2 overflow-auto">
-            <!-- Alta Urgenza Section -->
-            <li class="menu-header small text-uppercase"><span class="menu-header-text">Alta urgenza</span></li>
-            <div class="container">
+        <span style="margin-top: 10px;"></span>
+        <div class="menu-inner-shadow"></div>
+        <button type="button" style="border-radius: 0;" class="btn btn-info btn-link" onclick="location.href='../'">
+          <span class="tf-icons bx bx-chevron-left me-1"></span>Inizio
+        </button>
+        <ul class="menu-inner py-2 overflow-auto" style="overflow-x: hidden; overflow-y: scroll; height: 100vh;">
+          <li class="menu-item">
+            <!-- Components -->
+            <ul class="menu-inner py-2 overflow-auto">
+              <!-- Alta Urgenza Section -->
+              <li class="menu-header small text-uppercase"><span class="menu-header-text">Alta urgenza</span></li>
+              <div class="container">
                 <div class="row" id="taskList"></div>
-            </div>
-    
-            <!-- Seção Normale -->
-            <li class="menu-header small text-uppercase"><span class="menu-header-text">Normale</span></li>
-            <div class="container">
+              </div>
+
+              <!-- Seção Normale -->
+              <li class="menu-header small text-uppercase"><span class="menu-header-text">Normale</span></li>
+              <div class="container">
                 <div class="row" id="taskListar"></div>
-            </div>
-    
-            <!-- Seção Ho Tempo -->
-            <li class="menu-header small text-uppercase"><span class="menu-header-text">Ho tempo</span><span>&#128512;</span></li>
-            <div class="container">
+              </div>
+
+              <!-- Seção Ho Tempo -->
+              <li class="menu-header small text-uppercase"><span class="menu-header-text">Ho
+                  tempo</span><span>&#128512;</span></li>
+              <div class="container">
                 <div class="row" id="taskListHoTempo"></div>
-            </div>
-    
-            <!-- Categorias -->
-            <li class="menu-header small text-uppercase"><span class="menu-header-text">Categorias</span></li>
-            <div class="container">
+              </div>
+
+              <!-- Categorias -->
+              <li class="menu-header small text-uppercase"><span class="menu-header-text">Categorias</span></li>
+              <div class="container">
                 <div class="row" id="taskListCategory"></div>
-            </div>
-        </ul>
-    
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
+              </div>
+            </ul>
+
+            <script>
+              document.addEventListener('DOMContentLoaded', function () {
                 const tasks1 = JSON.parse('<?php echo $tasksJson1; ?>');
-    
+
                 const taskContainer1 = document.getElementById('taskList');
-    
+
                 tasks1.forEach(task => {
-                    const card = document.createElement('div');
-                    card.className = 'col-12'; 
-                    task.title = task.title.replace(/\*\*/g, "'");
-                    card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
+                  const card = document.createElement('div');
+                  card.className = 'col-12';
+                  task.title = task.title.replace(/\*\*/g, "'");
+                  card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
                             <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; // Exibe o nome da tarefa
-                    taskContainer1.appendChild(card);
+                  taskContainer1.appendChild(card);
                 });
-    
+
                 const tasks2 = JSON.parse('<?php echo $tasksJson2; ?>');
-    
+
                 const taskContainer2 = document.getElementById('taskListar');
-    
+
                 tasks2.forEach(task => {
-                    const card = document.createElement('div');
-                    card.className = 'col-12'; 
-                    task.title = task.title.replace(/\*\*/g, "'");
-                    card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
-                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; 
-                    taskContainer2.appendChild(card);
+                  const card = document.createElement('div');
+                  card.className = 'col-12';
+                  task.title = task.title.replace(/\*\*/g, "'");
+                  card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
+                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`;
+                  taskContainer2.appendChild(card);
                 });
-    
+
                 const tasks3 = JSON.parse('<?php echo $tasksJson3; ?>');
-    
+
                 const taskContainer3 = document.getElementById('taskListHoTempo');
-    
+
                 tasks3.forEach(task => {
-                    const card = document.createElement('div');
-                    card.className = 'col-12';
-                    task.title = task.title.replace(/\*\*/g, "'");
-                    card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
-                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`; 
-                    taskContainer3.appendChild(card);
+                  const card = document.createElement('div');
+                  card.className = 'col-12';
+                  task.title = task.title.replace(/\*\*/g, "'");
+                  card.innerHTML = `<form method='post' action='../html/task'><input type="hidden" name="id_task" value='${task.id_task}'>
+                            <button type='submit' class="btn btn-link p-0">${task.title}</button></form>`;
+                  taskContainer3.appendChild(card);
                 });
-    
+
                 const tasks4 = JSON.parse('<?php echo $tasksJson4; ?>');
-    
+
                 const taskContainer4 = document.getElementById('taskListCategory');
-    
+
                 tasks4.forEach(task => {
-                    const card = document.createElement('div');
-                    card.className = 'col-12'; 
-                    task.name = task.name.replace(/\*\*/g, "'");
-                    card.innerHTML = `<div class="d-flex justify-content-between align-items-center">
+                  const card = document.createElement('div');
+                  card.className = 'col-12';
+                  task.name = task.name.replace(/\*\*/g, "'");
+                  card.innerHTML = `<div class="d-flex justify-content-between align-items-center">
                         <form method="post" action="../html/category"><input type="hidden" name="category" value="${task.id_category}" /><button class="btn btn-link p-0"><span>${task.name}</span></button></form>
                         <form method="post" action="../html/deletecategory">
                             <input type="hidden" value="${task.id_category}" name="idcategory"/>
@@ -171,118 +172,140 @@
                                 <span class="tf-icons bx bx-trash p-0"></span>
                             </button>
                         </form>
-                    </div>`; 
-                    taskContainer4.appendChild(card);
+                    </div>`;
+                  taskContainer4.appendChild(card);
                 });
-            });
-        </script>
-                <style>
-                  .menu-inner {
-                    overflow-x: hidden;
-                    overflow-y: scroll;
-                    height: 100vh;
-                    scrollbar-width: none; 
-                  }
-                
-                  .menu-inner::-webkit-scrollbar {
-                    width: 0; 
-                    background: transparent; 
-                  }
-                </style>
+              });
+            </script>
+            <style>
+              .menu-inner {
+                overflow-x: hidden;
+                overflow-y: scroll;
+                height: 100vh;
+                scrollbar-width: none;
+              }
+
+              .menu-inner::-webkit-scrollbar {
+                width: 0;
+                background: transparent;
+              }
+            </style>
+          </li>
+        </ul>
+
+      </aside>
+      <div class="layout-page">
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+          <div class="container-xxl flex-grow-1 container-p-y">
+
+            <!-- Basic Bootstrap Table -->
+            <div class="d-flex justify-content-between align-items-center py-3 mb-2">
+              <h4 class="mb-0"></h4>
+              <div class="btn-group" id="dropdown-icon-demo">
+              <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bx bx-globe me-1"></i> Languages
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="pt"><span class="flag-icon flag-icon-pt flag-icon-squared"></span>Português</a></li>
+                <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="es"><span class="flag-icon flag-icon-es flag-icon-squared"></span>Español</a></li>
+                <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-lang="it"><span class="flag-icon flag-icon-it flag-icon-suspred"></span>Italiano</a></li>
+                <li>
+                  <hr class="dropdown-divider">
                 </li>
-          </ul>
-        
-        </aside>
-        <div class="layout-page">
-            <!-- Content wrapper -->
-            <div class="content-wrapper">
-                <!-- Content -->
-                <div class="container-xxl flex-grow-1 container-p-y">
-                    
-                    <!-- Basic Bootstrap Table -->
-                    <div class="card">
-                        <h5 class="card-header">Categoria</h5>
-                        <div class="table-responsive text-nowrap">
-                            <table class="table" id="taskTable">
-                                <thead>
-                                    <tr>
-                                        <th>Attività</th>
-                                        <th>Data finale</th>
-                                        <th>Proprietario</th>
-                                        <th>Stato</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table-border-bottom-0">
-                                    <!-- Rows will be populated by JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <!--/ Basic Bootstrap Table -->
-                </div>
-                <!-- / Content -->
-                <div class="content-backdrop fade"></div>
+                <li><a href="javascript:void(0);" class="dropdown-item d-flex align-items-center"><i class="bx bx-chevron-right scaleX-n1-rtl"></i>Separated link</a></li>
+              </ul>
             </div>
-            <!-- Content wrapper -->
+            </div>
+            <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css" />
+
+            <div class="card">
+              <h5 class="card-header">Categoria</h5>
+
+              <div class="table-responsive text-nowrap">
+                <table class="table" id="taskTable">
+                  <thead>
+                    <tr>
+                      <th>Attività</th>
+                      <th>Data finale</th>
+                      <th>Proprietario</th>
+                      <th>Stato</th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-border-bottom-0">
+                    <!-- Rows will be populated by JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!--/ Basic Bootstrap Table -->
+          </div>
+          <!-- / Content -->
+          <div class="content-backdrop fade"></div>
         </div>
-        
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-        
-                const tasksJson5 = '<?php echo addslashes($tasksJson5); ?>';
-                const tasks = JSON.parse(tasksJson5);
-            
-                console.log('Tasks Data:', tasks); 
-            
-                const tbody = document.querySelector('#taskTable tbody');
-            
-                tasks.forEach(task => {
-                    const tr = document.createElement('tr');
-            
-                    const taskTitleTd = document.createElement('td');
-                    taskTitleTd.innerHTML = `<i class="bx bx-task bx-sm text-danger me-3"></i> <span class="fw-medium">${task.title}</span>`;
-                    tr.appendChild(taskTitleTd);
-            
-                    const finalDateTd = document.createElement('td');
-                    finalDateTd.textContent = task.final_date;
-                    tr.appendChild(finalDateTd);
-            
-                    const ownerTd = document.createElement('td');
-                    ownerTd.textContent = task.name; 
-                    tr.appendChild(ownerTd);
-            
-                    // Create and append status
-                    const statusTd = document.createElement('td');
-                    statusTd.innerHTML = `<span class="badge bg-label-primary">${task.Completed ? 'Completed' : 'Active'}</span>`;
-                    tr.appendChild(statusTd);
-            
-                    tbody.appendChild(tr);
-                });
-            });
-        </script>
-        
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        <!-- Content wrapper -->
+      </div>
 
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
-    <script src="../../../../../assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="../../../../../assets/vendor/libs/popper/popper.js"></script>
-    <script src="../../../../../assets/vendor/js/bootstrap.js"></script>
-    <script src="../../../../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
 
-    <script src="../../../../../assets/vendor/js/menu.js"></script>
-    <!-- endbuild -->
+          const tasksJson5 = '<?php echo addslashes($tasksJson5); ?>';
+          const tasks = JSON.parse(tasksJson5);
 
-    <!-- Vendors JS -->
-    <script src="../../../../../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+          console.log('Tasks Data:', tasks);
 
-    <!-- Main JS -->
-    <script src="../../../../../assets/js/main.js"></script>
+          const tbody = document.querySelector('#taskTable tbody');
 
-    <!-- Page JS -->
-    <script src="../../../../../assets/js/dashboards-analytics.js"></script>
+          tasks.forEach(task => {
+            const tr = document.createElement('tr');
 
-    <!-- Place this tag in your head or just before your close body tag. -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-  </body>
+            const taskTitleTd = document.createElement('td');
+            taskTitleTd.innerHTML = `<i class="bx bx-task bx-sm text-danger me-3"></i> <span class="fw-medium">${task.title}</span>`;
+            tr.appendChild(taskTitleTd);
+
+            const finalDateTd = document.createElement('td');
+            finalDateTd.textContent = task.final_date;
+            tr.appendChild(finalDateTd);
+
+            const ownerTd = document.createElement('td');
+            ownerTd.textContent = task.name;
+            tr.appendChild(ownerTd);
+
+            // Create and append status
+            const statusTd = document.createElement('td');
+            statusTd.innerHTML = `<span class="badge bg-label-primary">${task.Completed ? 'Completed' : 'Active'}</span>`;
+            tr.appendChild(statusTd);
+
+            tbody.appendChild(tr);
+          });
+        });
+      </script>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+      <!-- Core JS -->
+      <!-- build:js assets/vendor/js/core.js -->
+      <script src="../../../../../assets/vendor/libs/jquery/jquery.js"></script>
+      <script src="../../../../../assets/vendor/libs/popper/popper.js"></script>
+      <script src="../../../../../assets/vendor/js/bootstrap.js"></script>
+      <script src="../../../../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+      <script src="../../../../../assets/vendor/js/menu.js"></script>
+      <!-- endbuild -->
+
+      <!-- Vendors JS -->
+      <script src="../../../../../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+
+      <!-- Main JS -->
+      <script src="../../../../../assets/js/main.js"></script>
+
+      <!-- Page JS -->
+      <script src="../../../../../assets/js/dashboards-analytics.js"></script>
+
+      <!-- Place this tag in your head or just before your close body tag. -->
+      <script async defer src="https://buttons.github.io/buttons.js"></script>
+</body>
+
 </html>
